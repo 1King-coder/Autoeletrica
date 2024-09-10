@@ -13,7 +13,7 @@ namespace PlayingWithMEP
 {
     [Transaction(TransactionMode.Manual)]
     [Regeneration(RegenerationOption.Manual)]
-    public class _01_TestToGetEquipment: IExternalCommand
+    public class _02_GettingEquipmentWithClasses: IExternalCommand
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elementSet)
         {
@@ -29,21 +29,9 @@ namespace PlayingWithMEP
 
             FamilyInstance el = utils.pickElement(sel);
             
-            ElectricalEquipment panel = el.MEPModel as ElectricalEquipment;
-
-            ISet<ElectricalSystem> electricalSystemsSet = panel.GetAssignedElectricalSystems();
-
-            List<ElectricalSystem> electricalSystemsList = utils.ESSetToList(electricalSystemsSet);
-
-            
-
-            
-
-            Dictionary<string, Parameter> parameters = utils.ParamMapToDictonary(electricalSystemsList[0].ParametersMap);
-
-
-
             trans.Commit();
+
+            Panel panel = utils.getSelectedPanel(el);   
 
             return Result.Succeeded;
         }
