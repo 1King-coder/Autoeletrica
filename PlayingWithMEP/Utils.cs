@@ -105,6 +105,11 @@ namespace PlayingWithMEP
         public string Type { get; set; }
 
         public double apparentload { get; set; }
+
+        public double length { get; set; }
+
+        
+
     }
 
 

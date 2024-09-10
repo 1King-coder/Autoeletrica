@@ -39,7 +39,7 @@ namespace PlayingWithMEP
 
             
 
-            string parameters = electricalSystemsList[0].get_Parameter(BuiltInParameter.RBS_ELEC_APPARENT_LOAD).AsValueString();
+            ParameterMap parameters = electricalSystemsList[0].ParametersMap;
 
 
 
