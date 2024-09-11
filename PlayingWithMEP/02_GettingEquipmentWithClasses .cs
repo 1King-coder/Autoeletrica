@@ -35,11 +35,7 @@ namespace PlayingWithMEP
             trans.Commit();
 
             ECs.Panel panel = new ECs.Panel(el, doc);
-            for (int i = 0; i < 1; i++)
-            {
-
-            }
-
+            
 
             return Result.Succeeded;
         }
