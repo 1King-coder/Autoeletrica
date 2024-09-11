@@ -8,6 +8,8 @@ using Autodesk.Revit.UI;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.UI.Selection;
 using Autodesk.Revit.DB.Electrical;
+using ECs = PlayingWithMEP.ElectricalClasses;
+
 
 namespace PlayingWithMEP
 {
@@ -20,6 +22,7 @@ namespace PlayingWithMEP
             UIApplication uiapp = commandData.Application;
             Document doc = uiapp.ActiveUIDocument.Document;
             Selection sel = uiapp.ActiveUIDocument.Selection;
+            
 
             Utils utils = new Utils(doc);
 
@@ -31,7 +34,12 @@ namespace PlayingWithMEP
             
             trans.Commit();
 
-            Panel panel = utils.getSelectedPanel(el);   
+            ECs.Panel panel = new ECs.Panel(el, doc);
+            for (int i = 0; i < 1; i++)
+            {
+
+            }
+
 
             return Result.Succeeded;
         }

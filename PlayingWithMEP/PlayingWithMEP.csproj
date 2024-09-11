@@ -69,6 +69,7 @@
   <ItemGroup>
     <Compile Include="02_GettingEquipmentWithClasses .cs" />
     <Compile Include="01_TestToGetEquipment.cs" />
+    <Compile Include="ElectricalClasses.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
