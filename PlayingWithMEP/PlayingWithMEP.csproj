@@ -92,6 +92,7 @@
     <Compile Include="01_TestToGetEquipment.cs" />
     <Compile Include="ElectricalClasses.cs" />
     <Compile Include="GoogleSheetsManager.cs" />
+    <Compile Include="PlanilhaDimensionamentoEletrico.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

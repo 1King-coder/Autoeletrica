@@ -176,7 +176,6 @@ namespace PlayingWithMEP
 
                 }
 
-
                 this.levelId = disp.LevelId;
 
                 this.typeId = disp.GetTypeId();
@@ -194,6 +193,8 @@ namespace PlayingWithMEP
                 this.location = dispES.Location;
 
             }
+
+            public string dispType { get; set; }
 
             public FamilyInstance dispositiveInstance { get; set; }
 
