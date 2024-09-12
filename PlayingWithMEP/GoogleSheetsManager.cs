@@ -82,7 +82,7 @@ namespace PlayingWithMEP
 
             var updateReq = this.service.Spreadsheets.Values.Update(valuesToSend, this.SpreadsheetId, $"{sheet}!{range}");
             updateReq.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.USERENTERED;
-            
+
             var response = updateReq.Execute();
         }
 
@@ -90,6 +90,26 @@ namespace PlayingWithMEP
             var deleteReq = this.service.Spreadsheets.Values.Clear(new ClearValuesRequest(), this.SpreadsheetId, $"{sheet}!{range}");
             
             var response = deleteReq.Execute();
+        }
+
+        public void batchUpdate (string sheet, string[] rangesList, List<object> data)
+        {
+            ValueRange valuesToSend = new ValueRange();
+
+            List<IList<object>> dataMatrix = new List<IList<object>> { data };
+            BatchUpdateSpreadsheetRequest batchReqBody = new BatchUpdateSpreadsheetRequest();
+
+            batchReqBody.Requests = new List<Request>();
+
+            foreach (string range in rangesList)
+            {
+                Request updateReq = new Request();
+
+                batchReqBody.Requests.Add()
+            }
+
+
+            var batchUpReq = this.service.Spreadsheets.Values.BatchUpdate();
         }
 
 
