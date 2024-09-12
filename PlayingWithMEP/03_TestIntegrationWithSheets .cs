@@ -23,7 +23,6 @@ namespace PlayingWithMEP
             Document doc = uiapp.ActiveUIDocument.Document;
             Selection sel = uiapp.ActiveUIDocument.Selection;
 
-            GoogleSheetsManager sheetsApi = new GoogleSheetsManager("1MZt_KFsS692brVrzg6c-06q4siw1l7bPfPLvwIXfC_c");
             
 
             Utils utils = new Utils(doc);
@@ -38,9 +37,10 @@ namespace PlayingWithMEP
 
             ECs.Panel panel = new ECs.Panel(el, doc);
 
-            List<object> data = new List<object>() { "Hello", "World", "1001" };
+            PlanilhaDimensionamentoEletrico sheetsApi = new PlanilhaDimensionamentoEletrico("1MZt_KFsS692brVrzg6c-06q4siw1l7bPfPLvwIXfC_c", panel);
 
-            sheetsApi.writeData("Quadro de Carga", "B8:D8", data);            
+
+            sheetsApi.sendCircuitsDataToSheets();
 
             return Result.Succeeded;
         }

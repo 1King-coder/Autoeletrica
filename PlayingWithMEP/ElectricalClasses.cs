@@ -98,6 +98,16 @@ namespace PlayingWithMEP
 
                 this.dispositives = getDispositives(ES.Elements, doc);
 
+                this.voltage = u.voltageStringToInt(ES.get_Parameter(BuiltInParameter.RBS_ELEC_VOLTAGE).AsValueString());
+
+                this.numOfDispositivesByLoad = GetNumOfDispositivesByLoad();
+                    
+                this.numOfPoles = ES.get_Parameter(BuiltInParameter.RBS_ELEC_CIRCUIT_WIRE_NUM_HOTS_PARAM).AsInteger();
+                this.numOfNeutrals = ES.get_Parameter(BuiltInParameter.RBS_ELEC_CIRCUIT_WIRE_NUM_NEUTRALS_PARAM).AsInteger();
+                this.numOfGrounds = ES.get_Parameter(BuiltInParameter.RBS_ELEC_CIRCUIT_WIRE_NUM_GROUNDS_PARAM).AsInteger();
+
+                this.scheme = GetScheme();
+
             }
 
             public static double GetLongerPath(ElectricalSystem ES, Document doc)
@@ -152,6 +162,65 @@ namespace PlayingWithMEP
 
             public List<Dispositive> dispositives { get; set; }
 
+            public Dictionary<string, Dictionary<string, int>> numOfDispositivesByLoad {  get; set; }
+
+            public string scheme { get; set; }
+
+            public int numOfPoles { get; set; }
+
+            public int numOfNeutrals { get; set; }
+
+            public int numOfGrounds { get; set; }
+
+            private string schemeNumToString (int num)
+            {
+                return num == 1 ? "" : num.ToString ();
+            }
+
+            public string GetScheme ()
+            {
+                string poles = $"{schemeNumToString(this.numOfPoles)}F";
+                string neutrals = !this.numOfNeutrals.Equals(0) ? $" + {schemeNumToString(this.numOfNeutrals)}N" : "";
+                string grounds = !this.numOfGrounds.Equals(0) ? $" + {schemeNumToString(this.numOfGrounds)}T" : "";
+
+                string scheme = $"{poles}{neutrals}{grounds}";
+
+                return scheme;
+            }
+
+            public Dictionary<string, Dictionary<string, int>> GetNumOfDispositivesByLoad ()
+            {
+                Dictionary<string, Dictionary<string, int>> numOfDispsByLoad = new Dictionary<string, Dictionary<string, int>>();
+
+                numOfDispsByLoad.Add("Lamps", new Dictionary<string, int>() { { "100", 0 }, { "60", 0 }, { "dif", 0 } });
+                numOfDispsByLoad.Add("TUGs-TUEs", new Dictionary<string, int>() { { "TUE", 0 }, { "100", 0 }, { "600", 0 } });
+
+                foreach (Dispositive d in this.dispositives)
+                {
+                    if (d.dispType == "Lamp")
+                    {
+                        if (!numOfDispsByLoad["Lamps"].ContainsKey(d.apparentLoad.ToString())) 
+                        {
+                            numOfDispsByLoad["Lamps"]["dif"] += 1;
+                        }
+
+                        numOfDispsByLoad["Lamps"][d.apparentLoad.ToString()] += 1;
+                        continue;
+                    }
+
+                    if (d.dispType == "TUE")
+                    {
+                        numOfDispsByLoad["TUGs-TUEs"]["TUE"] += d.apparentLoad;
+
+                        continue;
+                    }
+
+                    numOfDispsByLoad["TUGs-TUEs"][d.apparentLoad.ToString()] += 1;
+                }
+
+                return numOfDispsByLoad;
+            }
+
         }
 
         public class Dispositive
@@ -192,7 +261,22 @@ namespace PlayingWithMEP
 
                 this.location = dispES.Location;
 
+                this.dispType = getDispType();
+
             }
+
+            public string getDispType()
+            {
+                // Checks if this dispositive is a TUE or TUG
+                if (this.categoryName == "Luminárias")
+                {
+                    return "Lamp";
+                }
+
+                return this.apparentLoad == 100 || this.apparentLoad == 600 ? "TUG" : "TUE";
+            }
+
+            
 
             public string dispType { get; set; }
 

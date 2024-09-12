@@ -36,10 +36,9 @@ namespace PlayingWithMEP
 
             
             
-            using (var stream = new FileStream(Properties.Resources.creds, FileMode.Open, FileAccess.Read))
-            {
-                credential = GoogleCredential.FromStream(stream).CreateScoped(scopes);
-            }
+            
+            credential = GoogleCredential.FromJson(Properties.Resources.creds).CreateScoped(scopes);
+            
 
             SheetsService service = new SheetsService(new BaseClientService.Initializer() {
                 HttpClientInitializer = credential,
