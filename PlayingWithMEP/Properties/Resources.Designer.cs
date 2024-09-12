@@ -61,12 +61,15 @@ namespace PlayingWithMEP.Properties {
         }
         
         /// <summary>
-        ///   Consulta um recurso localizado do tipo System.Byte[].
+        ///   Consulta uma cadeia de caracteres localizada semelhante a {
+        ///  &quot;type&quot;: &quot;service_account&quot;,
+        ///  &quot;project_id&quot;: &quot;sheetsapi-423316&quot;,
+        ///  &quot;private_key_id&quot;: &quot;5c28d84d5f1f2d4070ad3ac78515e778a8de78af&quot;,
+        ///  &quot;private_key&quot;: &quot;-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDGrNEX+LBnL+eU\nMHg03KxnKZV1GVOv70P2f6Rs4CY+pzLe62FWf7u7//J6Gtc24p/gRl4J8GfBD6Mv\nnKQh7efH/wX7BeZs4RVJUDxTDfz3SKiqPWJXUv3pOSw0Xv6KldPSyxo+y4k5euiF\nnYztbWVhlWaX05DSMdqivYA5JZlvljZ00EvWJjuKvvpATqZD30XQoCjeFqmko0bY\nWsLhLmaHOJ4dfuy/zrO/ob1BvUgdyAr9ZPkrPU9PteM3cNfhRqUJES12kyWlDRys\nq+PO [o restante da cadeia de caracteres foi truncado]&quot;;.
         /// </summary>
-        internal static byte[] credentials {
+        internal static string creds {
             get {
-                object obj = ResourceManager.GetObject("credentials", resourceCulture);
-                return ((byte[])(obj));
+                return ResourceManager.GetString("creds", resourceCulture);
             }
         }
     }

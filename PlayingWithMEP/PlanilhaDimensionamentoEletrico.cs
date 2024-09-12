@@ -6,8 +6,14 @@ using System.Threading.Tasks;
 
 namespace PlayingWithMEP
 {
-    internal class PlanilhaDimensionamentoEletrico
+    internal class PlanilhaDimensionamentoEletrico : GoogleSheetsManager
     {
+        public PlanilhaDimensionamentoEletrico(string spreadsheetId) : base(spreadsheetId) { }
 
+        public void sendCircuitsDataToSheets()
+        {
+            // TODO: Implementar a escrita dos dados de circuitos na planilha
+        }
+        
     }
 }
