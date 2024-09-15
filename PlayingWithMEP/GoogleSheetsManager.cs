@@ -48,7 +48,7 @@ namespace PlayingWithMEP
             return service;
         }
 
-        public void writeData(string sheet, string range, List<object> data)
+        public async Task<AppendValuesResponse> writeData(string sheet, string range, List<object> data)
         {
             ValueRange valuesToSend = new ValueRange();
 
@@ -58,8 +58,11 @@ namespace PlayingWithMEP
 
             var appendReq = this.service.Spreadsheets.Values.Append(valuesToSend, this.SpreadsheetId, $"{sheet}!{range}");
             appendReq.ValueInputOption = SpreadsheetsResource.ValuesResource.AppendRequest.ValueInputOptionEnum.USERENTERED;
+
+            Task<AppendValuesResponse> response = appendReq.ExecuteAsync();
             
-            var response = appendReq.Execute();
+
+            return await response;
         
         }
 
@@ -90,26 +93,6 @@ namespace PlayingWithMEP
             var deleteReq = this.service.Spreadsheets.Values.Clear(new ClearValuesRequest(), this.SpreadsheetId, $"{sheet}!{range}");
             
             var response = deleteReq.Execute();
-        }
-
-        public void batchUpdate (string sheet, string[] rangesList, List<object> data)
-        {
-            ValueRange valuesToSend = new ValueRange();
-
-            List<IList<object>> dataMatrix = new List<IList<object>> { data };
-            BatchUpdateSpreadsheetRequest batchReqBody = new BatchUpdateSpreadsheetRequest();
-
-            batchReqBody.Requests = new List<Request>();
-
-            foreach (string range in rangesList)
-            {
-                Request updateReq = new Request();
-
-                batchReqBody.Requests.Add()
-            }
-
-
-            var batchUpReq = this.service.Spreadsheets.Values.BatchUpdate();
         }
 
 

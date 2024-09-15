@@ -14,16 +14,22 @@ namespace PlayingWithMEP
             this.panel = panel; 
         }
 
-        public void sendCircuitsDataToSheets()
+        public async void SendCircuitsDataToSheets()
         {
             // TODO: Implementar a escrita dos dados de circuitos na planilha
             // B8:C8;E8:F8;N8:R8;
-            string getCircuitRange (int rowNum)
+            string getCircuitLoadBoardRange (int rowNum)
             {
                 return $"B{rowNum}:C{rowNum};E{rowNum}:F{rowNum};N{rowNum}:R{rowNum}";
             }
 
-            string sheet = "Quadro de Carga";
+            string getCircuitCalcRange (int rowNum)
+            {
+                return $"N{rowNum}";
+            }
+
+            string sheet1 = "Quadro de Carga";
+            string sheet2 = "Dimensionamento das Seções";
             int row = 8;
 
             foreach (ElectricalClasses.Circuit c in this.panel.AssignedCircuits)
@@ -43,14 +49,18 @@ namespace PlayingWithMEP
                     c.numOfDispositivesByLoad["TUGs-TUEs"]["600"],
                     c.numOfDispositivesByLoad["TUGs-TUEs"]["TUE"]
                 };
-                string[] ranges = getCircuitRange(row).Split(';');
 
-                this.writeData(sheet, ranges[0], circuitData_1);
-                this.writeData(sheet, ranges[1], circuitData_2);
-                this.writeData(sheet, ranges[2], circuitData_3);
+                List<object> circuitData_4 = new List<object>() { c.length };
 
+                string[] ranges = getCircuitLoadBoardRange(row).Split(';');
 
+                await this.writeData(sheet1, ranges[0], circuitData_1);
+                await this.writeData(sheet1, ranges[1], circuitData_2);
+                await this.writeData(sheet1, ranges[2], circuitData_3);
+                await this.writeData(sheet2, getCircuitCalcRange(row), circuitData_4);
+                
                 row++;
+                
             }
 
         }

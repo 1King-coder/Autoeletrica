@@ -39,8 +39,9 @@ namespace PlayingWithMEP
 
             PlanilhaDimensionamentoEletrico sheetsApi = new PlanilhaDimensionamentoEletrico("1MZt_KFsS692brVrzg6c-06q4siw1l7bPfPLvwIXfC_c", panel);
 
+            List<ECs.Circuit> circuits = panel.AssignedCircuits; // ECs.Circuit
 
-            sheetsApi.sendCircuitsDataToSheets();
+            sheetsApi.SendCircuitsDataToSheets();
 
             return Result.Succeeded;
         }

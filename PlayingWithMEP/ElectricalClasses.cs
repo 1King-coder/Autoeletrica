@@ -24,7 +24,7 @@ namespace PlayingWithMEP
 
                 this.PanelObj = panelEE;
 
-                this.AssignedCircuits = getCircuits(panelEE, doc);
+                this.AssignedCircuits = SortCircuitsByNumber(getCircuits(panelEE, doc));
 
                 this.totalLoad = getPanelTotalLoad(this.AssignedCircuits);
 
@@ -57,6 +57,13 @@ namespace PlayingWithMEP
                 }
 
                 return circuitList;
+            }
+
+            public List<Circuit> SortCircuitsByNumber (List<Circuit> Circuits)
+            {
+                List<Circuit> sortedCircuits = Circuits.OrderBy(c => c.circuitNumber).ToList();
+
+                return sortedCircuits;
             }
 
             public FamilyInstance panelElement { get; set; }
