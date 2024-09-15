@@ -64,8 +64,8 @@ namespace PlayingWithMEP.Properties {
         ///   Consulta uma cadeia de caracteres localizada semelhante a {
         ///  &quot;type&quot;: &quot;service_account&quot;,
         ///  &quot;project_id&quot;: &quot;sheetsapi-423316&quot;,
-        ///  &quot;private_key_id&quot;: &quot;23bfc032cc47d629c033ee91489dcd503306d350&quot;,
-        ///  &quot;private_key&quot;: &quot;-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDQGSAUbIbcIdWH\nbYfhBJGbBpqqi6Tc+bE4palhz24U7Y0VDNsS13h42yunOQJq3mcAqE6XtIddI5/z\nRfLUr5n8N2TwpcpRcATqjx8bacYZcZ/ZhJAkNPpCtlwxoYEYR80OsT1r7nv1+kFc\nfpJFEhe8dHMJ9M2mqM/4uUutClDR91WFgmUiCrW3bvC7fm23h9SbXd+0qcJ9EjeB\nEZF35y6n/VqOseL1uvjb11pmZfeYNmZHhLTEkJ54d7sml12Z48vOMPdvoxkPG3Pr\nb4qP [o restante da cadeia de caracteres foi truncado]&quot;;.
+        ///  &quot;private_key_id&quot;: &quot;5c28d84d5f1f2d4070ad3ac78515e778a8de78af&quot;,
+        ///  &quot;private_key&quot;: &quot;-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDGrNEX+LBnL+eU\nMHg03KxnKZV1GVOv70P2f6Rs4CY+pzLe62FWf7u7//J6Gtc24p/gRl4J8GfBD6Mv\nnKQh7efH/wX7BeZs4RVJUDxTDfz3SKiqPWJXUv3pOSw0Xv6KldPSyxo+y4k5euiF\nnYztbWVhlWaX05DSMdqivYA5JZlvljZ00EvWJjuKvvpATqZD30XQoCjeFqmko0bY\nWsLhLmaHOJ4dfuy/zrO/ob1BvUgdyAr9ZPkrPU9PteM3cNfhRqUJES12kyWlDRys\nq+PO [o restante da cadeia de caracteres foi truncado]&quot;;.
         /// </summary>
         internal static string creds {
             get {

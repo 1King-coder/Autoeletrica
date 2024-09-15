@@ -48,7 +48,7 @@ namespace PlayingWithMEP
             return service;
         }
 
-        public async Task<AppendValuesResponse> writeData(string sheet, string range, List<object> data)
+        public AppendValuesResponse writeData(string sheet, string range, List<object> data)
         {
             ValueRange valuesToSend = new ValueRange();
 
@@ -59,10 +59,10 @@ namespace PlayingWithMEP
             var appendReq = this.service.Spreadsheets.Values.Append(valuesToSend, this.SpreadsheetId, $"{sheet}!{range}");
             appendReq.ValueInputOption = SpreadsheetsResource.ValuesResource.AppendRequest.ValueInputOptionEnum.USERENTERED;
 
-            Task<AppendValuesResponse> response = appendReq.ExecuteAsync();
+            AppendValuesResponse response = appendReq.Execute();
             
 
-            return await response;
+            return response;
         
         }
 

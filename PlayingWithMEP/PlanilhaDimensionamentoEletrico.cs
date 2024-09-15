@@ -54,10 +54,10 @@ namespace PlayingWithMEP
 
                 string[] ranges = getCircuitLoadBoardRange(row).Split(';');
 
-                await this.writeData(sheet1, ranges[0], circuitData_1);
-                await this.writeData(sheet1, ranges[1], circuitData_2);
-                await this.writeData(sheet1, ranges[2], circuitData_3);
-                await this.writeData(sheet2, getCircuitCalcRange(row), circuitData_4);
+                this.writeData(sheet1, ranges[0], circuitData_1);
+                this.writeData(sheet1, ranges[1], circuitData_2);
+                this.writeData(sheet1, ranges[2], circuitData_3);
+                this.writeData(sheet2, getCircuitCalcRange(row), circuitData_4);
                 
                 row++;
                 
