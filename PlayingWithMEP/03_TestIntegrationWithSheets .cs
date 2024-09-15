@@ -43,7 +43,7 @@ namespace PlayingWithMEP
             List<ECs.Circuit> circuits = panel.AssignedCircuits; // ECs.Circuit
 
 
-            //sheetsApi.SendCircuitsDataToSheets();
+            sheetsApi.SendCircuitsDataToSheets();
 
             return Result.Succeeded;
         }
