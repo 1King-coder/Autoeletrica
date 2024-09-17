@@ -258,6 +258,8 @@ namespace PlayingWithMEP
 
                 ElectricalSystem dispES = this.dispositiveInstance.MEPModel.GetElectricalSystems().ElementAt(0);
 
+                this.EScircuit = dispES;
+
                 this.circuitName = dispES.LoadName;
 
                 this.connectorManager = dispES.ConnectorManager;
@@ -282,7 +284,7 @@ namespace PlayingWithMEP
 
                 return this.apparentLoad == 100 || this.apparentLoad == 600 ? "TUG" : "TUE";
             }
-
+            public ElectricalSystem EScircuit { get; set; }
             
 
             public string dispType { get; set; }

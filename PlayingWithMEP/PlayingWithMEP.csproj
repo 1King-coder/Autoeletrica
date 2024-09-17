@@ -88,9 +88,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="02_GettingEquipmentWithClasses  - Cópia .cs" />
+    <Compile Include="04_IdentifyCircuits .cs" />
     <Compile Include="03_TestIntegrationWithSheets .cs" />
     <Compile Include="01_TestToGetEquipment.cs" />
     <Compile Include="ElectricalClasses.cs" />
+    <Compile Include="GeometryUtils.cs" />
     <Compile Include="GoogleSheetsManager.cs" />
     <Compile Include="PlanilhaDimensionamentoEletrico.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
