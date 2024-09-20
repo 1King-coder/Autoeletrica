@@ -262,7 +262,7 @@ namespace PlayingWithMEP
 
                 this.circuitName = dispES.LoadName;
 
-                this.connectorManager = dispES.ConnectorManager;
+                this.connectorManager = this.dispositiveInstance.MEPModel.ConnectorManager;
 
                 this.room = this.dispositiveInstance.Room;
 

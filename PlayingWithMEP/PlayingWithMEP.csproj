@@ -95,6 +95,7 @@
     <Compile Include="GeometryUtils.cs" />
     <Compile Include="GoogleSheetsManager.cs" />
     <Compile Include="PlanilhaDimensionamentoEletrico.cs" />
+    <Compile Include="ProjectAutomations.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

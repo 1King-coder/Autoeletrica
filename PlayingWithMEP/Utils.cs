@@ -11,6 +11,7 @@ using Autodesk.Revit.DB.Electrical;
 using System.Collections;
 using Autodesk.Revit.UI.Events;
 using Autodesk.Revit.DB.Architecture;
+using ECs = PlayingWithMEP.ElectricalClasses;
 
 
 
@@ -45,6 +46,78 @@ namespace PlayingWithMEP
             Element selectedPanel = this.doc.GetElement(pickedRef);
 
             return selectedPanel as FamilyInstance;
+        }
+
+        public Reference pickElementRef(Selection sel)
+        {
+            Reference pickedRef = null;
+
+            try
+            {
+                pickedRef = sel.PickObject(ObjectType.Element, "Select the Dispositive");
+
+            }
+            catch
+            {
+                return null;
+            }
+
+            return pickedRef;
+        }
+
+        public ElementId GetDispositiveCircuitShemeSymbolId (ElectricalClasses.Dispositive dispositive)
+        {
+            ECs.Circuit dispCirc = new ECs.Circuit(dispositive.EScircuit, doc);
+
+            switch (dispCirc.scheme) 
+            {
+                case "F + N + T":
+                    if (dispositive.dispType == "Lamp") return this.symbolIdForPowerDispositives("1 FN").Id;
+
+                    return this.symbolIdForPowerDispositives("1 FNT").Id;
+
+                case "2F + T":
+                    return this.symbolIdForPowerDispositives("2FT").Id;
+
+                case "2F + N + T":
+                    return this.symbolIdForPowerDispositives("2FNT").Id;
+
+                case "3F + T":
+                    return this.symbolIdForPowerDispositives("3FT").Id;
+
+                case "3F + N + T":
+                    return this.symbolIdForPowerDispositives("3FNT").Id;
+
+                default:
+                    return this.symbolIdForPowerDispositives("1FN").Id;
+            }
+        }
+
+        public FamilySymbol symbolIdForPowerDispositives (string scheme) 
+        {
+            IEnumerable<FamilySymbol> CircuitFamilySymbols = new FilteredElementCollector(this.doc).OfClass(typeof(FamilySymbol))
+                .Cast<FamilySymbol>().Where(x => x.FamilyName.Equals("Fiação - Tags Eletrical Fixtures - Dispositivos"));
+
+
+            return CircuitFamilySymbols.Where(x => x.Name.Equals(scheme)).First(); 
+        }
+
+        public FamilySymbol symbolIdForIluminationDispositives (string scheme)
+        {
+            IEnumerable<FamilySymbol> LuminaryFamilySymbol = new FilteredElementCollector(this.doc).OfClass(typeof(FamilySymbol))
+                .Cast<FamilySymbol>().Where(x => x.FamilyName.Equals("Fiação - Tags Lighting Fixture - Luminarias"));
+
+            return LuminaryFamilySymbol.Where(x => x.Name.Equals(scheme)).First();
+        }
+
+        public bool isDispositive (Element e)
+        {
+            return e.Category.Name == "Dispositivos elétricos";
+        }
+
+        public bool isLuminary (Element e)
+        {
+            return e.Category.Name == "Luminárias";
         }
 
         public List<ElectricalSystem> ESSetToList (ISet<ElectricalSystem> iset)

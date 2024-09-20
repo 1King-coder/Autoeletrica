@@ -9,6 +9,7 @@ using Autodesk.Revit.Attributes;
 using Autodesk.Revit.UI.Selection;
 using Autodesk.Revit.DB.Electrical;
 using ECs = PlayingWithMEP.ElectricalClasses;
+using Automations = PlayingWithMEP.ProjectAutomations;
 
 
 namespace PlayingWithMEP
@@ -26,22 +27,21 @@ namespace PlayingWithMEP
             
 
             Utils utils = new Utils(doc);
+            GeometryUtils gUtils = new GeometryUtils(doc);
+            Automations.IdentifyCircuitsMethod identify = new Automations.IdentifyCircuitsMethod(doc);
 
             Transaction trans = new Transaction(doc);
 
             trans.Start("Selection");
 
-            FamilyInstance el = utils.pickElement(sel);
-
-            
-
-            
-
+            Reference el = utils.pickElementRef(sel);
             
             trans.Commit();
-            ECs.Circuit circ = new ECs.Circuit(new ECs.Dispositive(el, doc).EScircuit, doc);
 
+            ECs.Panel panel = new ECs.Panel(doc.GetElement(el) as FamilyInstance, doc);
 
+            identify.identifyAllCircuitsFromPanel(panel);
+            
             return Result.Succeeded;
         }
     }
