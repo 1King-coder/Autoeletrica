@@ -38,9 +38,11 @@ namespace PlayingWithMEP
             
             trans.Commit();
 
-            ECs.Panel panel = new ECs.Panel(doc.GetElement(el) as FamilyInstance, doc);
+            //ECs.Panel panel = new ECs.Panel(doc.GetElement(el) as FamilyInstance, doc);
 
-            identify.identifyAllCircuitsFromPanel(panel);
+            identify.IdentifyDispositiveCircuit(new ECs.Dispositive(doc.GetElement(el), doc), el);
+
+            //identify.identifyAllCircuitsFromPanel(panel);
             
             return Result.Succeeded;
         }

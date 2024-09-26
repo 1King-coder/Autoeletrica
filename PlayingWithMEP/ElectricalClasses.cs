@@ -268,7 +268,7 @@ namespace PlayingWithMEP
 
                 this.name = dispES.Name;
 
-                this.location = dispES.Location;
+                this.location = this.dispositiveElement.Location;
 
                 this.dispType = getDispType();
 
@@ -314,5 +314,22 @@ namespace PlayingWithMEP
             public ConnectorManager connectorManager { get; set; }
 
         }
+
+        public class ConduitAndDispositives 
+        {
+            public ConduitAndDispositives(List<Conduit> conduits, List<Dispositive> dispositives, List<ElementId> mappedConduits) 
+            {
+                this.ConduitsList = conduits;
+                this.DispositivesList = dispositives;
+                this.MappedConduitsIdList = mappedConduits;
+            }
+
+            public List<Conduit> ConduitsList { get; set; }
+
+            public List <Dispositive> DispositivesList { get; set; }
+
+            public List<ElementId> MappedConduitsIdList { get; set; }
+        }
+
     }
 }

@@ -43,12 +43,29 @@ namespace PlayingWithMEP
 
                 List<Connector> usedCons = gUt.GetDispositiveUsedConnectors(dispositive);
 
-                List<Conduit> conduitsTilNextDispositive = gUt.TrackConduitsToNextES(usedCons);
+                Dictionary<int, List<ElementId>> cPathToNextDispositives = gUt.GetConduitsPathsFromDispositive(dispositive);
+
+                List<string> connectedElements = new List<string>();
+
+                foreach (Connector conId in usedCons)
+                {
+                    List<Conduit> cPath = ut.GetConduitsFromPath(cPathToNextDispositives[conId.Id]);
+
+                    connectedElements.Add(this.doc.GetElement(gUt.GetNextDispositiveFromPath(cPath)).Name);
+                }
+
+                //List<Conduit> conduitsPath = ut.GetConduitsFromPath(cPathToNextDispositives[usedCons.Last().Id]);
+
+               // Element nextDisp = this.doc.GetElement(gUt.GetNextDispositiveFromPath(conduitsPath));
+
+                //List<Conduit> condsToPanel = gUt.TrackConduitTilPanel(condAndDisp.DispositivesList, dispositive, condAndDisp.MappedConduitsIdList);
+
+                //List <Conduit> conduitsTilNextDispositive = condAndDisp.ConduitsList;
                 Transaction trans = new Transaction(doc);
 
                 trans.Start("Identify Circuit");
 
-                foreach (Conduit conduit in conduitsTilNextDispositive)
+                /*foreach (Conduit conduit in conduitsTilNextDispositive)
                 {
                     Line line = gUt.GetLineFromConduit(conduit);
 
@@ -81,7 +98,6 @@ namespace PlayingWithMEP
                         continue;
                     }
 
-
                     IndependentTag tag = IndependentTag.Create(this.doc, TagId, this.doc.ActiveView.Id, DispositiveRef, true, TagOrientation.Horizontal, tagPt);
                     tag.LeaderEndCondition = LeaderEndCondition.Free;
                     tag.SetLeaderEnd(DispositiveRef, conduitMiddlePoint);
@@ -110,7 +126,7 @@ namespace PlayingWithMEP
 
                 }
 
-                trans.Commit();
+                trans.Commit();*/
             }
 
             public void identifyAllCircuitsFromPanel(ECs.Panel panel)
@@ -121,6 +137,7 @@ namespace PlayingWithMEP
                     {
                         Reference dispositiveRef = new Reference(dispositive.dispositiveElement);
                         IdentifyDispositiveCircuit(dispositive, dispositiveRef);
+
                     }
                 }
             }

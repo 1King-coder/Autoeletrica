@@ -12,6 +12,8 @@ using System.Collections;
 using Autodesk.Revit.UI.Events;
 using Autodesk.Revit.DB.Architecture;
 using ECs = PlayingWithMEP.ElectricalClasses;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 
 
@@ -19,7 +21,6 @@ namespace PlayingWithMEP
 {
     internal class Utils
     {
-
 
         private Document doc;
 
@@ -65,6 +66,10 @@ namespace PlayingWithMEP
             return pickedRef;
         }
 
+        public List<Conduit> GetConduitsFromPath (List<ElementId> cPath)
+        {
+            return cPath.ConvertAll(elId => this.doc.GetElement(elId) as Conduit);
+        }
         public ElementId GetDispositiveCircuitShemeSymbolId (ElectricalClasses.Dispositive dispositive)
         {
             ECs.Circuit dispCirc = new ECs.Circuit(dispositive.EScircuit, doc);
@@ -120,6 +125,11 @@ namespace PlayingWithMEP
             return e.Category.Name == "Luminárias";
         }
 
+        public bool isElectricEquipment(Element e)
+        {
+            return e.Category.Name == "Equipamento elétrico";
+        }
+
         public List<ElectricalSystem> ESSetToList (ISet<ElectricalSystem> iset)
         {
             List<ElectricalSystem> newList = new List<ElectricalSystem>();
@@ -155,5 +165,4 @@ namespace PlayingWithMEP
             return Convert.ToInt32(voltageString.Remove(voltageString.Length - 3));
         }
     }
-    
 }
