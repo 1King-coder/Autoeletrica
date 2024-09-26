@@ -45,14 +45,7 @@ namespace PlayingWithMEP
 
                 Dictionary<int, List<ElementId>> cPathToNextDispositives = gUt.GetConduitsPathsFromDispositive(dispositive);
 
-                List<string> connectedElements = new List<string>();
-
-                foreach (Connector conId in usedCons)
-                {
-                    List<Conduit> cPath = ut.GetConduitsFromPath(cPathToNextDispositives[conId.Id]);
-
-                    connectedElements.Add(this.doc.GetElement(gUt.GetNextDispositiveFromPath(cPath)).Name);
-                }
+                List<Element> connectedElements = gUt.GetConnectedElectricalElements(dispositive);
 
                 //List<Conduit> conduitsPath = ut.GetConduitsFromPath(cPathToNextDispositives[usedCons.Last().Id]);
 

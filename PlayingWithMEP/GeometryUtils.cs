@@ -183,6 +183,24 @@ namespace PlayingWithMEP
 
         }
 
+        public List<Element> GetConnectedElectricalElements (ECs.Dispositive dispositive)
+        {
+            List<Connector> usedCons = GetDispositiveUsedConnectors(dispositive);
+
+            Dictionary<int, List<ElementId>> cPathToNextDispositives = GetConduitsPathsFromDispositive(dispositive);
+
+            List<Element> connectedElements = new List<Element>();
+
+            foreach (Connector conId in usedCons)
+            {
+                List<Conduit> cPath = ut.GetConduitsFromPath(cPathToNextDispositives[conId.Id]);
+
+                connectedElements.Add(this.doc.GetElement(GetNextDispositiveFromPath(cPath)));
+            }
+
+            return connectedElements;
+        }
+
         public List<Conduit> GetParallelToXYConduits (List<Conduit> conduits)
         {
             List<Conduit> parallelToXYConduits = new List<Conduit>();
