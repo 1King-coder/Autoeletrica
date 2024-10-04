@@ -129,6 +129,10 @@ namespace PlayingWithMEP
         {
             return e.Category.Name == "Equipamento elétrico";
         }
+        public bool isElectricalComponent (Element e )
+        {
+            return isDispositive (e) || isLuminary(e) || isElectricEquipment(e);
+        }
 
         public List<ElectricalSystem> ESSetToList (ISet<ElectricalSystem> iset)
         {
@@ -163,6 +167,66 @@ namespace PlayingWithMEP
         public int voltageStringToInt (string voltageString)
         {
             return Convert.ToInt32(voltageString.Remove(voltageString.Length - 3));
+        }
+
+        public List<Connector> GetDispositiveUsedConnectors(ECs.Dispositive dispositive)
+        {
+            ConnectorSet allCons = dispositive.connectorManager.Connectors;
+            List<Connector > AllconnectorsList = new List<Connector>();
+
+            foreach (Connector con in allCons)
+            {
+                AllconnectorsList.Add (con);
+            }
+
+            return AllconnectorsList.Where((x) => !x.AllRefs.IsEmpty).ToList();
+
+        }
+
+        public List<Connector> GetConnectorListFromConnectorSet (ConnectorSet connectorSet)
+        {
+            List<Connector> connectorList = new List<Connector>();
+
+            foreach (Connector con in connectorSet)
+            {
+                connectorList.Add (con);
+            }
+
+            return connectorList;
+        }
+
+        public List<Connector> GetPanelUsedConnectors(ElectricalEquipment EE)
+        {
+            ConnectorSet allCons = EE.ConnectorManager.Connectors;
+            List<Connector> AllconnectorsList = new List<Connector>();
+
+            foreach (Connector con in allCons)
+            {
+                AllconnectorsList.Add(con);
+            }
+
+            return AllconnectorsList.Where((x) => !x.AllRefs.IsEmpty).ToList();
+
+        }
+
+        public List<Connector> GetConduitElbowUsedConnectors(MEPModel elbow)
+        {
+            ConnectorSet allCons = elbow.ConnectorManager.Connectors;
+            List<int> AllConsId = new List<int>();
+
+            List<Connector> AllconnectorsList = new List<Connector>();
+
+            foreach (Connector con in allCons)
+            {
+                AllconnectorsList.Add(con);
+            }
+
+            return AllconnectorsList.Where((x) => !x.AllRefs.IsEmpty).ToList();
+        }
+
+        public bool isElbowConnectedToMultipleConduits (MEPModel elbow)
+        {
+            return GetConduitElbowUsedConnectors(elbow).Count > 2;
         }
     }
 }

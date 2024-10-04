@@ -17,6 +17,7 @@ namespace PlayingWithMEP
         private Document doc;
         private Utils ut;
         private GeometryUtils gUt;
+        public MappingConduitsPaths mapping;
         private List<XYZ> alreadyIdentifiedPoints;
 
         public ProjectAutomations (Document doc)
@@ -25,7 +26,7 @@ namespace PlayingWithMEP
             this.ut = new Utils(doc);
             this.gUt = new GeometryUtils(doc);
             this.alreadyIdentifiedPoints = new List<XYZ>();
-
+            this.mapping = new MappingConduitsPaths(doc); 
         }
 
         public class IdentifyCircuitsMethod : ProjectAutomations 
@@ -39,21 +40,8 @@ namespace PlayingWithMEP
             public void IdentifyDispositiveCircuit(ECs.Dispositive dispositive, Reference DispositiveRef)
             {
 
-                ElementId TagId = ut.GetDispositiveCircuitShemeSymbolId(dispositive);
+                Dictionary<int, Dictionary<ElementId, List<ElementId>>> paths = mapping.GetPathsToNextDispositiveOrTElbowFromDispositive(dispositive);
 
-                List<Connector> usedCons = gUt.GetDispositiveUsedConnectors(dispositive);
-
-                Dictionary<int, List<ElementId>> cPathToNextDispositives = gUt.GetConduitsPathsFromDispositive(dispositive);
-
-                List<Element> connectedElements = gUt.GetConnectedElectricalElements(dispositive);
-
-                //List<Conduit> conduitsPath = ut.GetConduitsFromPath(cPathToNextDispositives[usedCons.Last().Id]);
-
-               // Element nextDisp = this.doc.GetElement(gUt.GetNextDispositiveFromPath(conduitsPath));
-
-                //List<Conduit> condsToPanel = gUt.TrackConduitTilPanel(condAndDisp.DispositivesList, dispositive, condAndDisp.MappedConduitsIdList);
-
-                //List <Conduit> conduitsTilNextDispositive = condAndDisp.ConduitsList;
                 Transaction trans = new Transaction(doc);
 
                 trans.Start("Identify Circuit");

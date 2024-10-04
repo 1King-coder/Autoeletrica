@@ -27,106 +27,6 @@ namespace PlayingWithMEP
             return ConvertCurveToLine((conduit.Location as LocationCurve).Curve);
         }
 
-        public List<Connector> GetDispositiveUsedConnectors (ECs.Dispositive dispositive)
-        {
-            ConnectorSet unusedCons = dispositive.connectorManager.UnusedConnectors;
-            ConnectorSet allCons = dispositive.connectorManager.Connectors;
-
-            List<int> unusedConsId = new List<int>();
-
-            foreach (Connector c in unusedCons)
-            {
-                unusedConsId.Add(c.Id);
-            }
-
-            List<Connector>  usedCons = new List<Connector>();
-
-            foreach (Connector con in allCons)
-            {
-                if (!unusedConsId.Contains(con.Id))
-                {
-                    usedCons.Add(con);
-                }
-            }
-
-            return usedCons;
-            
-        }
-
-        public List<Connector> GetConduitUsedConnectors (Conduit conduit)
-        {
-            ConnectorSet unusedCons = conduit.ConnectorManager.UnusedConnectors;
-            ConnectorSet allCons = conduit.ConnectorManager.Connectors;
-
-            List<int> unusedConsId = new List<int>();
-
-            foreach (Connector c in unusedCons)
-            {
-                unusedConsId.Add(c.Id);
-            }
-
-            List<Connector> usedCons = new List<Connector>();
-
-            foreach (Connector con in allCons)
-            {
-                if (!unusedConsId.Contains(con.Id))
-                {
-                    usedCons.Add(con);
-                }
-            }
-
-            return usedCons;
-
-        }
-
-        public List<ElementId> mapConduitCons (MEPCurve conduit, List<ElementId> mappedConduitsId)
-        {
-            ConnectorSet ConSet = conduit.ConnectorManager.Connectors;
-            
-
-            foreach (Connector c in ConSet)
-            {
-                foreach (Connector nextCon in c.AllRefs)
-                {
-                    if (nextCon.Owner.Category.Name == "Conexões do conduite" &&  !mappedConduitsId.Contains(nextCon.Owner.Id))
-                    {
-                        mappedConduitsId.Add(nextCon.Owner.Id);
-                        mapConduitElbowsCons(nextCon.Owner as FamilyInstance, mappedConduitsId);
-                    }
-
-                    if (nextCon.Owner.Category.Name == "Conduites" && !mappedConduitsId.Contains(nextCon.Owner.Id))
-                    {
-                        mappedConduitsId.Add(nextCon.Owner.Id);
-                    }
-
-                }
-            }
-
-            return mappedConduitsId;
-        }
-
-
-
-        public List<ElementId> mapConduitElbowsCons (FamilyInstance elbow, List<ElementId> mappedConduitsId)
-        {
-            
-            ConnectorSet ConSet = elbow.MEPModel.ConnectorManager.Connectors;
-
-            foreach (Connector c in ConSet)
-            {
-                foreach (Connector nextCon in c.AllRefs)
-                {
-                    if (!mappedConduitsId.Contains(nextCon.Owner.Id))
-                    {
-                        mappedConduitsId.Add(nextCon.Owner.Id);
-                        mapConduitCons(nextCon.Owner as MEPCurve, mappedConduitsId);
-
-                    }
-                }
-            }
-            return mappedConduitsId;
-        }
-
         public bool isValidParallelConduit (Conduit conduit)
         {
             Line conduitLine = GetLineFromConduit(conduit);
@@ -135,33 +35,6 @@ namespace PlayingWithMEP
             
         }
 
-
-        public Dictionary<int, List<ElementId>> GetConduitsPathsFromDispositive (ECs.Dispositive dispositive, List<ElementId> mappedConduitsId = null)
-        {
-            if (mappedConduitsId == null) { mappedConduitsId = new List<ElementId>(); }
-
-            List<Connector> consInUse = GetDispositiveUsedConnectors(dispositive);
-
-            Dictionary<int, List<ElementId>> result = new Dictionary<int, List<ElementId>>();
-
-            
-            foreach (Connector con in consInUse)
-            {
-                result.Add(con.Id, new List<ElementId>());
-
-                foreach (Connector nextCon in con.AllRefs)
-                {
-                    if (nextCon.Owner != null && nextCon.Owner.Category.Name == "Conduites" && !mappedConduitsId.Contains(nextCon.Owner.Id))
-                    {
-                        mappedConduitsId.Add(nextCon.Owner.Id);
-                        result[con.Id] = mapConduitCons(nextCon.Owner as MEPCurve, mappedConduitsId.ConvertAll(elId => elId));
-                    }
-                }
-                mappedConduitsId.Clear();
-            }
-
-            return result;
-        }
 
         public ElementId GetNextDispositiveFromPath (List<Conduit> cPath)
         {
@@ -183,23 +56,9 @@ namespace PlayingWithMEP
 
         }
 
-        public List<Element> GetConnectedElectricalElements (ECs.Dispositive dispositive)
-        {
-            List<Connector> usedCons = GetDispositiveUsedConnectors(dispositive);
 
-            Dictionary<int, List<ElementId>> cPathToNextDispositives = GetConduitsPathsFromDispositive(dispositive);
 
-            List<Element> connectedElements = new List<Element>();
 
-            foreach (Connector conId in usedCons)
-            {
-                List<Conduit> cPath = ut.GetConduitsFromPath(cPathToNextDispositives[conId.Id]);
-
-                connectedElements.Add(this.doc.GetElement(GetNextDispositiveFromPath(cPath)));
-            }
-
-            return connectedElements;
-        }
 
         public List<Conduit> GetParallelToXYConduits (List<Conduit> conduits)
         {
@@ -216,6 +75,19 @@ namespace PlayingWithMEP
             }
 
             return parallelToXYConduits;
+        }
+        
+        public Dictionary<int, List<Conduit>> GetParallelToXYConduitsFromPath (Dictionary<int, List<ElementId>> PathsFromConsObject)
+        {
+            Dictionary<int, List<Conduit>> result = new Dictionary<int, List<Conduit>>();
+
+            foreach (int conId in PathsFromConsObject.Keys)
+            {
+                List<Conduit> conduitsPath = ut.GetConduitsFromPath(PathsFromConsObject[conId]);
+                result.Add(conId, GetParallelToXYConduits(conduitsPath));
+            }
+
+            return result;
         }
 
         public bool isParallelToXAndY(XYZ vec)

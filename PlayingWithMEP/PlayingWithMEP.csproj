@@ -94,6 +94,7 @@
     <Compile Include="ElectricalClasses.cs" />
     <Compile Include="GeometryUtils.cs" />
     <Compile Include="GoogleSheetsManager.cs" />
+    <Compile Include="MappingConduitsPaths.cs" />
     <Compile Include="PlanilhaDimensionamentoEletrico.cs" />
     <Compile Include="ProjectAutomations.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

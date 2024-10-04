@@ -32,6 +32,10 @@ namespace PlayingWithMEP
 
                 this.Name = panelElement.Name;
 
+                this.location = this.panelElement.Location as LocationPoint;
+
+                this.UsedConnectors = u.GetPanelUsedConnectors(this.PanelObj);
+
             }
 
             public int getPanelTotalLoad(List<Circuit> panelCircuits)
@@ -78,6 +82,9 @@ namespace PlayingWithMEP
 
             public string Name { get; set; }
 
+            public LocationPoint location {  get; set; }
+
+            public List<Connector> UsedConnectors { get; set; }
         }
 
         public class Circuit
@@ -268,9 +275,12 @@ namespace PlayingWithMEP
 
                 this.name = dispES.Name;
 
-                this.location = this.dispositiveElement.Location;
+                this.location = this.dispositiveElement.Location as LocationPoint;
 
                 this.dispType = getDispType();
+
+                this.UsedConnectors = u.GetDispositiveUsedConnectors(this);
+
 
             }
 
@@ -286,6 +296,7 @@ namespace PlayingWithMEP
             }
             public ElectricalSystem EScircuit { get; set; }
             
+            public ElectricalEquipment Panel  { get; set; }
 
             public string dispType { get; set; }
 
@@ -309,9 +320,11 @@ namespace PlayingWithMEP
 
             public Room room { get; set; }
 
-            public Location location { get; set; }
+            public LocationPoint location { get; set; }
 
             public ConnectorManager connectorManager { get; set; }
+
+            public List<Connector> UsedConnectors { get; set; }
 
         }
 
