@@ -59,9 +59,9 @@ namespace PlayingWithMEP
 
                 
                 List<ElementId> pathToDispositive = new List<ElementId>();
-                while (!ut.isElectricalComponent(nextCon.Owner) || !ut.isElbowConnectedToMultipleConduits((nextCon.Owner as FamilyInstance).MEPModel))
+                while (!ut.isElectricalComponent(nextCon.Owner) && !ut.isElbowConnectedToMultipleConduits((nextCon.Owner as Conduit)))
                 {
-                    FamilyInstance nextEl = ut.GetConnectorListFromConnectorSet(nextCon.ConnectorManager.Connectors).Last().Owner as FamilyInstance;
+                    Element nextEl = ut.GetConnectorListFromConnectorSet(nextCon.ConnectorManager.Connectors).Last().Owner;
 
                     // verificar codigo
 
@@ -70,7 +70,7 @@ namespace PlayingWithMEP
                     {
 
                         pathToDispositive.Add(nextEl.Id);
-                        List<Connector> nextElConnectors = ut.GetConnectorListFromConnectorSet(nextEl.MEPModel.ConnectorManager.Connectors);
+                        List<Connector> nextElConnectors = ut.GetConnectorListFromConnectorSet((nextEl as Conduit).ConnectorManager.Connectors);
                         nextCon = nextElConnectors.Last();
                         
                     }
@@ -81,28 +81,6 @@ namespace PlayingWithMEP
 
                 pathToDispositive.Clear();
 
-                //foreach (Connector nextCon in con.AllRefs)
-                //{
-                //    if (ut.isElectricEquipment(nextCon.Owner))
-                //    {
-                //        break;
-                //    }
-
-                //    if (nextCon.Owner.Category.Name == "Conexões de conduite" && !mappedElements.Contains(nextCon.Owner.Id)) 
-                //    {
-                //        mappedElements.Add(nextCon.Owner.Id);
-                //        if (ut.isElbowConnectedToMultipleConduits((nextCon.Owner as FamilyInstance).MEPModel)) { break; }
-
-                //        // implement elbow forwarding mapping
-
-                //    }
-
-                //    if (nextCon.Owner.Category.Name == "Conduites" && !mappedElements.Contains(nextCon.Owner.Id))
-                //    {
-                //        mappedElements.Add(nextCon.Owner.Id);
-                //        result[con.Id].Add(nextCon.Owner.Id);
-                //    }
-                //}
             }
 
 
@@ -111,7 +89,7 @@ namespace PlayingWithMEP
 
         }
 
-        public List<ElementId> SimpleElbowForwardMapping (MEPModel simpleElbow, List<ElementId> mappedElements = null)
+        public List<ElementId> SimpleElbowForwardMapping (Conduit simpleElbow, List<ElementId> mappedElements = null)
         {
             if (mappedElements == null) { mappedElements = new List<ElementId>(); }
 

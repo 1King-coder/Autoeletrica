@@ -87,22 +87,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="02_GettingEquipmentWithClasses  - Cópia .cs" />
-    <Compile Include="04_IdentifyCircuits .cs" />
-    <Compile Include="03_TestIntegrationWithSheets .cs" />
-    <Compile Include="01_TestToGetEquipment.cs" />
-    <Compile Include="ElectricalClasses.cs" />
-    <Compile Include="GeometryUtils.cs" />
-    <Compile Include="GoogleSheetsManager.cs" />
-    <Compile Include="MappingConduitsPaths.cs" />
-    <Compile Include="PlanilhaDimensionamentoEletrico.cs" />
-    <Compile Include="ProjectAutomations.cs" />
+    <Compile Include="PluginsMethods\02_GettingEquipmentWithClasses  - Cópia .cs" />
+    <Compile Include="PluginsMethods\05_DiagramaUnifilar.cs" />
+    <Compile Include="PluginsMethods\04_IdentifyCircuits .cs" />
+    <Compile Include="PluginsMethods\03_TestIntegrationWithSheets .cs" />
+    <Compile Include="PluginsMethods\01_TestToGetEquipment.cs" />
+    <Compile Include="Sources\ElectricalClasses.cs" />
+    <Compile Include="Sources\Diagrams.cs" />
+    <Compile Include="Sources\GeometryUtils.cs" />
+    <Compile Include="Sources\GoogleSheetsManager.cs" />
+    <Compile Include="Sources\MappingConduitsPaths.cs" />
+    <Compile Include="Sources\PlanilhaDimensionamentoEletrico.cs" />
+    <Compile Include="Sources\ProjectAutomations.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Utils.cs" />
+    <Compile Include="Sources\UtilityClasses.cs" />
+    <Compile Include="Sources\Utils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

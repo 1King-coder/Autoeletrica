@@ -37,13 +37,13 @@ namespace PlayingWithMEP
 
             ECs.Panel panel = new ECs.Panel(el, doc);
 
-            PlanilhaDimensionamentoEletrico sheetsApi = new PlanilhaDimensionamentoEletrico("1MZt_KFsS692brVrzg6c-06q4siw1l7bPfPLvwIXfC_c", panel);
+            PlanilhaDimensionamentoEletrico sheetsApi = new PlanilhaDimensionamentoEletrico("1MZt_KFsS692brVrzg6c-06q4siw1l7bPfPLvwIXfC_c");
             GoogleSheetsManager test  = new GoogleSheetsManager("1MZt_KFsS692brVrzg6c-06q4siw1l7bPfPLvwIXfC_c");
 
             List<ECs.Circuit> circuits = panel.AssignedCircuits; // ECs.Circuit
 
 
-            sheetsApi.SendCircuitsDataToSheets();
+            sheetsApi.SendCircuitsDataToSheets(panel);
 
             return Result.Succeeded;
         }

@@ -209,7 +209,7 @@ namespace PlayingWithMEP
 
         }
 
-        public List<Connector> GetConduitElbowUsedConnectors(MEPModel elbow)
+        public List<Connector> GetConduitElbowUsedConnectors(Conduit elbow)
         {
             ConnectorSet allCons = elbow.ConnectorManager.Connectors;
             List<int> AllConsId = new List<int>();
@@ -224,9 +224,48 @@ namespace PlayingWithMEP
             return AllconnectorsList.Where((x) => !x.AllRefs.IsEmpty).ToList();
         }
 
-        public bool isElbowConnectedToMultipleConduits (MEPModel elbow)
+        public bool isElbowConnectedToMultipleConduits (Conduit elbow)
         {
             return GetConduitElbowUsedConnectors(elbow).Count > 2;
         }
+
+        public View GetViewByName (string name)
+        {
+            return new FilteredElementCollector(this.doc)
+                .OfCategory(BuiltInCategory.OST_Views)
+                .OfClass(typeof(View))
+                .Where(x => x.Name.Equals(name))
+                .Cast<View>().ToList().Last();
+        }
+
+        public string GetShemeToDiagrams (string sheme)
+        {
+            switch (sheme) 
+            {
+                case "F + N":
+                    return "1 FN";
+
+                case "F + N + T":
+                    return "1 FNT";
+
+                case "2F + T":
+                    return "2 FT";
+
+                case "2F + N + T":
+                    return "2 FNT";
+
+                case "3F + T":
+                    return "3 FT";
+
+                case "3F + N + T":
+                    return "3 FNT";
+
+
+                default:
+                    return "1 FN";
+            }
+
+        }
+
     }
 }

@@ -36,6 +36,12 @@ namespace PlayingWithMEP
 
                 this.UsedConnectors = u.GetPanelUsedConnectors(this.PanelObj);
 
+                this.numOfPoles = panelElement.get_Parameter(BuiltInParameter.RBS_ELEC_PANEL_NUMPHASES_PARAM).AsInteger();
+                this.numOfNeutrals = panelElement.get_Parameter(BuiltInParameter.RBS_ELEC_PANEL_NUMWIRES_PARAM).AsInteger() - numOfPoles; // gambiarra
+                this.numOfGrounds = 1; // gambiarra
+
+                this.scheme = this.GetScheme();
+
             }
 
             public int getPanelTotalLoad(List<Circuit> panelCircuits)
@@ -63,12 +69,35 @@ namespace PlayingWithMEP
                 return circuitList;
             }
 
+            private string schemeNumToString(int num)
+            {
+                return num == 1 ? "" : num.ToString();
+            }
+
+            public string GetScheme()
+            {
+                string poles = $"{schemeNumToString(this.numOfPoles)}F";
+                string neutrals = !this.numOfNeutrals.Equals(0) ? $" + {schemeNumToString(this.numOfNeutrals)}N" : "";
+                string grounds = !this.numOfGrounds.Equals(0) ? $" + {schemeNumToString(this.numOfGrounds)}T" : "";
+
+                string scheme = $"{poles}{neutrals}{grounds}";
+
+                return scheme;
+            }
+
             public List<Circuit> SortCircuitsByNumber (List<Circuit> Circuits)
             {
                 List<Circuit> sortedCircuits = Circuits.OrderBy(c => c.circuitNumber).ToList();
 
                 return sortedCircuits;
             }
+
+            public string scheme { get; set; }
+            public int numOfNeutrals { get; set; }
+            public int numOfGrounds { get; set; }
+
+            public int numOfPoles { get; set; }
+
 
             public FamilyInstance panelElement { get; set; }
 
@@ -122,6 +151,9 @@ namespace PlayingWithMEP
 
                 this.scheme = GetScheme();
 
+                this.isNotReserveCircuit = this.Name.Contains("Reserva") ? 0 : 1;
+
+
             }
 
             public static double GetLongerPath(ElectricalSystem ES, Document doc)
@@ -171,6 +203,8 @@ namespace PlayingWithMEP
             public int apparentload { get; set; }
 
             public int voltage { get; set; }
+
+            public int isNotReserveCircuit { get; set; }
 
             public double length { get; set; }
 
