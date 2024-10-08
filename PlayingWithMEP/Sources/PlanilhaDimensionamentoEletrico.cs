@@ -56,11 +56,8 @@ namespace PlayingWithMEP
                 string[] ranges = getCircuitLoadBoardRange(row).Split(';');
 
                 this.editData(sheet1, ranges[0], circuitData_1);
-                Thread.Sleep(250);
                 this.editData(sheet1, ranges[1], circuitData_2);
-                Thread.Sleep(250);
                 this.editData(sheet1, ranges[2], circuitData_3);
-                Thread.Sleep(250);
                 this.editData(sheet2, getCircuitCalcRange(row), circuitData_4);
                 Thread.Sleep(250);
 

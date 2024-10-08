@@ -65,6 +65,8 @@
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="RevitAPI">
       <HintPath>..\..\..\..\..\..\..\Program Files\Autodesk\Revit 2023\RevitAPI.dll</HintPath>
       <Private>False</Private>
@@ -73,25 +75,51 @@
       <HintPath>..\..\..\..\..\..\..\Program Files\Autodesk\Revit 2023\RevitAPIUI.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="ricaun.Revit.Mvvm.1.1.0, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ricaun.Revit.Mvvm.1.1.0\lib\net45\ricaun.Revit.Mvvm.1.1.0.dll</HintPath>
+    </Reference>
+    <Reference Include="ricaun.Revit.UI.0.7.0, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ricaun.Revit.UI.0.7.0\lib\net48\ricaun.Revit.UI.0.7.0.dll</HintPath>
+    </Reference>
+    <Reference Include="ricaun.Revit.UI.Tasks.1.0.0, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ricaun.Revit.UI.Tasks.1.0.0\lib\net46\ricaun.Revit.UI.Tasks.1.0.0.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.CodeDom, Version=7.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.CodeDom.7.0.0\lib\net462\System.CodeDom.dll</HintPath>
     </Reference>
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\GenerateSingleLineDiagramForm.xaml.cs">
+      <DependentUpon>GenerateSingleLineDiagramForm.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SetupInterface.cs" />
+    <Compile Include="App.cs" />
+    <Compile Include="Forms\SendCircuitsToSheets.xaml.cs">
+      <DependentUpon>SendCircuitsToSheets.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PluginsMethods\02_GettingEquipmentWithClasses  - Cópia .cs" />
     <Compile Include="PluginsMethods\05_DiagramaUnifilar.cs" />
     <Compile Include="PluginsMethods\04_IdentifyCircuits .cs" />
-    <Compile Include="PluginsMethods\03_TestIntegrationWithSheets .cs" />
+    <Compile Include="PluginsMethods\SendingCircuitsDataToSheets.cs" />
     <Compile Include="PluginsMethods\01_TestToGetEquipment.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Sources\ElectricalClasses.cs" />
     <Compile Include="Sources\Diagrams.cs" />
     <Compile Include="Sources\GeometryUtils.cs" />
@@ -99,11 +127,6 @@
     <Compile Include="Sources\MappingConduitsPaths.cs" />
     <Compile Include="Sources\PlanilhaDimensionamentoEletrico.cs" />
     <Compile Include="Sources\ProjectAutomations.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Sources\UtilityClasses.cs" />
     <Compile Include="Sources\Utils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -117,8 +140,19 @@
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Forms\GenerateSingleLineDiagramForm.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Forms\SendCircuitsToSheets.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

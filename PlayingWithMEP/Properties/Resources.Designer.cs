@@ -72,5 +72,15 @@ namespace PlayingWithMEP.Properties {
                 return ResourceManager.GetString("creds", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Byte[].
+        /// </summary>
+        internal static byte[] sheetsIcon {
+            get {
+                object obj = ResourceManager.GetObject("sheetsIcon", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

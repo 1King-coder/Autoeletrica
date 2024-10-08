@@ -17,7 +17,7 @@ namespace PlayingWithMEP
 {
     [Transaction(TransactionMode.Manual)]
     [Regeneration(RegenerationOption.Manual)]
-    public class _05_DiagramaUnifilar : IExternalCommand
+    public class DiagramaUnifilar : IExternalCommand
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elementSet)
         {
@@ -25,6 +25,7 @@ namespace PlayingWithMEP
             Document doc = uiapp.ActiveUIDocument.Document;
             Selection sel = uiapp.ActiveUIDocument.Selection;
             Diagrams diagrams = new Diagrams(doc);
+
             PlanilhaDimensionamentoEletrico planilha = new PlanilhaDimensionamentoEletrico("1MZt_KFsS692brVrzg6c-06q4siw1l7bPfPLvwIXfC_c");
 
             Automations.GenerateDiagramsClass diagGen = new Automations.GenerateDiagramsClass(doc, planilha);

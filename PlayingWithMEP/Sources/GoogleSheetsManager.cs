@@ -95,6 +95,12 @@ namespace PlayingWithMEP
             var response = deleteReq.Execute();
         }
 
+        public string GetSpreadsheetTitle ()
+        {
+
+            return this.service.Spreadsheets.Get(SpreadsheetId).Execute().Properties.Title;
+        }
+
 
     }
 }
