@@ -28,29 +28,21 @@ namespace PlayingWithMEP
     /// <summary>
     /// Interação lógica para UserControl1.xam
     /// </summary>
-    public partial class GenerateSingleLineDiagramForm : Window
+    public partial class GenerateThreeLineDiagramForm : Window
     {
         
         private readonly IRevitTask revitTask;
         private ECs.Panel selectedPanel;
         private List<string> errMessages = new List<string>() 
         {
-            "Valor inválido para disjuntor do padrão de entrada!",
-            "Valor inválido para secção dos cabos do padrão de entrada!",
             "Valor inválido para disjuntor do quadro de distribuição!",
             "Valor inválido para secção dos cabos do quadro de distribuição",
-            "Valor inválido para o número de polos do DR!",
-            "Valor inválido para a corrente suportada do DR!",
-            "Valor inválido para a corrente de proteção do DR!",
-            "Valor inválido para a tensão nominal do DPS!",
-            "Valor inválido para a corrente nominal do DPS!",
-            "Valor inválido para a classe de proteção do DPS!"
         };
 
         public IAsyncRelayCommand selectPanelBtnCmd { get; private set; }
         public IAsyncRelayCommand genPanelBtnCmd { get; private set; }
 
-        public GenerateSingleLineDiagramForm(IRevitTask revitTask)
+        public GenerateThreeLineDiagramForm(IRevitTask revitTask)
         {
             InitializeComponent();
             selectPanelBtnCmd = new AsyncRelayCommand(SelectPanelBtn_Click);
@@ -123,16 +115,8 @@ namespace PlayingWithMEP
         {
             return new List<string>()
             {
-                DisjuntorElecUtxtbox.Text,
-                SeccionsElecUtxtbox.Text,
                 DisjuntorPaneltxtbox.Text,
                 SeccionsPaneltxtbox.Text,
-                NumPolosDRtxtbox.Text,
-                CorrenteDRtxtbox.Text,
-                CorrenteProtDRtxtbox.Text,
-                TensaoNomDPStxtbox.Text,
-                CorrenteDPStxtbox.Text,
-                ClasseDPStxtbox.Text,
             };
         }
 
@@ -151,28 +135,14 @@ namespace PlayingWithMEP
 
         private int CheckFieldsContent ()
         {
-            try
-            {
-                Convert.ToInt32(DisjuntorElecUtxtbox.Text);
-            } catch ( FormatException e )
-            {
-                return 0;   
-            }
-            try
-            {
-                Convert.ToDouble(SeccionsElecUtxtbox.Text);
-            }
-            catch (FormatException e)
-            {
-                return 1;
-            }
+            
             try
             {
                 Convert.ToInt32(DisjuntorPaneltxtbox.Text);
             }
             catch (FormatException e)
             {
-                return 2;
+                return 0;
             }
             try
             {
@@ -180,96 +150,13 @@ namespace PlayingWithMEP
             }
             catch (FormatException e)
             {
-                return 3;
+                return 1;
             }
-            try
-            {
-                Convert.ToInt32(NumPolosDRtxtbox.Text);
-            }
-            catch (FormatException e)
-            {
-                return 4;
-            }
-            try
-            {
-                Convert.ToInt32(CorrenteDRtxtbox.Text);
-            }
-            catch (FormatException e)
-            {
-                return 5;
-            }
-            try
-            {
-                Convert.ToInt32(CorrenteProtDRtxtbox.Text);
-            }
-            catch (FormatException e)
-            {
-                return 6;
-            }
-            try
-            {
-                Convert.ToInt32(TensaoNomDPStxtbox.Text);
-            }
-            catch (FormatException e)
-            {
-                return 7;
-            }
-            try
-            {
-                Convert.ToInt32(CorrenteDPStxtbox.Text);
-            }
-            catch (FormatException e)
-            {
-                return 8;
-            }
-
-            if (!ClasseDPStxtbox.Text.ToLower().Contains("i") && !ClasseDPStxtbox.Text.ToLower().Contains("ii") && !ClasseDPStxtbox.Text.ToLower().Contains("iii"))
-            {
-                return 9;
-            }
+            
 
             return -1;
 
         }
-
-        private ElectricalUtilityData SetUpElecetricalUtilityData(int correnteDisjuntor, double seccaoCabos)
-        {
-            ElectricalUtilityData elecUData = new ElectricalUtilityData();
-
-            elecUData.CorrenteDisjuntor = correnteDisjuntor;
-            elecUData.SeccaoCabos = seccaoCabos;
-
-            return elecUData;
-        }
-
-        private PanelIdentifierData SetUpPanelIdentifierData(
-            int CorrenteDisjuntorGeral,
-            string ClasseProtecaoDPS,
-            int CorrenteNominalDPS,
-            int TensaoNominalDPS,
-            int CorrenteDR,
-            int CorrenteProtecaoDR,
-            int NumeroPolosDR,
-            double SeccaoCabos,
-            int DPSneutro
-           )
-        {
-            PanelIdentifierData panelIdentifierData = new PanelIdentifierData();
-
-            panelIdentifierData.CorrenteDisjuntorGeral = CorrenteDisjuntorGeral;
-            panelIdentifierData.DPSneutro = DPSneutro;
-            panelIdentifierData.TensaoNominalDPS = TensaoNominalDPS;
-            panelIdentifierData.ClasseDeProtecaoDPS = ClasseProtecaoDPS;
-            panelIdentifierData.CorrenteNominalDPS = CorrenteNominalDPS;
-            panelIdentifierData.CorrenteDR = CorrenteDR;
-            panelIdentifierData.CorrenteProtecaoDR = CorrenteProtecaoDR;
-            panelIdentifierData.NumeroPolosDR = NumeroPolosDR;
-            panelIdentifierData.SeccaoCabos = SeccaoCabos;
-
-            return panelIdentifierData;
-        }
-
-
 
         private async Task GenDiagramBtn_Click()
         {
@@ -293,19 +180,8 @@ namespace PlayingWithMEP
 
             PlanilhaDimensionamentoEletrico planilha = new PlanilhaDimensionamentoEletrico(spreadsheetId);
 
-            PanelIdentifierData panelIData = SetUpPanelIdentifierData(
-                Convert.ToInt32(DisjuntorPaneltxtbox.Text),
-                ClasseDPStxtbox.Text,
-                Convert.ToInt32(CorrenteDPStxtbox.Text),
-                Convert.ToInt32(TensaoNomDPStxtbox.Text),
-                Convert.ToInt32(CorrenteDRtxtbox.Text),
-                Convert.ToInt32(CorrenteProtDRtxtbox.Text),
-                Convert.ToInt32(NumPolosDRtxtbox.Text),
-                Convert.ToDouble(SeccionsPaneltxtbox.Text),
-                (bool) DPSforNeutralUchkbox.IsChecked ? 1 : 0
-                );
+            
 
-            ElectricalUtilityData elecUData = SetUpElecetricalUtilityData(Convert.ToInt32(DisjuntorElecUtxtbox.Text), Convert.ToDouble(SeccionsElecUtxtbox.Text));
 
             this.Hide();
             try
@@ -314,8 +190,8 @@ namespace PlayingWithMEP
                 {
                     Document doc = uiapp.ActiveUIDocument.Document;
                     Automations.GenerateDiagramsClass diagGen = new Automations.GenerateDiagramsClass(doc, planilha);
-                    diagGen.GenSingleLineDiagramFromPanel(this.selectedPanel, panelIData, elecUData, (bool)ShowElecUchkbox.IsChecked);
-                    uiapp.ActiveUIDocument.RequestViewChange(diagGen.singleLineView);
+                    diagGen.GenThreeLineDiagramFromPanel(selectedPanel, Convert.ToInt32(DisjuntorPaneltxtbox.Text), SeccionsPaneltxtbox.Text);
+                    uiapp.ActiveUIDocument.RequestViewChange(diagGen.threeLineView);
                 });
             }
             catch (Exception ex)
@@ -325,7 +201,7 @@ namespace PlayingWithMEP
 
 
 
-                TaskDialog.Show("Sucesso", "Diagrama Unifilar gerado com Sucesso!");
+            TaskDialog.Show("Sucesso", "Diagrama Unifilar gerado com Sucesso!");
             this.Show();
 
 

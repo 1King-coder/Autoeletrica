@@ -12,6 +12,7 @@ using ECs = PlayingWithMEP.ElectricalClasses;
 using PlayingWithMEP.Sources;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Security.Cryptography;
 
 
 namespace PlayingWithMEP
@@ -21,19 +22,16 @@ namespace PlayingWithMEP
         private Document doc;
         private Utils ut;
         private GeometryUtils gUt;
-        private PlanilhaDimensionamentoEletrico planilha;
         public MappingConduitsPaths mapping;
         private List<XYZ> alreadyIdentifiedPoints;
 
-        public ProjectAutomations (Document doc, PlanilhaDimensionamentoEletrico planilha)
+        public ProjectAutomations (Document doc)
         {
             this.doc = doc;
             this.ut = new Utils(doc);
             this.gUt = new GeometryUtils(doc);
-            this.planilha = planilha;
             this.alreadyIdentifiedPoints = new List<XYZ>();
             this.mapping = new MappingConduitsPaths(doc);
-            this.planilha = planilha;
         }
 
         public class IdentifyCircuitsClass : ProjectAutomations 
@@ -42,7 +40,7 @@ namespace PlayingWithMEP
             private Dictionary<ElementId, int> alreadyIdentifiedConduitsCount = new Dictionary<ElementId, int>();
             private Dictionary<ElementId, List<string>> alreadyIdentifiedCircuitsInConduit = new Dictionary<ElementId, List<string>>();
 
-            public IdentifyCircuitsClass(Document doc, PlanilhaDimensionamentoEletrico planilha) : base(doc, planilha) { }
+            public IdentifyCircuitsClass(Document doc) : base(doc) { }
 
             public void IdentifyDispositiveCircuit(ECs.Dispositive dispositive, Reference DispositiveRef)
             {
@@ -129,6 +127,94 @@ namespace PlayingWithMEP
                     }
                 }
             }
+
+            public void indentifyAllDispositivesFromPanel (ECs.Panel panel)
+            {
+                Transaction trans = new Transaction(doc);
+                trans.Start($"Identifying all dispostives from {panel.Name}");
+
+                foreach (ECs.Circuit circ in  panel.AssignedCircuits)
+                {
+                    foreach (ECs.Dispositive dispositive in circ.dispositives)
+                    {
+                        FamilySymbol fsym = ut.SymbolIdForPowerDispositives();
+
+                        if (dispositive.dispType == "Lamp")
+                        {
+                            fsym = ut.symbolIdForIluminationDispositivesOnRoof();
+
+                            if (dispositive.dispositiveElement.Name.Contains("Arandela"))
+                            {
+                                fsym = ut.symbolIdForIluminationDispositivesOnWall();
+                            }
+
+                            if (dispositive.categoryName == "Dispositivos de iluminação")
+                            {
+                                fsym = ut.SymbolIdForSwitches();
+                            }
+                        }
+
+                        XYZ tagPt = dispositive.location.Point + (dispositive.dispType == "Lamp" ? new XYZ() : dispositive.dispositiveInstance.FacingOrientation.Multiply( 0.5 * 0.3048) + new XYZ(0, - 0.1*0.3048, 0));
+                        Reference dispRef = new Reference(dispositive.dispositiveElement);
+
+                        IndependentTag tag = IndependentTag.Create(this.doc, fsym.Id, this.doc.ActiveView.Id, dispRef, false, TagOrientation.Horizontal, tagPt);
+                        
+                    }
+                }
+
+                trans.Commit();
+            }
+
+            public void identifyDispositiveCircuitScheme (ECs.Dispositive dispositive, XYZ placementPt)
+            {
+                
+                ElementId tagId = ut.GetDispositiveCircuitShemeSymbolId(dispositive);
+
+                if (dispositive.categoryName == "Dispositivos de iluminação")
+                {
+                    tagId = ut.SymbolIdForSwitchesScheme().Id;
+                }
+
+                Transaction transaction = new Transaction(doc);
+
+                transaction.Start("Identifying dispositive");
+
+
+                XYZ tagPt = placementPt;
+
+                if (placementPt == null)
+                {
+                    tagPt = dispositive.location.Point + (dispositive.dispType == "Lamp" ? new XYZ() : dispositive.dispositiveInstance.FacingOrientation.Multiply(0.5 * 0.3048) + new XYZ(0, -0.1 * 0.3048, 0));
+                }
+
+                Reference dispRef = new Reference(dispositive.dispositiveElement);
+
+                IndependentTag tag = IndependentTag.Create(this.doc, tagId, this.doc.ActiveView.Id, dispRef, false, TagOrientation.Horizontal, tagPt);
+                
+                transaction.Commit();
+            }
+
+            public void identifyMultipleDispositiveCircuitScheme (List<ECs.Dispositive> dispositives, XYZ placementPt)
+            {
+                int counter = 0;
+                XYZ pt = null;
+                List<string> alreadyIdentified = new List<string>();
+
+                foreach (ECs.Dispositive dispositive in dispositives)
+                {
+                    if (placementPt != null) { pt = placementPt + new XYZ(0.8 * counter, 0, 0); }
+
+                    if (!alreadyIdentified.Contains(dispositive.dispositiveElement.get_Parameter(BuiltInParameter.RBS_ELEC_CIRCUIT_NUMBER).AsValueString()))
+                    {
+                        identifyDispositiveCircuitScheme(dispositive, pt);
+                        counter++;
+                        alreadyIdentified.Add(dispositive.dispositiveElement.get_Parameter(BuiltInParameter.RBS_ELEC_CIRCUIT_NUMBER).AsValueString());
+                    }
+                    
+
+                }
+            }
+
         }
 
         
@@ -139,16 +225,17 @@ namespace PlayingWithMEP
             public Dictionary<string, string> breakers { get; set; }
             public Dictionary<string, string> cableSeccions {  get; set; }
             public Dictionary<string, Dictionary<string, string>> circuitsLoadsPerPhase { get; set; }
-            private View singleLineView;
-            private View threeLineView;
+            public View singleLineView;
+            public View threeLineView;
+            private PlanilhaDimensionamentoEletrico planilha;
 
 
-
-            public GenerateDiagramsClass(Document doc, PlanilhaDimensionamentoEletrico planilha) : base(doc, planilha) 
+            public GenerateDiagramsClass(Document doc, PlanilhaDimensionamentoEletrico planilha) : base(doc) 
             {
                 this.diagrams = new Diagrams(doc);
                 this.singleLineView = this.ut.GetViewByName("Diagrama Unifilar");
                 this.threeLineView = this.ut.GetViewByName("Diagrama Trifilar");
+                this.planilha = planilha;
             }
 
             public void GetCircuitsInfosFromSpreadsheet (ECs.Panel panel)
@@ -168,7 +255,7 @@ namespace PlayingWithMEP
 
 
                 ElecU.LookupParameter("Corrente do disjuntor").Set(elecUdata.CorrenteDisjuntor);
-                ElecU.LookupParameter("Secção dos cabos").SetValueString(elecUdata.SeccaoCabos);
+                ElecU.LookupParameter("Secção dos cabos").Set(elecUdata.SeccaoCabos);
 
                 trans.Commit();
 
@@ -183,9 +270,8 @@ namespace PlayingWithMEP
                 trans.Start("Generating Single-line circuits Symbol Diagram");
 
                 FamilyInstance circIden = this.doc.Create.NewFamilyInstance(insertionPt, fmsym, this.singleLineView);
-                this.doc.Regenerate();
                 circIden.LookupParameter("Corrente do Disjuntor").Set(circuitsIdentifierData.CorrenteDisjuntor);
-                circIden.LookupParameter("Descrição Circuito").Set(circuitsIdentifierData.Descricao);
+                circIden.LookupParameter("Descrição Circuito").Set($"{circuitsIdentifierData.NumeroCircuito} - {circuitsIdentifierData.Descricao}");
                 circIden.LookupParameter("Fase Circuito").Set(circuitsIdentifierData.GetPhasesWithLoad());
                 circIden.LookupParameter("Não Reserva").Set(circuitsIdentifierData.NaoReserva);
                 circIden.LookupParameter("Secção dos cabos").SetValueString(circuitsIdentifierData.SeccaoCabos);
@@ -196,6 +282,270 @@ namespace PlayingWithMEP
                 return circIden;
             }
 
+            public void CreateThreeLineDiagramBody (ThreeLinePanelIdenfierData panelIdenData )
+            {
+                double distanceBetweenBreakers = ut.metersToFeet(0.6);
+
+                double diagramHeight = ut.metersToFeet(3.5) + distanceBetweenBreakers * panelIdenData.numOfCircuits;
+
+                Line spaceLine = Line.CreateBound(new XYZ(), new XYZ(0, ut.metersToFeet(0.4), 0));
+                Line line1 = Line.CreateBound(new XYZ(), new XYZ(ut.metersToFeet(-2), ut.metersToFeet(-3.4641), 0));
+                Line line2 = Line.CreateBound(new XYZ(), new XYZ(0, ut.metersToFeet(-3.4641), 0));
+                Line line3 = Line.CreateBound(new XYZ(), new XYZ(ut.metersToFeet(2), ut.metersToFeet(-3.4641), 0));
+
+                Line PhaseALine = Line.CreateBound(line1.GetEndPoint(1), new XYZ (line1.GetEndPoint(1).X, -diagramHeight, 0));
+                Line PhaseBLine = Line.CreateBound(line2.GetEndPoint(1), new XYZ (line2.GetEndPoint(1).X, -diagramHeight, 0));
+                Line PhaseCLine = Line.CreateBound(line3.GetEndPoint(1), new XYZ (line3.GetEndPoint(1).X, -diagramHeight, 0));
+
+                Line NeutralLine1 = Line.CreateBound(new XYZ(0, 0, 0), new XYZ(ut.metersToFeet(10), 0, 0));
+                Line NeutralLine2 = Line.CreateBound(new XYZ(ut.metersToFeet(10), 0, 0), new XYZ(ut.metersToFeet(10), 0, 0).Subtract(new XYZ(0, diagramHeight, 0)));
+
+                Line GroundLine1 = Line.CreateBound(new XYZ(ut.metersToFeet(-2), ut.metersToFeet(0.8), 0), new XYZ(ut.metersToFeet(-2), 0, 0));
+                Line GroundLine2 = Line.CreateBound(new XYZ(ut.metersToFeet(-2), 0, 0), new XYZ(ut.metersToFeet(-10), 0, 0)); 
+
+                Line GroundLine3 = Line.CreateBound(new XYZ(ut.metersToFeet(-10), 0, 0), new XYZ(ut.metersToFeet(-10), 0, 0).Subtract(new XYZ(0, diagramHeight, 0)));
+
+                FamilySymbol breakerSym = diagrams.GetBreakerFamilySymbol(panelIdenData.numOfPoles);
+
+                Transaction trans = new Transaction(doc);
+                trans.Start("Instanciate three line diagram body");
+                XYZ breakerPt = new XYZ(0, ut.metersToFeet(0.4), 0);
+                FamilyInstance mainBreaker = this.doc.Create.NewFamilyInstance(breakerPt, breakerSym, this.threeLineView);
+                mainBreaker.LookupParameter("Corrente").Set(panelIdenData.CorrenteDisjuntor);
+
+                Line basisZaxis = Line.CreateUnbound(breakerPt, XYZ.BasisZ);
+
+                ElementTransformUtils.RotateElement(doc, mainBreaker.Id, basisZaxis, Math.PI / 2);
+
+                this.doc.Create.NewDetailCurve(this.threeLineView, spaceLine);
+                this.doc.Create.NewDetailCurve(this.threeLineView, line1);
+                this.doc.Create.NewDetailCurve(this.threeLineView, line2);
+                this.doc.Create.NewDetailCurve(this.threeLineView, line3);
+                this.doc.Create.NewDetailCurve(this.threeLineView, PhaseALine);
+                this.doc.Create.NewDetailCurve(this.threeLineView, PhaseBLine);
+                this.doc.Create.NewDetailCurve(this.threeLineView, PhaseCLine);
+                this.doc.Create.NewDetailCurve(this.threeLineView, NeutralLine1);
+                this.doc.Create.NewDetailCurve(this.threeLineView, NeutralLine2);
+                this.doc.Create.NewDetailCurve(this.threeLineView, GroundLine1);
+                this.doc.Create.NewDetailCurve(this.threeLineView, GroundLine2);
+                this.doc.Create.NewDetailCurve(this.threeLineView, GroundLine3);
+
+                TextNote.Create(doc, this.threeLineView.Id, new XYZ(ut.metersToFeet(0.3), ut.metersToFeet(0.3), 0), $"F #{panelIdenData.SeccaoCabos} mm²", this.doc.GetDefaultElementTypeId(ElementTypeGroup.TextNoteType));
+                TextNote.Create(doc, this.threeLineView.Id, NeutralLine1.GetEndPoint(1).Subtract(new XYZ(ut.metersToFeet(0.6),-ut.metersToFeet(0.3),0)), $"N #{panelIdenData.SeccaoCabos} mm²", this.doc.GetDefaultElementTypeId(ElementTypeGroup.TextNoteType));
+                TextNote.Create(doc, this.threeLineView.Id, GroundLine2.GetEndPoint(1).Add(new XYZ(0, ut.metersToFeet(0.3), 0)), $"T #{panelIdenData.SeccaoCabos} mm²", this.doc.GetDefaultElementTypeId(ElementTypeGroup.TextNoteType));
+                TextNote.Create(doc, this.threeLineView.Id, PhaseALine.GetEndPoint(1).Add(new XYZ(ut.metersToFeet(0.2), ut.metersToFeet(0.2), 0)), $"A", this.doc.GetDefaultElementTypeId(ElementTypeGroup.TextNoteType));
+                TextNote.Create(doc, this.threeLineView.Id, PhaseBLine.GetEndPoint(1).Add(new XYZ(ut.metersToFeet(0.2), ut.metersToFeet(0.2), 0)), $"B", this.doc.GetDefaultElementTypeId(ElementTypeGroup.TextNoteType));
+                TextNote.Create(doc, this.threeLineView.Id, PhaseCLine.GetEndPoint(1).Add(new XYZ(ut.metersToFeet(0.2), ut.metersToFeet(0.2), 0)), $"C", this.doc.GetDefaultElementTypeId(ElementTypeGroup.TextNoteType));
+
+                ut.DrawRectangle(this.threeLineView, new XYZ(GroundLine2.GetEndPoint(1).X - ut.metersToFeet(0.8), GroundLine2.GetEndPoint(1).Y + ut.metersToFeet(2), 0), new XYZ(NeutralLine2.GetEndPoint(1).X + ut.metersToFeet(0.8), NeutralLine2.GetEndPoint(1).Y - ut.metersToFeet(0.8), 0));
+
+                TextNote.Create(doc, this.threeLineView.Id, new XYZ(GroundLine2.GetEndPoint(1).X - ut.metersToFeet(0.3), GroundLine2.GetEndPoint(1).Y + ut.metersToFeet(1.7), 0), panelIdenData.name, this.doc.GetDefaultElementTypeId(ElementTypeGroup.TextNoteType));
+
+                trans.Commit();
+            }
+
+            public FamilyInstance GenThreeLineCircuitIdentifierSymbol(ThreeLineCircuitsIdentifierData circuitsIdentifierData, XYZ insertionPt, FamilySymbol fmsym)
+            {
+
+                Transaction trans = new Transaction(this.doc);
+
+                trans.Start("Generating Three-line circuits Symbol Diagram");
+
+                FamilyInstance circIden = this.doc.Create.NewFamilyInstance(insertionPt, fmsym, this.threeLineView);
+
+                if (circuitsIdentifierData.numOfPoles == 3)
+                {
+                    SetTriCircIdentifierElement(fmsym, circuitsIdentifierData, insertionPt);
+
+                    trans.Commit();
+
+                    mirrorThreeLineCircuitIdentifierIfHasPhaseA(circuitsIdentifierData, circIden);
+
+                    return circIden;
+                }
+
+                if (circuitsIdentifierData.numOfPoles == 2)
+                {
+                    SetBiCircIdentifierElement(circIden, circuitsIdentifierData, insertionPt);
+                    trans.Commit();
+
+                    mirrorThreeLineCircuitIdentifierIfHasPhaseA(circuitsIdentifierData, circIden);
+
+                    return circIden;
+                }
+
+                SetMonoCircIdentifierElement(circIden, circuitsIdentifierData, insertionPt);
+
+                trans.Commit();
+
+                mirrorThreeLineCircuitIdentifierIfHasPhaseA(circuitsIdentifierData, circIden);
+
+                Transaction t = new Transaction(this.doc);
+                
+                return circIden;
+            }
+
+            public void mirrorThreeLineCircuitIdentifierIfHasPhaseA (ThreeLineCircuitsIdentifierData circuitsIdentifierData, FamilyInstance circIden)
+            {
+                
+                if (circuitsIdentifierData.GetPhasesWithLoad().Contains("A"))
+                {
+                    Transaction trans = new Transaction(this.doc);
+
+                    trans.Start("Mirroring Element");
+                    ElementTransformUtils.MirrorElement(doc, circIden.Id, Plane.CreateByNormalAndOrigin(XYZ.BasisX, new XYZ()));
+                    this.doc.Delete(circIden.Id);
+                    trans.Commit();
+                }
+            }
+
+
+            public void SetMonoCircIdentifierElement (FamilyInstance circIden, ThreeLineCircuitsIdentifierData circuitsIdentifierData, XYZ insertionPt)
+            {
+                circIden.LookupParameter("Corrente do Disjuntor").Set(circuitsIdentifierData.CorrenteDisjuntor);
+                circIden.LookupParameter("Descrição Circuito").Set($"{circuitsIdentifierData.NumeroCircuito} - {circuitsIdentifierData.Descricao}");
+                circIden.LookupParameter("Fase Circuito").Set(circuitsIdentifierData.GetPhasesWithLoad());
+                circIden.LookupParameter("Não Reserva").Set(circuitsIdentifierData.NaoReserva);
+                if (!circuitsIdentifierData.NaoReserva.Equals(0))
+                {
+                    circIden.LookupParameter("Potência Circuito").Set(Convert.ToInt32(circuitsIdentifierData.circuitLoadPerPhase[circuitsIdentifierData.GetPhasesWithLoad()]));
+                }
+                else
+                {
+                    circIden.LookupParameter("Potência Circuito").Set(circuitsIdentifierData.totalLoad);
+
+                }
+
+                XYZ circlePt = insertionPt;
+
+                if (circuitsIdentifierData.GetPhasesWithLoad().Contains("B"))
+                {
+                    Line lineB = Line.CreateBound(insertionPt, insertionPt.Add(new XYZ(-2 / 0.3048, 0, 0)));
+                    this.doc.Create.NewDetailCurve(threeLineView, lineB);
+                    circlePt = insertionPt.Add(new XYZ(-2 / 0.3048, 0, 0));
+                }
+                if (circuitsIdentifierData.GetPhasesWithLoad().Contains("A"))
+                {
+                    circlePt = insertionPt.Subtract(new XYZ (ut.metersToFeet(4), 0, 0));
+                }
+
+
+                ut.CreateCircularFilledRegion(doc, this.threeLineView, ut.metersToFeet(0.1), circlePt);
+            }
+
+            public void SetBiCircIdentifierElement (FamilyInstance circIden, ThreeLineCircuitsIdentifierData circuitsIdentifierData, XYZ insertionPt)
+            {
+                string[] fases = circuitsIdentifierData.GetPhasesWithLoad().Split(',');
+
+                string fase1 = "";
+                string fase2 = "";
+
+                if (!circuitsIdentifierData.Descricao.Contains("Reserva"))
+                {
+                    fase1 = fases[0].Trim();
+                    fase2 = fases[1].Trim();
+
+                }
+
+                circIden.LookupParameter("Corrente do Disjuntor").Set(circuitsIdentifierData.CorrenteDisjuntor);
+                circIden.LookupParameter("Descrição Circuito").Set($"{circuitsIdentifierData.NumeroCircuito} - {circuitsIdentifierData.Descricao}");
+                circIden.LookupParameter("Fase 1 Circuito").Set(fase1);
+                circIden.LookupParameter("Fase 2 Circuito").Set(fase2);
+                circIden.LookupParameter("Não Reserva").Set(circuitsIdentifierData.NaoReserva);
+                if (circuitsIdentifierData.Descricao.Contains("Reserva"))
+                {
+                    circIden.LookupParameter("Potência Circuito Fase 1").Set(Convert.ToInt32(circuitsIdentifierData.totalLoad / 2));
+                    circIden.LookupParameter("Potência Circuito Fase 2").Set(Convert.ToInt32(circuitsIdentifierData.totalLoad / 2));
+                }
+                else
+                {
+                    circIden.LookupParameter("Potência Circuito Fase 1").Set(Convert.ToInt32(circuitsIdentifierData.circuitLoadPerPhase[fase1]));
+                    circIden.LookupParameter("Potência Circuito Fase 2").Set(Convert.ToInt32(circuitsIdentifierData.circuitLoadPerPhase[fase2]));
+                }
+
+                XYZ circlePt = insertionPt;
+
+                Line line = Line.CreateBound(insertionPt, insertionPt.Add(new XYZ(-2 / 0.3048, 0, 0)));
+
+                if (circuitsIdentifierData.GetPhasesWithLoad().Contains("A"))
+                {
+                    circlePt = insertionPt.Add(new XYZ(ut.metersToFeet(-4), ut.metersToFeet(0.754), 0));
+                    ut.CreateCircularFilledRegion(doc, this.threeLineView, ut.metersToFeet(0.1), circlePt);
+
+                    if (circuitsIdentifierData.GetPhasesWithLoad().Contains("B"))
+                    {
+
+                        line = Line.CreateBound(insertionPt.Subtract(new XYZ(ut.metersToFeet(4), 0, 0)), insertionPt.Add(new XYZ(-2 / 0.3048, 0, 0)));
+                        ut.CreateCircularFilledRegion(doc, this.threeLineView, ut.metersToFeet(0.1), line.GetEndPoint(1));
+                    } else
+                    {
+                        line = Line.CreateBound(insertionPt.Subtract(new XYZ(ut.metersToFeet(4), 0, 0)), insertionPt);
+                        ut.CreateCircularFilledRegion(doc, this.threeLineView, ut.metersToFeet(0.1), insertionPt);
+
+                    }
+                }
+
+                if (circuitsIdentifierData.GetPhasesWithLoad().Contains("B") && circuitsIdentifierData.GetPhasesWithLoad().Contains("C"))
+                {
+                    circlePt = insertionPt.Add(new XYZ(ut.metersToFeet(-2), ut.metersToFeet(0.754), 0));
+
+                    line = Line.CreateBound(insertionPt.Add(new XYZ(0, ut.metersToFeet(0.754), 0)), insertionPt.Add(new XYZ(ut.metersToFeet(-2), ut.metersToFeet(0.754), 0))); ;
+                    ut.CreateCircularFilledRegion(doc, this.threeLineView, ut.metersToFeet(0.1), circlePt);
+                    ut.CreateCircularFilledRegion(doc, this.threeLineView, ut.metersToFeet(0.1), insertionPt);
+
+                }
+
+
+                this.doc.Create.NewDetailCurve(threeLineView, line);
+            }
+
+            public void SetTriCircIdentifierElement(FamilySymbol circIden, ThreeLineCircuitsIdentifierData circuitsIdentifierData, XYZ insertionPt)
+            {
+                string[] fases = circuitsIdentifierData.GetPhasesWithLoad().Split(',');
+
+                string fase1 = "";
+                string fase2 = "";
+                string fase3 = "";
+
+                if (!circuitsIdentifierData.Descricao.Contains("Reserva"))
+                {
+                    fase1 = fases[0].Trim();
+                    fase2 = fases[1].Trim();
+                    fase3 = fases[2].Trim();
+
+                }
+
+                circIden.LookupParameter("Corrente do Disjuntor").Set(circuitsIdentifierData.CorrenteDisjuntor);
+                circIden.LookupParameter("Descrição Circuito").Set($"{circuitsIdentifierData.NumeroCircuito} - {circuitsIdentifierData.Descricao}");
+                circIden.LookupParameter("Fase 1 Circuito").Set(fase1);
+                circIden.LookupParameter("Fase 2 Circuito").Set(fase2);
+                circIden.LookupParameter("Fase 3 Circuito").Set(fase3);
+                circIden.LookupParameter("Não Reserva").Set(circuitsIdentifierData.NaoReserva);
+                if (circuitsIdentifierData.Descricao.Contains("Reserva"))
+                {
+                    circIden.LookupParameter("Potência Circuito Fase 1").Set(Convert.ToInt32(circuitsIdentifierData.totalLoad / 3));
+                    circIden.LookupParameter("Potência Circuito Fase 2").Set(Convert.ToInt32(circuitsIdentifierData.totalLoad / 3));
+                    circIden.LookupParameter("Potência Circuito Fase 3").Set(Convert.ToInt32(circuitsIdentifierData.totalLoad / 3));
+                }
+                else
+                {
+                    circIden.LookupParameter("Potência Circuito Fase 1").Set(Convert.ToInt32(circuitsIdentifierData.circuitLoadPerPhase[fase1]));
+                    circIden.LookupParameter("Potência Circuito Fase 2").Set(Convert.ToInt32(circuitsIdentifierData.circuitLoadPerPhase[fase2]));
+                    circIden.LookupParameter("Potência Circuito Fase 3").Set(Convert.ToInt32(circuitsIdentifierData.circuitLoadPerPhase[fase3]));
+                }
+
+                ut.CreateCircularFilledRegion(doc, this.threeLineView, ut.metersToFeet(0.1), insertionPt);
+
+                Line lineB = Line.CreateBound(insertionPt.Subtract(new XYZ(ut.metersToFeet(4), ut.metersToFeet(-0.752), 0)), insertionPt.Subtract(new XYZ(ut.metersToFeet(2), ut.metersToFeet(-0.752), 0)));
+                ut.CreateCircularFilledRegion(doc, this.threeLineView, ut.metersToFeet(0.1), lineB.GetEndPoint(1));
+
+                Line lineC = Line.CreateBound(insertionPt, insertionPt.Subtract(new XYZ(ut.metersToFeet(4), 0, 0)));
+                ut.CreateCircularFilledRegion(doc, this.threeLineView, ut.metersToFeet(0.1), lineC.GetEndPoint(1));
+
+                this.doc.Create.NewDetailCurve(threeLineView, lineB);
+                this.doc.Create.NewDetailCurve(threeLineView, lineC);
+            }
+
             public FamilyInstance GenPanelSymbol (PanelIdentifierData panelIdentifierData, FamilySymbol fmsym)
             {
                 Transaction trans = new Transaction(this.doc);
@@ -203,10 +553,9 @@ namespace PlayingWithMEP
                 trans.Start("Generating Single-line panel Symbol Diagram");
 
                 FamilyInstance panelIden = this.doc.Create.NewFamilyInstance(new XYZ(), fmsym, this.singleLineView);
-                this.doc.Regenerate();
 
                 panelIden.LookupParameter("Corrente do disjuntor").Set(panelIdentifierData.CorrenteDisjuntorGeral);
-                panelIden.LookupParameter("Secção dos Cabos").SetValueString(panelIdentifierData.SeccaoCabos);
+                panelIden.LookupParameter("Secção dos Cabos").Set(panelIdentifierData.SeccaoCabos);
                 panelIden.LookupParameter("Número de polos DR").Set(panelIdentifierData.NumeroPolosDR);
                 panelIden.LookupParameter("Corrente DR").Set(panelIdentifierData.CorrenteDR);
                 panelIden.LookupParameter("Corrente de proteção DDR (mA)").Set(panelIdentifierData.CorrenteProtecaoDR);
@@ -236,44 +585,39 @@ namespace PlayingWithMEP
                 return circuitsIdentifierData;
             }
 
-            public ElectricalUtilityData SetUpElecetricalUtilityData (int correnteDisjuntor, string seccaoCabos)
+            public ThreeLineCircuitsIdentifierData SetUpThreeLineCircuitData(ECs.Circuit circuit)
             {
-                ElectricalUtilityData elecUData = new ElectricalUtilityData();
+                ThreeLineCircuitsIdentifierData circuitsIdentifierData = new ThreeLineCircuitsIdentifierData();
 
-                elecUData.CorrenteDisjuntor = correnteDisjuntor;
-                elecUData.SeccaoCabos = seccaoCabos;
+                circuitsIdentifierData.Descricao = circuit.Name;
+                circuitsIdentifierData.NumeroCircuito = circuit.circuitNumber;
+                circuitsIdentifierData.circuitLoadPerPhase = this.circuitsLoadsPerPhase[circuit.circuitNumber];
+                circuitsIdentifierData.NaoReserva = circuit.isNotReserveCircuit;
+                circuitsIdentifierData.CorrenteDisjuntor = Convert.ToInt32(this.breakers[circuit.circuitNumber]);
+                circuitsIdentifierData.totalLoad = circuit.apparentload;
+                circuitsIdentifierData.numOfPoles = circuit.numOfPoles;
 
-                return elecUData;
-            }
-            
-            public PanelIdentifierData SetUpPanelIdentifierData (
-                int CorrenteDisjuntorGeral,
-                string ClasseProtecaoDPS,
-                int CorrenteNominalDPS,
-                int TensaoNominalDPS,
-                int CorrenteDR,
-                int CorrenteProtecaoDR,
-                int NumeroPolosDR,
-                string SeccaoCabos,
-                int DPSneutro
-               )
-            {
-                PanelIdentifierData panelIdentifierData = new PanelIdentifierData();
-
-                panelIdentifierData.CorrenteDisjuntorGeral = CorrenteDisjuntorGeral;
-                panelIdentifierData.DPSneutro = DPSneutro;
-                panelIdentifierData.TensaoNominalDPS = TensaoNominalDPS;
-                panelIdentifierData.ClasseDeProtecaoDPS = ClasseProtecaoDPS;
-                panelIdentifierData.CorrenteNominalDPS = CorrenteNominalDPS;
-                panelIdentifierData.CorrenteDR = CorrenteDR;
-                panelIdentifierData.CorrenteProtecaoDR = CorrenteProtecaoDR;
-                panelIdentifierData.NumeroPolosDR = NumeroPolosDR;
-                panelIdentifierData.SeccaoCabos = SeccaoCabos;
-
-                return panelIdentifierData; 
+                return circuitsIdentifierData;
             }
 
-            public void GenSingleLineDiagramFromPanel (ECs.Panel panel)
+            public ThreeLinePanelIdenfierData SetUpThreeLinePanelData(ECs.Panel panel, int CorrenteDisjuntor, string SeccaoCabos)
+            {
+                ThreeLinePanelIdenfierData panelIData = new ThreeLinePanelIdenfierData();
+
+                panelIData.CorrenteDisjuntor = CorrenteDisjuntor;
+                panelIData.SeccaoCabos = SeccaoCabos;
+                panelIData.numOfCircuits = panel.AssignedCircuits.Count();
+                panelIData.numOfPoles = panel.numOfPoles;
+                panelIData.name = panel.Name;
+
+                return panelIData;
+
+            }
+
+
+
+
+            public void GenSingleLineDiagramFromPanel (ECs.Panel panel, PanelIdentifierData panelIData, ElectricalUtilityData elecUData, bool ShowElecU)
             {
                 
                 this.GetCircuitsInfosFromSpreadsheet(panel);
@@ -282,25 +626,16 @@ namespace PlayingWithMEP
                 FamilySymbol fsymEU = this.diagrams.GetElectricalUtilityFamilySymbol(this.ut.GetShemeToDiagrams("3F + N + T"));
                 FamilySymbol fsymPanel = this.diagrams.GetElectricalEquipmentFamilySymbol(this.ut.GetShemeToDiagrams(panel.scheme));
 
-                ElectricalUtilityData elecUData = SetUpElecetricalUtilityData(32, "4,0");
+                if (ShowElecU)
+                {
+                    GenElectricalUtilitySymbol(elecUData, fsymEU);
+                }
 
-                GenElectricalUtilitySymbol(elecUData, fsymEU);
-
-                PanelIdentifierData panelIData = SetUpPanelIdentifierData(
-                    32,
-                    "III",
-                    30,
-                    175,
-                    63,
-                    30,
-                    4,
-                    "6,0",
-                    0
-                    );
+                
 
                 GenPanelSymbol(panelIData, fsymPanel);
 
-                List<XYZ> distribuitedInsertionPoints = this.diagrams.GetDitribuitedCircuitsIdentifiersPosList(panel.AssignedCircuits.Count);
+                List<XYZ> distribuitedInsertionPoints = this.diagrams.GetDitribuitedCircuitsIdentifiersPosList(panel.AssignedCircuits.Count());
 
                 int counter = 0;
 
@@ -313,6 +648,55 @@ namespace PlayingWithMEP
                     GenSingleLineCircuitIdentifierSymbol(circuitIData, distribuitedInsertionPoints[counter], fsymCircuit);
 
                     counter++;
+                }
+
+
+            }
+            public void GenThreeLineDiagramFromPanel(ECs.Panel panel, int CorrenteDisjuntor, string SeccaoCabos)
+            {
+
+                this.GetCircuitsInfosFromSpreadsheet(panel);
+
+                ThreeLinePanelIdenfierData threeLinePanelIdenfierData = this.SetUpThreeLinePanelData(panel, CorrenteDisjuntor, SeccaoCabos);
+
+                this.CreateThreeLineDiagramBody(threeLinePanelIdenfierData);
+
+                float counter = 0;
+                
+
+                foreach (ECs.Circuit circuit in panel.AssignedCircuits)
+                {
+                    if (circuit.Name.ToLower().Contains("reserva")) { continue; }
+
+                    ThreeLineCircuitsIdentifierData circuitIData = SetUpThreeLineCircuitData(circuit);
+
+                    FamilySymbol fsymCircuit = this.diagrams.GetThreeLineMonoCircuitIdentifierFamilySymbol();
+
+                    if (circuit.numOfPoles == 2)
+                    {
+                        counter += 1.2f;
+                        fsymCircuit = this.diagrams.GetThreeLineBiCircuitIdentifierFamilySymbol();
+                    }
+                    if (circuit.numOfPoles == 3)
+                    {
+                        counter += 2.4f;
+                        fsymCircuit = this.diagrams.GetThreeLineTriCircuitIdentifierFamilySymbol();
+                    }
+
+                    if (circuit.isNotReserveCircuit == 0)
+                    {
+                        counter--;
+                    }
+
+                    XYZ pt = new XYZ(ut.metersToFeet(2), -ut.metersToFeet(0.76 * counter) - ut.metersToFeet(3.8), 0);
+
+                    GenThreeLineCircuitIdentifierSymbol(circuitIData, pt, fsymCircuit);
+
+                    counter += 0.6f;
+
+
+
+                    
                 }
 
 

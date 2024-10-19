@@ -16,9 +16,9 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
 using PlayingWithMEP;
+using PlayingWithMEP.Sources;
 using ricaun.Revit.Mvvm;
 using ricaun.Revit.UI.Tasks;
-using PlayingWithMEP.Sources;
 using ECs = PlayingWithMEP.ElectricalClasses;
 
 namespace PlayingWithMEP
@@ -26,20 +26,20 @@ namespace PlayingWithMEP
     /// <summary>
     /// Interação lógica para UserControl1.xam
     /// </summary>
-    public partial class SendCircuitsToSheets : Window
+    public partial class UpdateInRevitCircuits : Window
     {
 
         private readonly IRevitTask revitTask;
         private ECs.Panel selectedPanel;
 
         public IAsyncRelayCommand selectPanelBtnCmd { get; private set; }
-        public IAsyncRelayCommand sendToSheetsCmd { get; private set; }
+        public IAsyncRelayCommand UpdateCircuitsBtnCmd { get; private set; }
 
-        public SendCircuitsToSheets(IRevitTask revitTask)
+        public UpdateInRevitCircuits(IRevitTask revitTask)
         {
             InitializeComponent();
             selectPanelBtnCmd = new AsyncRelayCommand(SelectPanelBtn_Click);
-            sendToSheetsCmd = new AsyncRelayCommand(SendToSheetsBtn_Click);
+            UpdateCircuitsBtnCmd = new AsyncRelayCommand(UpdateBtn_Click);
             this.revitTask = revitTask;
 
 
@@ -76,7 +76,6 @@ namespace PlayingWithMEP
                 CircuitsDataTable.Items.Add(circ);
 
             }
-
             this.Show();
 
         }
@@ -86,12 +85,12 @@ namespace PlayingWithMEP
             selectPanelBtnCmd.Execute(null);
         }
 
-        private void SendToSheetsBtn_Click_1 (object sender, RoutedEventArgs e)
+        private void UpdateBtn_Click_1(object sender, RoutedEventArgs e)
         {
-            sendToSheetsCmd.Execute(null);
+            UpdateCircuitsBtnCmd.Execute(null);
         }
 
-        private async Task SendToSheetsBtn_Click ()
+        private async Task UpdateBtn_Click()
         {
             string spreadsheetLink = SheetsLinkTxtBox.Text.Trim();
 
@@ -99,25 +98,60 @@ namespace PlayingWithMEP
 
             string spreadsheetId = spreadsheetLink.Split('/')[5];
 
+            
+            
             try
             {
                 PlanilhaDimensionamentoEletrico planilha = new PlanilhaDimensionamentoEletrico(spreadsheetId);
                 if (this.selectedPanel == null) { throw new ArgumentNullException("Selecione um quadro de distribuição primeiro!"); }
-                planilha.SendCircuitsDataToSheets(this.selectedPanel);
+                Dictionary<string, string> breakers = planilha.GetAllCircuitsBreakersAmps(this.selectedPanel);
+                Dictionary<string, string> Seccions = planilha.GetAllCircuitsCableSeccion(this.selectedPanel);
+                Dictionary<string, string> temperatureFactors = planilha.GetAllCircuitsTemperatureFactors(this.selectedPanel);
+                Dictionary<string, string> groupFactors = planilha.GetAllCircuitsGroupFactors(this.selectedPanel);
 
-                //await revitTask.Run((uiapp) =>
-                //{
-                //    planilha.SendRoomsToSheets(uiapp.ActiveUIDocument.Document);
-                //});
+                await revitTask.Run((uiapp) =>
+                {
+                    Transaction trans = new Transaction(uiapp.ActiveUIDocument.Document);
+                    trans.Start("Updating circuits");
 
+                    foreach (ECs.Circuit circuit in this.selectedPanel.AssignedCircuits)
+                    {
+                        circuit.CircuitObj.LookupParameter("Proteção do circuito").Set(Convert.ToInt64(breakers[circuit.circuitNumber]));
+                        circuit.CircuitObj.LookupParameter("Seção do Condutor Adotado (mm²)").SetValueString(Seccions[circuit.circuitNumber]);
+
+                        if (!circuit.Name.Contains("Reserva"))
+                        {
+                            circuit.CircuitObj.LookupParameter("L Considerado").Set(circuit.length);
+                            circuit.CircuitObj.LookupParameter("FCA").Set(Convert.ToDouble(groupFactors[circuit.circuitNumber].Replace(',', '.'))/100);
+                            circuit.CircuitObj.LookupParameter("FCT").Set(Convert.ToDouble(temperatureFactors[circuit.circuitNumber].Replace(',', '.')) / 100);
+                        }
+                        
+
+
+                        foreach (ECs.Dispositive dispositive in circuit.dispositives)
+                        {
+                            if (Seccions[circuit.circuitNumber] == "2,5") 
+                            { 
+                                dispositive.dispositiveElement.LookupParameter("Seção do Condutor Adotado").Set(" ");
+                                continue;
+                            }
+
+                            dispositive.dispositiveElement.LookupParameter("Seção do Condutor Adotado").Set(Seccions[circuit.circuitNumber]);
+                        }
+
+                    }
+
+                    trans.Commit();
+
+                });
+
+                TaskDialog.Show("Sucesso", $"Os dados de todos os circuitos associados ao {this.selectedPanel.Name} foram atualizados com sucesso!");
 
             }
             catch (Exception ex)
             {
                 TaskDialog.Show("Ocorreu um erro", ex.ToString());
-                return;
             }
-            TaskDialog.Show("Sucesso", $"Os dados de todos os circuitos associados ao {this.selectedPanel.Name} foram inseridos na planilha com sucesso!");
 
 
 

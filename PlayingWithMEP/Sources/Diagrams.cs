@@ -42,6 +42,11 @@ namespace PlayingWithMEP
             return GetGenericAnnotationFamilySymbolByFamilyNameAndTypeName("Diagrama Medidor Concessionária Unifilar", scheme);
         }
 
+        public FamilySymbol GetBreakerFamilySymbol (int numOfPoles)
+        {
+            return GetGenericAnnotationFamilySymbolByFamilyNameAndTypeName("Disjuntor Unifilar", $"{numOfPoles} F");
+        }
+
         public FamilySymbol GetElectricalEquipmentFamilySymbol(string scheme)
         {
             return GetGenericAnnotationFamilySymbolByFamilyNameAndTypeName("Diagrama Entrada QDC", scheme);
@@ -54,17 +59,17 @@ namespace PlayingWithMEP
 
         public FamilySymbol GetThreeLineMonoCircuitIdentifierFamilySymbol()
         {
-            return GetGenericAnnotationFamilySymbolByFamilyNameAndTypeName("Diagrama identificação de circuitos trifilar monofásico", "monofásico");
+            return GetGenericAnnotationFamilySymbolByFamilyNameAndTypeName("Diagrama identificação de circuitos trifilar monofásico", "monofasico");
         }
 
         public FamilySymbol GetThreeLineBiCircuitIdentifierFamilySymbol()
         {
-            return GetGenericAnnotationFamilySymbolByFamilyNameAndTypeName("Diagrama identificação de circuitos trifilar bifásico", "bifásico");
+            return GetGenericAnnotationFamilySymbolByFamilyNameAndTypeName("Diagrama identificação de circuitos trifilar bifásico", "bifasico");
         }
 
         public FamilySymbol GetThreeLineTriCircuitIdentifierFamilySymbol()
         {
-            return GetGenericAnnotationFamilySymbolByFamilyNameAndTypeName("Diagrama identificação de circuitos trifilar trifásico", "trifásico");
+            return GetGenericAnnotationFamilySymbolByFamilyNameAndTypeName("Diagrama identificação de circuitos trifilar trifásico", "trifasico");
         }
 
         public List<XYZ> GetDitribuitedCircuitsIdentifiersPosList (int numOfCircuits)
@@ -88,6 +93,24 @@ namespace PlayingWithMEP
             posY.Reverse();
 
             posY.ForEach(x => result.Add(new XYZ(3.45/ 0.3048, x, 0)));
+
+            return result;
+        }
+
+        public List<XYZ> GetThreeLineDitribuitedCircuitsIdentifiersPosList(int numOfCircuits)
+        {
+            List<XYZ> result = new List<XYZ>();
+            List<double> posY = new List<double>();
+
+            for (int i = 0; i < numOfCircuits; i++)
+            {
+
+                posY.Add(0.76 * i / 0.3048);
+
+            }
+
+            posY.ForEach(y => result.Add(new XYZ(0, y, 0)));
+
 
             return result;
         }

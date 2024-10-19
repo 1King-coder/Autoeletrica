@@ -124,4 +124,22 @@
   <data name="sheetsIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\sheetsIcon.ico;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="DiagramaTri" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DiagramaTri.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="DiagramaUni" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DiagramaUni.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="disjuntorTrifilar" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\disjuntorTrifilar.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="disjuntorUnifilar" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\disjuntorUnifilar.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="indentificadorEsquema" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\indentificadorEsquema.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="updateCircuits" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\updateCircuits.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

@@ -58,18 +58,18 @@
         <StackPanel HorizontalAlignment="Left" Height="327" Margin="654,167,0,0" VerticalAlignment="Top" Width="219" Background="#FFB3B2B2">
             <Label Content="Quadro de Distribuição" Background="Black" Foreground="White" FontSize="16" HorizontalContentAlignment="Center"/>
             <TextBox x:Name="DisjuntorPaneltxtbox" TextWrapping="Wrap" Width="219" Height="24" FontSize="14"/>
-            <TextBox x:Name="SeccionsElecUtxtbox1" TextWrapping="Wrap" Height="28" FontSize="14"/>
+            <TextBox x:Name="SeccionsPaneltxtbox" TextWrapping="Wrap" Height="28" FontSize="14"/>
             <Label Content="DR" Background="Black" Foreground="White" FontSize="16" HorizontalContentAlignment="Center"/>
             <TextBox x:Name="NumPolosDRtxtbox" TextWrapping="Wrap" Height="25" FontSize="14"/>
             <TextBox x:Name="CorrenteDRtxtbox" TextWrapping="Wrap" Height="27" FontSize="14"/>
             <TextBox x:Name="CorrenteProtDRtxtbox" TextWrapping="Wrap" Height="25" FontSize="14"/>
             <Label Content="DPS" Background="Black" Foreground="White" FontSize="16" HorizontalContentAlignment="Center"/>
             <TextBox x:Name="TensaoNomDPStxtbox" TextWrapping="Wrap" Height="27" FontSize="14"/>
-            <TextBox x:Name="SeccionsElecUtxtbox1_Copiar5" TextWrapping="Wrap" Height="27" FontSize="14"/>
-            <TextBox x:Name="SeccionsElecUtxtbox1_Copiar6" TextWrapping="Wrap" Height="27" FontSize="14"/>
-            <CheckBox x:Name="DPSforNeutralUchkbox" Content="Sim/Não" Background="White" BorderBrush="Black" FontWeight="Bold" FontSize="14" Height="24" IsChecked="False" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+            <TextBox x:Name="CorrenteDPStxtbox" TextWrapping="Wrap" Height="27" FontSize="14"/>
+            <TextBox x:Name="ClasseDPStxtbox" TextWrapping="Wrap" Height="27" FontSize="14"/>
+            <CheckBox x:Name="DPSforNeutralUchkbox" Content="Sim/Não" Background="White" BorderBrush="Black" FontWeight="Bold" FontSize="14" Height="24" IsChecked="False" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Center"/>
         </StackPanel>
-        <Button x:Name="GenDiagramBtn" Content="Gerar Diagrama" HorizontalAlignment="Left" Height="60" Margin="440,501,0,0" VerticalAlignment="Top" Width="433" Background="#FFD0CFCF" FontSize="24"/>
+        <Button x:Name="GenDiagramBtn" Content="Gerar Diagrama" HorizontalAlignment="Left" Height="60" Margin="440,501,0,0" VerticalAlignment="Top" Width="433" Background="#FFD0CFCF" FontSize="24" Click="GenDiagramBtn_Click_1"/>
     </Grid>
 
 

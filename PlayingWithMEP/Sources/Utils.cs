@@ -14,6 +14,11 @@ using Autodesk.Revit.DB.Architecture;
 using ECs = PlayingWithMEP.ElectricalClasses;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Collections.ObjectModel;
+using System.Windows;
+using Google.Apis.Sheets.v4.Data;
+using System.Windows.Media.TextFormatting;
+using System.Linq.Expressions;
 
 
 
@@ -37,7 +42,7 @@ namespace PlayingWithMEP
             try
             {
                 pickedRef = sel.PickObject(ObjectType.Element, "Select the Eletric panel");
-
+                
             }
             catch 
             {
@@ -47,6 +52,86 @@ namespace PlayingWithMEP
             Element selectedPanel = this.doc.GetElement(pickedRef);
 
             return selectedPanel as FamilyInstance;
+        }
+
+        public double feetToMeters (double feetNum)
+        {
+            return feetNum / 3.281;
+        }
+
+        public double metersToFeet(double metersNum)
+        {
+            return metersNum / 0.3048;
+        }
+
+        public FamilyInstance pickElement(Selection sel, ISelectionFilter selectionFilter)
+        {
+            Reference pickedRef = null;
+
+
+            try
+            {
+                pickedRef = sel.PickObject(ObjectType.Element, selectionFilter, "Select the Eletric panel");
+
+            }
+            catch
+            {
+                return null;
+            }
+
+            Element selectedPanel = this.doc.GetElement(pickedRef);
+
+            return selectedPanel as FamilyInstance;
+        }
+
+        public List<FamilyInstance> pickElements(Selection sel)
+        {
+            List<Reference> pickedRefs = null;
+
+
+
+            try
+            {
+                pickedRefs = sel.PickObjects(ObjectType.Element, "Select the Eletric panel").ToList();
+
+            }
+            catch
+            {
+                return null;
+            }
+            List<FamilyInstance> FIlist = new List<FamilyInstance>();
+            foreach (Reference pickedRef in pickedRefs) 
+            {
+                FIlist.Add(this.doc.GetElement(pickedRef) as FamilyInstance);
+            }
+
+
+            return FIlist;
+        }
+
+        public List<FamilyInstance> pickElements(Selection sel, ISelectionFilter selectionFilter)
+        {
+            List<Reference> pickedRefs = null;
+
+
+
+            try
+            {
+                pickedRefs = sel.PickObjects(ObjectType.Element, selectionFilter, "Select the Eletric panel").ToList();
+
+            }
+            catch
+            {
+                return null;
+            }
+            List<FamilyInstance> FIlist = new List<FamilyInstance>();
+            foreach (Reference pickedRef in pickedRefs)
+            {
+                FIlist.Add(this.doc.GetElement(pickedRef) as FamilyInstance);
+            }
+
+
+            return FIlist;
         }
 
         public Reference pickElementRef(Selection sel)
@@ -77,28 +162,28 @@ namespace PlayingWithMEP
             switch (dispCirc.scheme) 
             {
                 case "F + N + T":
-                    if (dispositive.dispType == "Lamp") return this.symbolIdForPowerDispositives("1 FN").Id;
+                    if (dispositive.dispType == "Lamp") return this.SymbolIdForIluminationDispositives("1 FN").Id;
 
-                    return this.symbolIdForPowerDispositives("1 FNT").Id;
+                    return this.SymbolIdForPowerDispositives("1 FNT").Id;
 
                 case "2F + T":
-                    return this.symbolIdForPowerDispositives("2FT").Id;
+                    return this.SymbolIdForPowerDispositives("2FT").Id;
 
                 case "2F + N + T":
-                    return this.symbolIdForPowerDispositives("2FNT").Id;
+                    return this.SymbolIdForPowerDispositives("2FNT").Id;
 
                 case "3F + T":
-                    return this.symbolIdForPowerDispositives("3FT").Id;
+                    return this.SymbolIdForPowerDispositives("3FT").Id;
 
                 case "3F + N + T":
-                    return this.symbolIdForPowerDispositives("3FNT").Id;
+                    return this.SymbolIdForPowerDispositives("3FNT").Id;
 
                 default:
-                    return this.symbolIdForPowerDispositives("1FN").Id;
+                    return this.SymbolIdForPowerDispositives("1FN").Id;
             }
         }
 
-        public FamilySymbol symbolIdForPowerDispositives (string scheme) 
+        public FamilySymbol SymbolIdForPowerDispositives (string scheme) 
         {
             IEnumerable<FamilySymbol> CircuitFamilySymbols = new FilteredElementCollector(this.doc).OfClass(typeof(FamilySymbol))
                 .Cast<FamilySymbol>().Where(x => x.FamilyName.Equals("Fiação - Tags Eletrical Fixtures - Dispositivos"));
@@ -107,12 +192,53 @@ namespace PlayingWithMEP
             return CircuitFamilySymbols.Where(x => x.Name.Equals(scheme)).First(); 
         }
 
-        public FamilySymbol symbolIdForIluminationDispositives (string scheme)
+        public FamilySymbol SymbolIdForPowerDispositives ()
+        {
+            IEnumerable<FamilySymbol> CircuitFamilySymbols = new FilteredElementCollector(this.doc).OfClass(typeof(FamilySymbol))
+                .Cast<FamilySymbol>().Where(x => x.FamilyName.Equals("Tag de N Circ Legenda Pt Tomada"));
+
+
+            return CircuitFamilySymbols.Where(x => x.Name.Equals("Tag de N Circ Legenda Pt Tomada")).First();
+        }
+
+        public FamilySymbol SymbolIdForIluminationDispositives(string scheme)
         {
             IEnumerable<FamilySymbol> LuminaryFamilySymbol = new FilteredElementCollector(this.doc).OfClass(typeof(FamilySymbol))
                 .Cast<FamilySymbol>().Where(x => x.FamilyName.Equals("Fiação - Tags Lighting Fixture - Luminarias"));
 
             return LuminaryFamilySymbol.Where(x => x.Name.Equals(scheme)).First();
+        }
+
+        public FamilySymbol SymbolIdForSwitchesScheme ()
+        {
+            IEnumerable<FamilySymbol> LuminaryFamilySymbol = new FilteredElementCollector(this.doc).OfClass(typeof(FamilySymbol))
+                .Cast<FamilySymbol>().Where(x => x.FamilyName.Equals("Fiação - Tags Lighting Devices - Disp Iluminacao"));
+
+            return LuminaryFamilySymbol.Where(x => x.Name.Equals("1 FR")).First();
+        }
+
+        public FamilySymbol SymbolIdForSwitches()
+        {
+            IEnumerable<FamilySymbol> LuminaryFamilySymbol = new FilteredElementCollector(this.doc).OfClass(typeof(FamilySymbol))
+                .Cast<FamilySymbol>().Where(x => x.FamilyName.Equals("Tag para Interruptor - Switch ID"));
+
+            return LuminaryFamilySymbol.Where(x => x.Name.Equals("Tag para Interruptor - Switch ID")).First();
+        }
+
+        public FamilySymbol symbolIdForIluminationDispositivesOnRoof()
+        {
+            IEnumerable<FamilySymbol> LuminaryFamilySymbol = new FilteredElementCollector(this.doc).OfClass(typeof(FamilySymbol))
+                .Cast<FamilySymbol>().Where(x => x.FamilyName.Equals("Tag de Luminárias de Teto Circular"));
+
+            return LuminaryFamilySymbol.Where(x => x.Name.Equals("Tag de Luminárias de Teto Circular")).First();
+        }
+
+        public FamilySymbol symbolIdForIluminationDispositivesOnWall()
+        {
+            IEnumerable<FamilySymbol> LuminaryFamilySymbol = new FilteredElementCollector(this.doc).OfClass(typeof(FamilySymbol))
+                .Cast<FamilySymbol>().Where(x => x.FamilyName.Equals("Tag de Luminárias na Parede"));
+
+            return LuminaryFamilySymbol.Where(x => x.Name.Equals("Tag de Luminárias na Parede")).First();
         }
 
         public bool isDispositive (Element e)
@@ -267,5 +393,81 @@ namespace PlayingWithMEP
 
         }
 
+        public List<Room> getRoomsFromLevel(Document document, Level level)
+        {
+
+            List<Element> Rooms = new FilteredElementCollector(document).OfClass(typeof(SpatialElement)).WhereElementIsNotElementType().Where(room => room.GetType() == typeof(Room)).ToList();
+
+            return Rooms.Where(room => document.GetElement(room.LevelId) == level).Select(r => r as Room).ToList();
+        }
+
+        public FilledRegionType GetFilledRegionType(string name)
+        {
+            FilteredElementCollector collector = new FilteredElementCollector(doc);
+            return collector
+              .OfClass(typeof(FilledRegionType)).Last() as FilledRegionType;
+        }
+
+        public Category GetLineStyleId (string name)
+        {
+            
+            Category c = doc.Settings.Categories.get_Item(BuiltInCategory.OST_Lines);
+            
+            return c.SubCategories.get_Item(name);
+        }
+
+        public FilledRegion CreateCircularFilledRegion(Document document, View view, double radius, XYZ centerPt)
+        {
+
+            Arc circle1 = Arc.Create(centerPt, radius, 0, Math.PI, XYZ.BasisX, XYZ.BasisY);
+            Arc circle2 = Arc.Create(centerPt, radius, Math.PI, 2 * Math.PI, XYZ.BasisX, XYZ.BasisY);
+
+            List<CurveLoop> profileloops = new List<CurveLoop>();
+            CurveLoop profileloop = new CurveLoop();
+
+
+            profileloop.Append(circle1);
+            profileloop.Append(circle2);
+
+            profileloops.Add(profileloop);
+
+            FilledRegionType filledRegionType = this.GetFilledRegionType("Preto");
+
+            if (filledRegionType == null)
+            {
+                string message = "Nenhum tipo de região preenchida disponível.";
+                TaskDialog.Show("Error", message);
+                return null;
+            }
+            
+            // Cria a região preenchida
+            FilledRegion filledRegion = FilledRegion.Create(doc, filledRegionType.Id, view.Id , profileloops);
+            DetailElementOrderUtils.BringToFront(this.doc, view, filledRegion.Id);
+
+            return filledRegion;
+        }
+
+        public void DrawRectangle (View view, XYZ topLeftCorner, XYZ bottomRightCorner)
+        {
+            XYZ topRigtCorner = new XYZ(bottomRightCorner.X, topLeftCorner.Y, 0);
+            XYZ bottomLeftCorner = new XYZ(topLeftCorner.X, bottomRightCorner.Y, 0);
+
+            List<Line> lines = new List<Line>() 
+            {
+                Line.CreateBound(topLeftCorner, topRigtCorner),
+                Line.CreateBound(topRigtCorner, bottomRightCorner),
+                Line.CreateBound(bottomRightCorner, bottomLeftCorner),
+                Line.CreateBound(bottomLeftCorner, topLeftCorner)
+            };
+
+            lines.ForEach(line =>
+            {
+                DetailCurve curve = this.doc.Create.NewDetailCurve(view, line);
+                curve.LineStyle = this.doc.GetElement(curve.GetLineStyleIds().Where(s => this.doc.GetElement(s).Name == "<Projeção>").Last());
+            });
+
+
+
+        }
     }
 }

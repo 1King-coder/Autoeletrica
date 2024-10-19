@@ -75,13 +75,12 @@ namespace PlayingWithMEP
             return response.Values;
         }
 
-        public void editData(string sheet, string range, List<object> data)
+        public void editData(string sheet, string range, List<IList<object>> data)
         {
             ValueRange valuesToSend = new ValueRange();
 
-            List<IList<object>> dataMatrix = new List<IList<object>> { data };
             
-            valuesToSend.Values = dataMatrix;
+            valuesToSend.Values = data;
 
             var updateReq = this.service.Spreadsheets.Values.Update(valuesToSend, this.SpreadsheetId, $"{sheet}!{range}");
             updateReq.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.USERENTERED;

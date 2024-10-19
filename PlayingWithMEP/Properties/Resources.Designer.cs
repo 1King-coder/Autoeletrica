@@ -76,9 +76,69 @@ namespace PlayingWithMEP.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Byte[].
         /// </summary>
+        internal static byte[] DiagramaTri {
+            get {
+                object obj = ResourceManager.GetObject("DiagramaTri", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Byte[].
+        /// </summary>
+        internal static byte[] DiagramaUni {
+            get {
+                object obj = ResourceManager.GetObject("DiagramaUni", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Byte[].
+        /// </summary>
+        internal static byte[] disjuntorTrifilar {
+            get {
+                object obj = ResourceManager.GetObject("disjuntorTrifilar", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Byte[].
+        /// </summary>
+        internal static byte[] disjuntorUnifilar {
+            get {
+                object obj = ResourceManager.GetObject("disjuntorUnifilar", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Byte[].
+        /// </summary>
+        internal static byte[] indentificadorEsquema {
+            get {
+                object obj = ResourceManager.GetObject("indentificadorEsquema", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Byte[].
+        /// </summary>
         internal static byte[] sheetsIcon {
             get {
                 object obj = ResourceManager.GetObject("sheetsIcon", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Byte[].
+        /// </summary>
+        internal static byte[] updateCircuits {
+            get {
+                object obj = ResourceManager.GetObject("updateCircuits", resourceCulture);
                 return ((byte[])(obj));
             }
         }

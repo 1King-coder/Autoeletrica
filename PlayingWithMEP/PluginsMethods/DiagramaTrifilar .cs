@@ -13,6 +13,9 @@ using System.Windows.Forms;
 using System.Windows;
 using ricaun.Revit.UI.Tasks;
 using ricaun.Revit.Mvvm;
+using PlayingWithMEP.Sources;
+using System.Windows.Controls;
+using Automations = PlayingWithMEP.ProjectAutomations;
 
 
 
@@ -20,17 +23,23 @@ namespace PlayingWithMEP
 {
     [Transaction(TransactionMode.Manual)]
     [Regeneration(RegenerationOption.Manual)]
-    public class SendingCircuitsDataToSheets : IExternalCommand
-    { 
+    public class DiagramaTrifilar : IExternalCommand
+    { private UIApplication uiapp;
+        private Document doc;
+        private Selection sel;
+
+
+        private Utils utils;
+        private Automations.GenerateDiagramsClass genDiag;
         
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elementSet)
         {
             UIApplication uiapp = commandData.Application;
-            
+            this.uiapp = commandData.Application;
+            this.doc = uiapp.ActiveUIDocument.Document;
+            this.sel = uiapp.ActiveUIDocument.Selection;
 
-            new SendCircuitsToSheets(App.RevitTask).Show();
-
-            
+            new GenerateThreeLineDiagramForm(App.RevitTask).Show();
 
             return Result.Succeeded;
         }

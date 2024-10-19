@@ -1,0 +1,46 @@
+﻿<Window x:Class="PlayingWithMEP.GenerateThreeLineDiagramForm"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PlayingWithMEP"
+             mc:Ignorable="d" Height="587" Width="900">
+    <Grid>
+        <StackPanel HorizontalAlignment="Left" Height="180" Margin="27,30,0,0" VerticalAlignment="Top" Width="376">
+            <Label x:Name="SelectedPanelLbl" Content="Clique em Selecionar e escolha um Quadro de distribuição no projeto" Background="White" HorizontalContentAlignment="Center" FontWeight="Bold" UseLayoutRounding="False" ScrollViewer.CanContentScroll="True" VerticalContentAlignment="Center" FontSize="11"/>
+
+            <Button x:Name="SelectPanelBtn" Content="Selecionar" Background="#FFF3EFEF" Command="{Binding selectPanelBtnCmd}" Click="SelectPanelBtn_Click_1" FontSize="16"/>
+
+            <ListView x:Name="CircuitsDataTable" Height="128" Background="White" Foreground="Black" FontSize="9" BorderBrush="Black">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Descrição" Width="100" DisplayMemberBinding="{Binding Name}"/>
+                        <GridViewColumn Header="Circuito" Width="50" DisplayMemberBinding="{Binding circuitNumber}"/>
+                        <GridViewColumn Header="Tensão" Width="50" DisplayMemberBinding="{Binding voltage}"/>
+                        <GridViewColumn Header="Esquema" Width="80" DisplayMemberBinding="{Binding scheme}"/>
+                        <GridViewColumn Header="Potência" DisplayMemberBinding="{Binding apparentload}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Left" Height="197" Margin="27,233,0,0" VerticalAlignment="Top" Width="376">
+            <Label x:Name="lbl1" Content="Insira o link da Planilha:" Background="White" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+            <TextBox x:Name="SheetsLinkTxtBox" TextWrapping="Wrap" FontSize="16" BorderBrush="Black"/>
+            <Button x:Name="verifyLinkBtn" Content="Verificar" BorderBrush="Black" FontSize="16" Click="verifyLinkBtn_Click"/>
+            <Label x:Name="SpreadsheetTitleLbl" Content="TíTULO DA PLANILHA" Background="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="30" Height="123"/>
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Left" Height="83" Margin="448,54,0,0" VerticalAlignment="Top" Width="214" Background="#FFB3B2B2">
+            <Label Content="Quadro de Distribuição" Background="Black" Foreground="White" FontSize="16" HorizontalContentAlignment="Center"/>
+            <Label Content="Corrente do Disjuntor:" Background="#FFD6D5D5" HorizontalContentAlignment="Right"/>
+            <Label Content="Secção dos cabos:" Background="#FFD6D5D5" HorizontalContentAlignment="Right"/>
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Left" Height="79" Margin="662,54,0,0" VerticalAlignment="Top" Width="219" Background="#FFB3B2B2">
+            <Label Content="" Background="Black" Foreground="White" FontSize="16" HorizontalContentAlignment="Center"/>
+            <TextBox x:Name="DisjuntorPaneltxtbox" TextWrapping="Wrap" Width="219" Height="24" FontSize="14"/>
+            <TextBox x:Name="SeccionsPaneltxtbox" TextWrapping="Wrap" Height="28" FontSize="14"/>
+        </StackPanel>
+        <Button x:Name="GenDiagramBtn" Content="Gerar Diagrama" HorizontalAlignment="Left" Height="60" Margin="450,150,0,0" VerticalAlignment="Top" Width="433" Background="#FFD0CFCF" FontSize="24" Click="GenDiagramBtn_Click_1"/>
+    </Grid>
+
+
+</Window>

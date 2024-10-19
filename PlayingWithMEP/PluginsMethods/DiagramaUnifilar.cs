@@ -26,23 +26,10 @@ namespace PlayingWithMEP
             Selection sel = uiapp.ActiveUIDocument.Selection;
             Diagrams diagrams = new Diagrams(doc);
 
-            PlanilhaDimensionamentoEletrico planilha = new PlanilhaDimensionamentoEletrico("1MZt_KFsS692brVrzg6c-06q4siw1l7bPfPLvwIXfC_c");
+            new GenerateSingleLineDiagramForm(App.RevitTask).Show();
 
-            Automations.GenerateDiagramsClass diagGen = new Automations.GenerateDiagramsClass(doc, planilha);
 
-            Utils utils = new Utils(doc);
 
-            Transaction trans = new Transaction(doc);
-
-            trans.Start("Selection");
-
-            Reference el = utils.pickElementRef(sel);
-            trans.Commit();
-            ECs.Panel panel = new ECs.Panel(doc.GetElement(el) as FamilyInstance, doc);
-
-            diagGen.GenSingleLineDiagramFromPanel(panel);
-
-            
 
             return Result.Succeeded;
         }

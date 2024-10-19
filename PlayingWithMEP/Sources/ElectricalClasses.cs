@@ -87,7 +87,9 @@ namespace PlayingWithMEP
 
             public List<Circuit> SortCircuitsByNumber (List<Circuit> Circuits)
             {
-                List<Circuit> sortedCircuits = Circuits.OrderBy(c => c.circuitNumber).ToList();
+                List<Circuit> sortedCircuits = new List<Circuit> (Circuits.OrderBy((c) => {
+                    if (c.circuitNumber.Split(',').ToList().Count() > 1) { return Convert.ToInt32(c.circuitNumber.Split(',')[0]); } else { return Convert.ToInt32(c.circuitNumber); };
+                }));
 
                 return sortedCircuits;
             }
@@ -149,6 +151,10 @@ namespace PlayingWithMEP
                 this.numOfNeutrals = ES.get_Parameter(BuiltInParameter.RBS_ELEC_CIRCUIT_WIRE_NUM_NEUTRALS_PARAM).AsInteger();
                 this.numOfGrounds = ES.get_Parameter(BuiltInParameter.RBS_ELEC_CIRCUIT_WIRE_NUM_GROUNDS_PARAM).AsInteger();
 
+                this.phaseALoad = ES.get_Parameter(BuiltInParameter.RBS_ELEC_APPARENT_LOAD_PHASEA).AsValueString().Replace("VA", "").Trim();
+                this.phaseBLoad = ES.get_Parameter(BuiltInParameter.RBS_ELEC_APPARENT_LOAD_PHASEB).AsValueString().Replace("VA", "").Trim();
+                this.phaseCLoad = ES.get_Parameter(BuiltInParameter.RBS_ELEC_APPARENT_LOAD_PHASEC).AsValueString().Replace("VA", "").Trim();
+
                 this.scheme = GetScheme();
 
                 this.isNotReserveCircuit = this.Name.Contains("Reserva") ? 0 : 1;
@@ -190,6 +196,9 @@ namespace PlayingWithMEP
                 return disps;
             }
 
+            public string phaseALoad {  get; set; }
+            public string phaseBLoad {  get; set; }
+            public string phaseCLoad {  get; set; }
             public ElectricalSystem CircuitObj { get; set; }
 
             public string circuitNumber { get; set; }
@@ -249,7 +258,8 @@ namespace PlayingWithMEP
                     {
                         if (!numOfDispsByLoad["Lamps"].ContainsKey(d.apparentLoad.ToString())) 
                         {
-                            numOfDispsByLoad["Lamps"]["dif"] += 1;
+                            numOfDispsByLoad["TUGs-TUEs"]["TUE"] += d.apparentLoad;
+                            continue;
                         }
 
                         numOfDispsByLoad["Lamps"][d.apparentLoad.ToString()] += 1;
@@ -297,7 +307,7 @@ namespace PlayingWithMEP
 
                 this.typeId = disp.GetTypeId();
 
-                ElectricalSystem dispES = this.dispositiveInstance.MEPModel.GetElectricalSystems().ElementAt(0);
+                ElectricalSystem dispES = this.dispositiveInstance.MEPModel.GetElectricalSystems().First();
 
                 this.EScircuit = dispES;
 

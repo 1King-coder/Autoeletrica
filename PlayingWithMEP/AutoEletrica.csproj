@@ -102,17 +102,25 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\GenerateThreeLineDiagramForm .xaml.cs">
+      <DependentUpon>GenerateThreeLineDiagramForm .xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\GenerateSingleLineDiagramForm.xaml.cs">
       <DependentUpon>GenerateSingleLineDiagramForm.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\UpdateInRevitCircuits.xaml.cs">
+      <DependentUpon>UpdateInRevitCircuits.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PluginsMethods\IdentifyAllDispositives.cs" />
+    <Compile Include="PluginsMethods\DiagramaTrifilar .cs" />
+    <Compile Include="PluginsMethods\UpdateInRevitCircuitsFromPanel.cs" />
     <Compile Include="SetupInterface.cs" />
     <Compile Include="App.cs" />
     <Compile Include="Forms\SendCircuitsToSheets.xaml.cs">
       <DependentUpon>SendCircuitsToSheets.xaml</DependentUpon>
     </Compile>
     <Compile Include="PluginsMethods\02_GettingEquipmentWithClasses  - Cópia .cs" />
-    <Compile Include="PluginsMethods\05_DiagramaUnifilar.cs" />
-    <Compile Include="PluginsMethods\04_IdentifyCircuits .cs" />
+    <Compile Include="PluginsMethods\DiagramaUnifilar.cs" />
     <Compile Include="PluginsMethods\SendingCircuitsDataToSheets.cs" />
     <Compile Include="PluginsMethods\01_TestToGetEquipment.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -127,6 +135,7 @@
     <Compile Include="Sources\MappingConduitsPaths.cs" />
     <Compile Include="Sources\PlanilhaDimensionamentoEletrico.cs" />
     <Compile Include="Sources\ProjectAutomations.cs" />
+    <Compile Include="Sources\SelectionFilters.cs" />
     <Compile Include="Sources\UtilityClasses.cs" />
     <Compile Include="Sources\Utils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -145,7 +154,15 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Forms\GenerateThreeLineDiagramForm .xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Forms\GenerateSingleLineDiagramForm.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Forms\UpdateInRevitCircuits.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -153,6 +170,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Icons\DiagramaTri.png" />
+    <Content Include="Icons\DiagramaUni.png" />
+    <Content Include="Icons\disjuntorTrifilar.png" />
+    <Content Include="Icons\disjuntorUnifilar.png" />
+    <Content Include="Icons\indentificadorEsquema.png" />
+    <Content Include="Icons\sheetsIcon.ico" />
+    <Content Include="Icons\updateCircuits.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

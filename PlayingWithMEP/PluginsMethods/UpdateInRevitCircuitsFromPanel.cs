@@ -20,7 +20,7 @@ namespace PlayingWithMEP
 {
     [Transaction(TransactionMode.Manual)]
     [Regeneration(RegenerationOption.Manual)]
-    public class SendingCircuitsDataToSheets : IExternalCommand
+    public class UpdateInRevitCircuitsFromPanel : IExternalCommand
     { 
         
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elementSet)
@@ -28,7 +28,7 @@ namespace PlayingWithMEP
             UIApplication uiapp = commandData.Application;
             
 
-            new SendCircuitsToSheets(App.RevitTask).Show();
+            new UpdateInRevitCircuits(App.RevitTask).Show();
 
             
 
