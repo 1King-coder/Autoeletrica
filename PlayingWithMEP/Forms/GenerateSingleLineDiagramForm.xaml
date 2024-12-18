@@ -62,8 +62,8 @@
             <TextBox x:Name="DisjuntorPaneltxtbox" TextWrapping="Wrap" Width="219" Height="24" FontSize="14"/>
             <TextBox x:Name="SeccionsPaneltxtbox" TextWrapping="Wrap" Height="28" FontSize="14"/>
             <Label Content="DR" Background="Black" Foreground="White" FontSize="16" HorizontalContentAlignment="Center"/>
-            <CheckBox x:Name="HasGeneraDRchkBox" Content="Sim/Não" Background="White" BorderBrush="Black" FontWeight="Bold" FontSize="14" Height="27" IsChecked="False" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Checked="DPSforNeutralUchkbox_Copiar1_Checked" HorizontalAlignment="Center"/>
-            <TextBox x:Name="NumPolosDRtxtbox" TextWrapping="Wrap" Height="25" FontSize="14" TextChanged="NumPolosDRtxtbox_TextChanged"/>
+            <CheckBox x:Name="HasGeneraDRchkBox" Content="Sim/Não" Background="White" BorderBrush="Black" FontWeight="Bold" FontSize="14" Height="27" IsChecked="False" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBox x:Name="NumPolosDRtxtbox" TextWrapping="Wrap" Height="25" FontSize="14"/>
             <TextBox x:Name="CorrenteDRtxtbox" TextWrapping="Wrap" Height="27" FontSize="14"/>
             <TextBox x:Name="CorrenteProtDRtxtbox" TextWrapping="Wrap" Height="25" FontSize="14"/>
             <Label Content="DPS" Background="Black" Foreground="White" FontSize="16" HorizontalContentAlignment="Center"/>

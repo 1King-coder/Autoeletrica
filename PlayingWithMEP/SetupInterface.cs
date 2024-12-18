@@ -32,6 +32,7 @@ namespace AutoEletrica
             string threeLineFullDPath = Path.Combine(Path.GetDirectoryName(thisdirectorypath), "Icons", "DiagramaTri.png");
             string identifyCircsPath = Path.Combine(Path.GetDirectoryName(thisdirectorypath), "Icons", "indentificadorEsquema.png");
             string updateCircsPath = Path.Combine(Path.GetDirectoryName(thisdirectorypath), "Icons", "updateCircuits.png");
+            string associateSwitchesPath = Path.Combine(Path.GetDirectoryName(thisdirectorypath), "Icons", "associateSwitchs.png");
 
 
             application.CreateRibbonTab(tabName);
@@ -80,6 +81,14 @@ namespace AutoEletrica
 
             UpdateCircuitsInRevitbtnData.SetLargeImage(new BitmapImage(new System.Uri(updateCircsPath)));
 
+            var AssociateSwitchesbtnData = new PushButtonData("Associar comandos", "Associar \nComandos", Assembly.GetExecutingAssembly().Location, "AutoEletrica.AssociaComandosAInterruptores")
+            {
+
+                ToolTip = "Essa ferramenta é usada para associar comandos aos interruptores associados ao QD selecionado (1a = QD 1 comando a)"
+            };
+
+            AssociateSwitchesbtnData.SetLargeImage(new BitmapImage(new System.Uri(associateSwitchesPath)));
+
 
 
             PushButton SendCircuitsToSheetsbtn = panelAnnotation.AddItem(SendCircuitsToSheetsbtnData) as PushButton;
@@ -87,6 +96,7 @@ namespace AutoEletrica
             PushButton GenerateThreeLineDiagrambtn = panelAnnotation.AddItem(GenerateThreeLineDiagrambtnData) as PushButton;
             PushButton IdentifyElectricalElementsbtn = panelAnnotation.AddItem(IdentifyElectricalElementsbtnData) as PushButton;
             PushButton UpdateCircuitsInRevitbtn = panelAnnotation.AddItem(UpdateCircuitsInRevitbtnData) as PushButton;
+            PushButton AssociateSwitchesbtn = panelAnnotation.AddItem(AssociateSwitchesbtnData) as PushButton;
 
 
 

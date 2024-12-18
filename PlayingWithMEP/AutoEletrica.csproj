@@ -123,7 +123,7 @@
     <Compile Include="PluginsMethods\02_GettingEquipmentWithClasses  - Cópia .cs" />
     <Compile Include="PluginsMethods\DiagramaUnifilar.cs" />
     <Compile Include="PluginsMethods\SendingCircuitsDataToSheets.cs" />
-    <Compile Include="PluginsMethods\01_TestToGetEquipment.cs" />
+    <Compile Include="PluginsMethods\AssociaComandosAInterruptores.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
