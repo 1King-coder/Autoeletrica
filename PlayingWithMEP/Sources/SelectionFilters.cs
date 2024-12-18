@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PlayingWithMEP.Sources
+namespace AutoEletrica.Sources
 {
 
     internal class SelectionFilterDispositives : ISelectionFilter

@@ -7,8 +7,8 @@
     <ProjectGuid>{DA337059-9671-48A0-B301-6CF89959D250}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PlayingWithMEP</RootNamespace>
-    <AssemblyName>PlayingWithMEP</AssemblyName>
+    <RootNamespace>AutoEletrica</RootNamespace>
+    <AssemblyName>AutoEletrica</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -114,6 +114,7 @@
     <Compile Include="PluginsMethods\IdentifyAllDispositives.cs" />
     <Compile Include="PluginsMethods\DiagramaTrifilar .cs" />
     <Compile Include="PluginsMethods\UpdateInRevitCircuitsFromPanel.cs" />
+    <Compile Include="PluginsMethods\WiresInConduit.cs" />
     <Compile Include="SetupInterface.cs" />
     <Compile Include="App.cs" />
     <Compile Include="Forms\SendCircuitsToSheets.xaml.cs">

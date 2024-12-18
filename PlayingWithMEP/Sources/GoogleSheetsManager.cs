@@ -10,7 +10,7 @@ using Google.Apis.Sheets.v4.Data;
 using System.IO;
 
 
-namespace PlayingWithMEP
+namespace AutoEletrica
 {
     internal class GoogleSheetsManager
     {

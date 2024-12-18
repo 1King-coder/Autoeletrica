@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Documents;
 
-namespace PlayingWithMEP.Sources
+namespace AutoEletrica.Sources
 {
     internal interface IElectricalUtilityData
     {
@@ -22,6 +22,10 @@ namespace PlayingWithMEP.Sources
         string NumeroCircuito { get; set; }
         int Potencia { get; set; }
         string SeccaoCabos { get; set; }
+
+        int Tensao {  get; set; }
+
+        int Frequencia {  get; set; }
 
         Dictionary<string, string> circuitLoadPerPhase { get; set; }
 
@@ -84,6 +88,10 @@ namespace PlayingWithMEP.Sources
         public string NumeroCircuito { get; set; }
         public int Potencia { get; set; }
         public string SeccaoCabos { get; set; }
+        public int Tensao { get; set; }
+
+        public int Frequencia { get; set; }
+
         public Dictionary<string, string> circuitLoadPerPhase { get; set; }
 
         public string GetPhasesWithLoad()
@@ -128,6 +136,10 @@ namespace PlayingWithMEP.Sources
         public double SeccaoCabos { get; set; }
 
         public int DPSneutro { get; set; }
+
+        public int HasDPS { get; set; }
+
+        public int HasGeneralDR {  get; set; }
     }
     internal class ThreeLineCircuitsIdentifierData : IThreeLineCircuitsIdentifierData
     {

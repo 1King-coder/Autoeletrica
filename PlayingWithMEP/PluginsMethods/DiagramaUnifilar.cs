@@ -8,12 +8,12 @@ using Autodesk.Revit.UI;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.UI.Selection;
 using Autodesk.Revit.DB.Electrical;
-using ECs = PlayingWithMEP.ElectricalClasses;
-using Automations = PlayingWithMEP.ProjectAutomations;
+using ECs = AutoEletrica.ElectricalClasses;
+using Automations = AutoEletrica.ProjectAutomations;
 using System.Security.Principal;
 
 
-namespace PlayingWithMEP
+namespace AutoEletrica
 {
     [Transaction(TransactionMode.Manual)]
     [Regeneration(RegenerationOption.Manual)]

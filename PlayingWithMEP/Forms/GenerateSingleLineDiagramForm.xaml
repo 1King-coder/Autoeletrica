@@ -1,10 +1,10 @@
-﻿<Window x:Class="PlayingWithMEP.GenerateSingleLineDiagramForm"
+﻿<Window x:Class="AutoEletrica.GenerateSingleLineDiagramForm"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:PlayingWithMEP"
-             mc:Ignorable="d" Height="587" Width="900">
+             xmlns:local="clr-namespace:AutoEletrica"
+             mc:Ignorable="d" Height="700" Width="900">
     <Grid>
         <StackPanel HorizontalAlignment="Left" Height="180" Margin="27,30,0,0" VerticalAlignment="Top" Width="376">
             <Label x:Name="SelectedPanelLbl" Content="Clique em Selecionar e escolha um Quadro de distribuição no projeto" Background="White" HorizontalContentAlignment="Center" FontWeight="Bold" UseLayoutRounding="False" ScrollViewer.CanContentScroll="True" VerticalContentAlignment="Center" FontSize="11"/>
@@ -23,11 +23,11 @@
                 </ListView.View>
             </ListView>
         </StackPanel>
-        <StackPanel HorizontalAlignment="Left" Height="197" Margin="27,233,0,0" VerticalAlignment="Top" Width="376">
+        <StackPanel HorizontalAlignment="Left" Height="328" Margin="27,233,0,0" VerticalAlignment="Top" Width="376">
             <Label x:Name="lbl1" Content="Insira o link da Planilha:" Background="White" VerticalAlignment="Top" HorizontalAlignment="Center"/>
             <TextBox x:Name="SheetsLinkTxtBox" TextWrapping="Wrap" FontSize="16" BorderBrush="Black"/>
             <Button x:Name="verifyLinkBtn" Content="Verificar" BorderBrush="Black" FontSize="16" Click="verifyLinkBtn_Click"/>
-            <Label x:Name="SpreadsheetTitleLbl" Content="TíTULO DA PLANILHA" Background="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="30" Height="123"/>
+            <Label x:Name="SpreadsheetTitleLbl" Content="TíTULO DA PLANILHA" Background="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="30" Height="252"/>
         </StackPanel>
         <StackPanel HorizontalAlignment="Left" Height="108" Margin="440,42,0,0" VerticalAlignment="Top" Width="214" Background="#FFB3B2B2">
             <Label Content="Padrão de Entrada" Background="Black" Foreground="White" FontSize="16" HorizontalContentAlignment="Center"/>
@@ -41,35 +41,39 @@
             <TextBox x:Name="DisjuntorElecUtxtbox" TextWrapping="Wrap" Width="219" Height="24" FontSize="14"/>
             <TextBox x:Name="SeccionsElecUtxtbox" TextWrapping="Wrap" Height="22" FontSize="14"/>
         </StackPanel>
-        <StackPanel HorizontalAlignment="Left" Height="325" Margin="440,167,0,0" VerticalAlignment="Top" Width="214" Background="#FFB3B2B2">
+        <StackPanel HorizontalAlignment="Left" Height="378" Margin="440,167,0,0" VerticalAlignment="Top" Width="214" Background="#FFB3B2B2">
             <Label Content="Quadro de Distribuição" Background="Black" Foreground="White" FontSize="16" HorizontalContentAlignment="Center"/>
             <Label Content="Corrente do Disjuntor:" Background="#FFD6D5D5" HorizontalContentAlignment="Right"/>
             <Label Content="Secção dos cabos:" Background="#FFD6D5D5" HorizontalContentAlignment="Right"/>
             <Label Content="DR" Background="Black" Foreground="White" FontSize="16" HorizontalContentAlignment="Center"/>
+            <Label x:Name="HasGeneralDRLbl" Content="Tem DR geral:" Background="#FFD6D5D5" HorizontalContentAlignment="Right"/>
             <Label Content="Número de polos:" Background="#FFD6D5D5" HorizontalContentAlignment="Right"/>
             <Label Content="Corrente suportada:" Background="#FFD6D5D5" HorizontalContentAlignment="Right"/>
             <Label Content="Corrente de proteção (mA):" Background="#FFD6D5D5" HorizontalContentAlignment="Right"/>
             <Label Content="DPS" Background="Black" Foreground="White" FontSize="16" HorizontalContentAlignment="Center"/>
+            <Label x:Name="HasDPSLbl" Content="Tem DPS:" Background="#FFD6D5D5" HorizontalContentAlignment="Right"/>
             <Label Content="Tensão nominal:" Background="#FFD6D5D5" HorizontalContentAlignment="Right"/>
             <Label Content="Corrente nominal (kA):" Background="#FFD6D5D5" HorizontalContentAlignment="Right"/>
-            <Label Content="Classe de proteção:" Background="#FFD6D5D5" HorizontalContentAlignment="Right"/>
+            <Label Content="Classe de proteção:" Background="#FFD6D5D5" HorizontalContentAlignment="Right" Width="213"/>
             <Label Content="DPS para o neutro:" Background="#FFD6D5D5" HorizontalContentAlignment="Right"/>
         </StackPanel>
-        <StackPanel HorizontalAlignment="Left" Height="327" Margin="654,167,0,0" VerticalAlignment="Top" Width="219" Background="#FFB3B2B2">
+        <StackPanel HorizontalAlignment="Left" Height="379" Margin="654,167,0,0" VerticalAlignment="Top" Width="219" Background="#FFB3B2B2">
             <Label Content="Quadro de Distribuição" Background="Black" Foreground="White" FontSize="16" HorizontalContentAlignment="Center"/>
             <TextBox x:Name="DisjuntorPaneltxtbox" TextWrapping="Wrap" Width="219" Height="24" FontSize="14"/>
             <TextBox x:Name="SeccionsPaneltxtbox" TextWrapping="Wrap" Height="28" FontSize="14"/>
             <Label Content="DR" Background="Black" Foreground="White" FontSize="16" HorizontalContentAlignment="Center"/>
-            <TextBox x:Name="NumPolosDRtxtbox" TextWrapping="Wrap" Height="25" FontSize="14"/>
+            <CheckBox x:Name="HasGeneraDRchkBox" Content="Sim/Não" Background="White" BorderBrush="Black" FontWeight="Bold" FontSize="14" Height="27" IsChecked="False" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Checked="DPSforNeutralUchkbox_Copiar1_Checked" HorizontalAlignment="Center"/>
+            <TextBox x:Name="NumPolosDRtxtbox" TextWrapping="Wrap" Height="25" FontSize="14" TextChanged="NumPolosDRtxtbox_TextChanged"/>
             <TextBox x:Name="CorrenteDRtxtbox" TextWrapping="Wrap" Height="27" FontSize="14"/>
             <TextBox x:Name="CorrenteProtDRtxtbox" TextWrapping="Wrap" Height="25" FontSize="14"/>
             <Label Content="DPS" Background="Black" Foreground="White" FontSize="16" HorizontalContentAlignment="Center"/>
+            <CheckBox x:Name="HasDPSchkbox" Content="Sim/Não" Background="White" BorderBrush="Black" FontWeight="Bold" FontSize="14" Height="24" IsChecked="False" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Center"/>
             <TextBox x:Name="TensaoNomDPStxtbox" TextWrapping="Wrap" Height="27" FontSize="14"/>
             <TextBox x:Name="CorrenteDPStxtbox" TextWrapping="Wrap" Height="27" FontSize="14"/>
             <TextBox x:Name="ClasseDPStxtbox" TextWrapping="Wrap" Height="27" FontSize="14"/>
             <CheckBox x:Name="DPSforNeutralUchkbox" Content="Sim/Não" Background="White" BorderBrush="Black" FontWeight="Bold" FontSize="14" Height="24" IsChecked="False" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Center"/>
         </StackPanel>
-        <Button x:Name="GenDiagramBtn" Content="Gerar Diagrama" HorizontalAlignment="Left" Height="60" Margin="440,501,0,0" VerticalAlignment="Top" Width="433" Background="#FFD0CFCF" FontSize="24" Click="GenDiagramBtn_Click_1"/>
+        <Button x:Name="GenDiagramBtn" Content="Gerar Diagrama" HorizontalAlignment="Left" Height="60" Margin="440,560,0,0" VerticalAlignment="Top" Width="433" Background="#FFD0CFCF" FontSize="24" Click="GenDiagramBtn_Click_1"/>
     </Grid>
 
 

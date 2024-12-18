@@ -11,7 +11,7 @@ using Autodesk.Revit.DB.Electrical;
 using System.Collections;
 using Autodesk.Revit.UI.Events;
 using Autodesk.Revit.DB.Architecture;
-using ECs = PlayingWithMEP.ElectricalClasses;
+using ECs = AutoEletrica.ElectricalClasses;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.ObjectModel;
@@ -22,7 +22,7 @@ using System.Linq.Expressions;
 
 
 
-namespace PlayingWithMEP
+namespace AutoEletrica
 {
     internal class Utils
     {
@@ -212,7 +212,7 @@ namespace PlayingWithMEP
         public FamilySymbol SymbolIdForSwitchesScheme ()
         {
             IEnumerable<FamilySymbol> LuminaryFamilySymbol = new FilteredElementCollector(this.doc).OfClass(typeof(FamilySymbol))
-                .Cast<FamilySymbol>().Where(x => x.FamilyName.Equals("Fiação - Tags Lighting Devices - Disp Iluminacao"));
+                .Cast<FamilySymbol>().Where(x => x.Category.BuiltInCategory == BuiltInCategory.OST_LightingDeviceTags);
 
             return LuminaryFamilySymbol.Where(x => x.Name.Equals("1 FR")).First();
         }

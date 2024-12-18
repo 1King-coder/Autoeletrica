@@ -8,9 +8,9 @@ using Autodesk.Revit.UI;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.UI.Selection;
 using Autodesk.Revit.DB.Electrical;
-using ECs = PlayingWithMEP.ElectricalClasses;
+using ECs = AutoEletrica.ElectricalClasses;
 
-namespace PlayingWithMEP
+namespace AutoEletrica
 {
     internal class Diagrams
     {
@@ -72,7 +72,7 @@ namespace PlayingWithMEP
             return GetGenericAnnotationFamilySymbolByFamilyNameAndTypeName("Diagrama identificação de circuitos trifilar trifásico", "trifasico");
         }
 
-        public List<XYZ> GetDitribuitedCircuitsIdentifiersPosList (int numOfCircuits)
+        public List<XYZ> GetDitribuitedCircuitsIdentifiersPosList (int numOfCircuits, XYZ insertionPt)
         {
             List<XYZ> result = new List<XYZ>();
             List<double> posY = new List<double>();
@@ -92,7 +92,7 @@ namespace PlayingWithMEP
             posY.Sort();
             posY.Reverse();
 
-            posY.ForEach(x => result.Add(new XYZ(3.45/ 0.3048, x, 0)));
+            posY.ForEach(y => result.Add(new XYZ((3.45/ 0.3048) + insertionPt.X, y, 0)));
 
             return result;
         }

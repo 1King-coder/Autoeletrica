@@ -15,15 +15,15 @@ using System.Windows.Shapes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
-using PlayingWithMEP;
+using AutoEletrica;
 using ricaun.Revit.Mvvm;
 using ricaun.Revit.UI.Tasks;
-using ECs = PlayingWithMEP.ElectricalClasses;
-using Automations = PlayingWithMEP.ProjectAutomations;
-using PlayingWithMEP.Sources;
+using ECs = AutoEletrica.ElectricalClasses;
+using Automations = AutoEletrica.ProjectAutomations;
+using AutoEletrica.Sources;
 
 
-namespace PlayingWithMEP
+namespace AutoEletrica
 {
     /// <summary>
     /// Interação lógica para UserControl1.xam
@@ -251,12 +251,16 @@ namespace PlayingWithMEP
             int CorrenteProtecaoDR,
             int NumeroPolosDR,
             double SeccaoCabos,
-            int DPSneutro
+            int DPSneutro,
+            int HasDPS,
+            int HasGeneralDR
            )
         {
             PanelIdentifierData panelIdentifierData = new PanelIdentifierData();
 
             panelIdentifierData.CorrenteDisjuntorGeral = CorrenteDisjuntorGeral;
+            panelIdentifierData.HasDPS = HasDPS;
+            panelIdentifierData.HasGeneralDR = HasGeneralDR;
             panelIdentifierData.DPSneutro = DPSneutro;
             panelIdentifierData.TensaoNominalDPS = TensaoNominalDPS;
             panelIdentifierData.ClasseDeProtecaoDPS = ClasseProtecaoDPS;
@@ -302,7 +306,9 @@ namespace PlayingWithMEP
                 Convert.ToInt32(CorrenteProtDRtxtbox.Text),
                 Convert.ToInt32(NumPolosDRtxtbox.Text),
                 Convert.ToDouble(SeccionsPaneltxtbox.Text),
-                (bool) DPSforNeutralUchkbox.IsChecked ? 1 : 0
+                (bool) DPSforNeutralUchkbox.IsChecked ? 1 : 0,
+                (bool) HasDPSchkbox.IsChecked ? 1 : 0,
+                (bool) HasGeneraDRchkBox.IsChecked ? 1 : 0
                 );
 
             ElectricalUtilityData elecUData = SetUpElecetricalUtilityData(Convert.ToInt32(DisjuntorElecUtxtbox.Text), Convert.ToDouble(SeccionsElecUtxtbox.Text));
@@ -314,18 +320,24 @@ namespace PlayingWithMEP
                 {
                     Document doc = uiapp.ActiveUIDocument.Document;
                     Automations.GenerateDiagramsClass diagGen = new Automations.GenerateDiagramsClass(doc, planilha);
-                    diagGen.GenSingleLineDiagramFromPanel(this.selectedPanel, panelIData, elecUData, (bool)ShowElecUchkbox.IsChecked);
                     uiapp.ActiveUIDocument.RequestViewChange(diagGen.singleLineView);
+                    this.Hide();
+                    Selection sel = uiapp.ActiveUIDocument.Selection;
+                    XYZ insertionPt = sel.PickPoint("Selecione onde gerar o diagrama");
+                    diagGen.GenSingleLineDiagramFromPanel(this.selectedPanel, panelIData, elecUData, insertionPt, (bool)ShowElecUchkbox.IsChecked);
+                    this.Show();
                 });
             }
             catch (Exception ex)
             {
                 TaskDialog.Show("Erro", ex.ToString());
+                this.Show();
+                return;
             }
 
 
 
-                TaskDialog.Show("Sucesso", "Diagrama Unifilar gerado com Sucesso!");
+            TaskDialog.Show("Sucesso", "Diagrama Unifilar gerado com Sucesso!");
             this.Show();
 
 

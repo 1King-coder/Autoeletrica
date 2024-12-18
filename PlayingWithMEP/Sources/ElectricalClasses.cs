@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
 
-namespace PlayingWithMEP
+namespace AutoEletrica
 {
     internal class ElectricalClasses
     {

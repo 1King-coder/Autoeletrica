@@ -3,14 +3,14 @@ using Autodesk.Revit.UI;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.UI.Selection;
 using Autodesk.Revit.DB.Electrical;
-using ECs = PlayingWithMEP.ElectricalClasses;
+using ECs = AutoEletrica.ElectricalClasses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PlayingWithMEP
+namespace AutoEletrica
 {
     internal class GeometryUtils
     {
@@ -55,10 +55,6 @@ namespace PlayingWithMEP
             return null;
 
         }
-
-
-
-
 
         public List<Conduit> GetParallelToXYConduits (List<Conduit> conduits)
         {
@@ -119,6 +115,8 @@ namespace PlayingWithMEP
         {
             return Line.CreateBound(c.GetEndPoint(0), c.GetEndPoint(1));
         }
+
+        
 
     }
 }

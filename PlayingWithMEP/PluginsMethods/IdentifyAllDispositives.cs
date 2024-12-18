@@ -8,15 +8,13 @@ using Autodesk.Revit.UI;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.UI.Selection;
 using Autodesk.Revit.DB.Electrical;
-using ECs = PlayingWithMEP.ElectricalClasses;
-using Automations = PlayingWithMEP.ProjectAutomations;
-using PlayingWithMEP.Sources;
-using System.Security.Principal;
-using System.Windows.Controls;
-using static PlayingWithMEP.ElectricalClasses;
+using ECs = AutoEletrica.ElectricalClasses;
+using Automations = AutoEletrica.ProjectAutomations;
+using AutoEletrica.Sources;
 
 
-namespace PlayingWithMEP
+
+namespace AutoEletrica
 {
     [Transaction(TransactionMode.Manual)]
     [Regeneration(RegenerationOption.Manual)]
@@ -24,7 +22,8 @@ namespace PlayingWithMEP
     {
         private UIApplication uiapp;
         private Document doc;
-        private Selection sel;
+        private Selection sel1;
+        private Selection sel2;
 
 
         private Utils utils;
@@ -35,7 +34,8 @@ namespace PlayingWithMEP
 
             this.uiapp = commandData.Application;
             this.doc = uiapp.ActiveUIDocument.Document;
-            this.sel = uiapp.ActiveUIDocument.Selection;
+            this.sel1 = uiapp.ActiveUIDocument.Selection;
+            this.sel2 = uiapp.ActiveUIDocument.Selection;
 
 
             this.utils = new Utils(doc);
@@ -44,24 +44,28 @@ namespace PlayingWithMEP
 
 
 
-            List<FamilyInstance> els = utils.pickElements(sel, new SelectionFilterDispositives());
-            
+            List<FamilyInstance> els = utils.pickElements(sel1, new SelectionFilterDispositives());
+            XYZ leaderEndPt = null;
+            XYZ leaderElbowPt = null;
             try
             {
-                XYZ pickedPt = sel.PickPoint();
-                pickedPt.Add(new XYZ(0, 0.135 / 0.3048, 0));
-                identifyThings(els, pickedPt);
+                leaderEndPt = sel1.PickPoint("Selecione a posição da ponta da linha de chamada");
+                leaderElbowPt = sel2.PickPoint("Selecione a posição do cotovelo da linha de chamada");
+
+                identifyThings(els, leaderEndPt, leaderElbowPt);
 
             } catch (Autodesk.Revit.Exceptions.OperationCanceledException e)
             {
-                identifyThings(els, null);
+                
+                identifyThings(els, null, null); 
+
 
             }
 
             return Result.Succeeded;
         }
 
-        private void identifyThings(List<FamilyInstance> els, XYZ placementPt)
+        private void identifyThings(List<FamilyInstance> els, XYZ leaderEndPt, XYZ leaderElbowPt)
         {
             if (els != null)
             {
@@ -81,22 +85,24 @@ namespace PlayingWithMEP
                         }
                     }));
 
-                    identify.identifyMultipleDispositiveCircuitScheme(sortedCircuits, placementPt);
+
+                    identify.identifyMultipleDispositiveCircuitScheme(sortedCircuits, leaderEndPt, leaderElbowPt);
                     return;
                 }
 
                 FamilyInstance el = els.Last();
 
-                if (utils.isDispositive(el as Element) || utils.isLuminary(el as Element))
-                {
-                    identify.identifyDispositiveCircuitScheme(new ECs.Dispositive(el as Element, doc), placementPt);
-                    return;
-                }
-
                 if (utils.isElectricEquipment(el))
                 {
                     identify.indentifyAllDispositivesFromPanel(new ECs.Panel(el, doc));
+                    return;
                 }
+
+                identify.identifyDispositiveCircuitScheme(new ECs.Dispositive(el as Element, doc), leaderEndPt, leaderElbowPt);
+                return;
+                
+
+                
             }
         }
 

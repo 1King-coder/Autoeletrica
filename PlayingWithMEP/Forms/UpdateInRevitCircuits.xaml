@@ -1,9 +1,9 @@
-﻿<Window x:Class="PlayingWithMEP.UpdateInRevitCircuits"
+﻿<Window x:Class="AutoEletrica.UpdateInRevitCircuits"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:PlayingWithMEP"
+             xmlns:local="clr-namespace:AutoEletrica"
              mc:Ignorable="d" Height="826" Width="971">
     <Grid Margin="0,10,0,-6" Background="LightGray">
         <Grid.ColumnDefinitions>

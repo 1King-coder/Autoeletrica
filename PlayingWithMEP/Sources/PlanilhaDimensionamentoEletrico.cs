@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using Autodesk.Revit.DB.Architecture;
 using System.Data.SqlClient;
 
-namespace PlayingWithMEP
+namespace AutoEletrica
 {
     internal class PlanilhaDimensionamentoEletrico : GoogleSheetsManager
     {

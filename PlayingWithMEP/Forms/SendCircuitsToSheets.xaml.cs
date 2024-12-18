@@ -15,13 +15,13 @@ using System.Windows.Shapes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
-using PlayingWithMEP;
+using AutoEletrica;
 using ricaun.Revit.Mvvm;
 using ricaun.Revit.UI.Tasks;
-using PlayingWithMEP.Sources;
-using ECs = PlayingWithMEP.ElectricalClasses;
+using AutoEletrica.Sources;
+using ECs = AutoEletrica.ElectricalClasses;
 
-namespace PlayingWithMEP
+namespace AutoEletrica
 {
     /// <summary>
     /// Interação lógica para UserControl1.xam

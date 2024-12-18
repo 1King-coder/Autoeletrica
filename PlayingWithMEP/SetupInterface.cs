@@ -1,6 +1,6 @@
 ﻿
 
-namespace PlayingWithMEP
+namespace AutoEletrica
 {
     using Autodesk.Revit.UI;
     using System.Reflection;
@@ -10,7 +10,7 @@ namespace PlayingWithMEP
     using Autodesk.Revit.ApplicationServices;
     using ricaun.Revit.UI;
     using System.IO;
-    using PlayingWithMEP.Properties;
+    using AutoEletrica.Properties;
 
     public class SetupInterface
     {
@@ -37,7 +37,7 @@ namespace PlayingWithMEP
             application.CreateRibbonTab(tabName);
             RibbonPanel panelAnnotation = application.CreateRibbonPanel(tabName, panelAnnotationName);
 
-            var SendCircuitsToSheetsbtnData = new PushButtonData("Enviar dados dos circuitos para Planilha", "Envia dados\nCircuitos", Assembly.GetExecutingAssembly().Location, "PlayingWithMEP.SendingCircuitsDataToSheets")
+            var SendCircuitsToSheetsbtnData = new PushButtonData("Enviar dados dos circuitos para Planilha", "Envia dados\nCircuitos", Assembly.GetExecutingAssembly().Location, "AutoEletrica.SendingCircuitsDataToSheets")
             {
                 ToolTipImage = new BitmapImage(new System.Uri(sheetsIcoPath))
                 , ToolTip = "Essa ferramenta é usada para enviar dados dos circuitos de um painel para planilha de dimensionamento"
@@ -45,7 +45,7 @@ namespace PlayingWithMEP
 
             SendCircuitsToSheetsbtnData.SetLargeImage(new BitmapImage(new System.Uri(sheetsIcoPath)));
 
-            var GenerateSingleLineDiagrambtnData = new PushButtonData("Gerar Diagrama Unifilar", "Diagrama \nUnifilar", Assembly.GetExecutingAssembly().Location, "PlayingWithMEP.DiagramaUnifilar")
+            var GenerateSingleLineDiagrambtnData = new PushButtonData("Gerar Diagrama Unifilar", "Diagrama \nUnifilar", Assembly.GetExecutingAssembly().Location, "AutoEletrica.DiagramaUnifilar")
             {
                 ToolTipImage = new BitmapImage(new System.Uri(singleLineFullDPath))
                 ,
@@ -54,7 +54,7 @@ namespace PlayingWithMEP
 
             GenerateSingleLineDiagrambtnData.SetLargeImage(new BitmapImage(new System.Uri(singleLineDPath)));
 
-            var GenerateThreeLineDiagrambtnData = new PushButtonData("Gerar Diagrama Trifilar", "Diagrama \nTrifilar", Assembly.GetExecutingAssembly().Location, "PlayingWithMEP.DiagramaTrifilar")
+            var GenerateThreeLineDiagrambtnData = new PushButtonData("Gerar Diagrama Trifilar", "Diagrama \nTrifilar", Assembly.GetExecutingAssembly().Location, "AutoEletrica.DiagramaTrifilar")
             {
                 ToolTipImage = new BitmapImage(new System.Uri(threeLineFullDPath))
                 ,
@@ -64,7 +64,7 @@ namespace PlayingWithMEP
             GenerateThreeLineDiagrambtnData.SetLargeImage(new BitmapImage(new System.Uri(threeLineDPath)));
 
 
-            var IdentifyElectricalElementsbtnData = new PushButtonData("Identificar dispositivos", "Identificar \nDispositivo", Assembly.GetExecutingAssembly().Location, "PlayingWithMEP.IdentifyDispositives")
+            var IdentifyElectricalElementsbtnData = new PushButtonData("Identificar dispositivos", "Identificar \nDispositivo", Assembly.GetExecutingAssembly().Location, "AutoEletrica.IdentifyDispositives")
             {
                 
                 ToolTip = "Essa ferramenta é usada para identificar o esquema de ligação de um dispositivo ou circuito e potências de vários dispositivos de um painel. \nSelecionar um dispositivo -> identifica o esquema do circuito \nSelecionar um quadro de distribuição -> Identifica o circuito e potência dos dispositivos conectados no quadro. "
@@ -72,7 +72,7 @@ namespace PlayingWithMEP
 
             IdentifyElectricalElementsbtnData.SetLargeImage(new BitmapImage(new System.Uri(identifyCircsPath)));
 
-            var UpdateCircuitsInRevitbtnData = new PushButtonData("Atualizar circuitos", "Atualizar \nCircuitos", Assembly.GetExecutingAssembly().Location, "PlayingWithMEP.UpdateInRevitCircuitsFromPanel")
+            var UpdateCircuitsInRevitbtnData = new PushButtonData("Atualizar circuitos", "Atualizar \nCircuitos", Assembly.GetExecutingAssembly().Location, "AutoEletrica.UpdateInRevitCircuitsFromPanel")
             {
                 
                 ToolTip = "Essa ferramenta é usada para recolher os dados dos circuitos dimensionados na planilha de dimensionamento e trazer dados como corrente do disjuntor e secção dos cabos "

@@ -8,14 +8,15 @@ using Autodesk.Revit.UI;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.UI.Selection;
 using Autodesk.Revit.DB.Electrical;
-using ECs = PlayingWithMEP.ElectricalClasses;
-using PlayingWithMEP.Sources;
+using ECs = AutoEletrica.ElectricalClasses;
+using AutoEletrica.Sources;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Security.Cryptography;
+using Autodesk.Revit.Exceptions;
 
 
-namespace PlayingWithMEP
+namespace AutoEletrica
 {
     internal class ProjectAutomations
     {
@@ -45,11 +46,11 @@ namespace PlayingWithMEP
             public void IdentifyDispositiveCircuit(ECs.Dispositive dispositive, Reference DispositiveRef)
             {
 
-                Dictionary<int, Dictionary<ElementId, List<ElementId>>> paths = mapping.GetPathsToNextDispositiveOrTElbowFromDispositive(dispositive);
+                //Dictionary<int, Dictionary<ElementId, List<ElementId>>> paths = mapping.GetPathsToNextDispositiveOrTElbowFromDispositive(dispositive);
 
-                Transaction trans = new Transaction(doc);
+                //Transaction trans = new Transaction(doc);
 
-                trans.Start("Identify Circuit");
+                //trans.Start("Identify Circuit");
 
                 /*foreach (Conduit conduit in conduitsTilNextDispositive)
                 {
@@ -148,7 +149,7 @@ namespace PlayingWithMEP
                                 fsym = ut.symbolIdForIluminationDispositivesOnWall();
                             }
 
-                            if (dispositive.categoryName == "Dispositivos de iluminação")
+                            if (dispositive.dispositiveElement.Category.Name == "Dispositivos de iluminação")
                             {
                                 fsym = ut.SymbolIdForSwitches();
                             }
@@ -165,12 +166,12 @@ namespace PlayingWithMEP
                 trans.Commit();
             }
 
-            public void identifyDispositiveCircuitScheme (ECs.Dispositive dispositive, XYZ placementPt)
+            public void identifyDispositiveCircuitScheme (ECs.Dispositive dispositive, XYZ leaderEndPt = null, XYZ leaderElbowPt = null, bool leaderAdded = false)
             {
                 
                 ElementId tagId = ut.GetDispositiveCircuitShemeSymbolId(dispositive);
 
-                if (dispositive.categoryName == "Dispositivos de iluminação")
+                if (dispositive.dispositiveElement.Name.Contains("Interruptor"))
                 {
                     tagId = ut.SymbolIdForSwitchesScheme().Id;
                 }
@@ -179,36 +180,57 @@ namespace PlayingWithMEP
 
                 transaction.Start("Identifying dispositive");
 
+                XYZ tagPt = leaderElbowPt;
 
-                XYZ tagPt = placementPt;
-
-                if (placementPt == null)
+                if (leaderEndPt == null)
                 {
-                    tagPt = dispositive.location.Point + (dispositive.dispType == "Lamp" ? new XYZ() : dispositive.dispositiveInstance.FacingOrientation.Multiply(0.5 * 0.3048) + new XYZ(0, -0.1 * 0.3048, 0));
+                    tagPt = dispositive.location.Point + (dispositive.dispType == "Lamp" ? new XYZ() : dispositive.dispositiveInstance.FacingOrientation.Multiply(ut.metersToFeet(0.6)) - new XYZ(0, ut.metersToFeet(0.1), 0));
+                    leaderAdded = true;
                 }
 
+                if (leaderElbowPt == null && leaderEndPt != null)
+                {
+                    leaderElbowPt = leaderEndPt.Add(new XYZ(ut.metersToFeet(0.6), ut.metersToFeet(0.6), 0));
+                }
+
+                
+                tagPt = tagPt.Add(new XYZ (ut.metersToFeet(0.2), ut.metersToFeet(0.135),0));
+   
                 Reference dispRef = new Reference(dispositive.dispositiveElement);
 
-                IndependentTag tag = IndependentTag.Create(this.doc, tagId, this.doc.ActiveView.Id, dispRef, false, TagOrientation.Horizontal, tagPt);
+                IndependentTag tag = IndependentTag.Create(this.doc, tagId, this.doc.ActiveView.Id, dispRef, !leaderAdded, TagOrientation.Horizontal, tagPt);
+
+                if (!leaderAdded && leaderEndPt != null && leaderElbowPt != null)
+                {
+                    tag.LeaderEndCondition = LeaderEndCondition.Free;
+                    tag.SetLeaderEnd(dispRef, leaderEndPt);
+                    tag.SetLeaderElbow(dispRef, leaderElbowPt);
+                    tag.TagHeadPosition = tagPt;
+                }
                 
+
+
                 transaction.Commit();
             }
 
-            public void identifyMultipleDispositiveCircuitScheme (List<ECs.Dispositive> dispositives, XYZ placementPt)
+            public void identifyMultipleDispositiveCircuitScheme (List<ECs.Dispositive> dispositives, XYZ leaderEndPt, XYZ leaderElbowPt)
             {
                 int counter = 0;
                 XYZ pt = null;
                 List<string> alreadyIdentified = new List<string>();
 
+                bool leaderAdded = false;
+
                 foreach (ECs.Dispositive dispositive in dispositives)
                 {
-                    if (placementPt != null) { pt = placementPt + new XYZ(0.8 * counter, 0, 0); }
+                    if (leaderElbowPt != null) { pt = leaderElbowPt + new XYZ(0.8 * counter, 0, 0); }
 
                     if (!alreadyIdentified.Contains(dispositive.dispositiveElement.get_Parameter(BuiltInParameter.RBS_ELEC_CIRCUIT_NUMBER).AsValueString()))
                     {
-                        identifyDispositiveCircuitScheme(dispositive, pt);
+                        identifyDispositiveCircuitScheme(dispositive, leaderEndPt, pt, leaderAdded);
                         counter++;
                         alreadyIdentified.Add(dispositive.dispositiveElement.get_Parameter(BuiltInParameter.RBS_ELEC_CIRCUIT_NUMBER).AsValueString());
+                        leaderAdded = true;
                     }
                     
 
@@ -245,13 +267,13 @@ namespace PlayingWithMEP
                 this.circuitsLoadsPerPhase = this.planilha.GetCircuitsLoadPerPhase(panel);
             }
 
-            public FamilyInstance GenElectricalUtilitySymbol (ElectricalUtilityData elecUdata, FamilySymbol fmsym)
+            public FamilyInstance GenElectricalUtilitySymbol (ElectricalUtilityData elecUdata, FamilySymbol fmsym, XYZ insertionPt)
             {
 
                 Transaction trans = new Transaction(this.doc);
                 trans.Start("Generating Single-line Electrical utility Symbol Diagram");
 
-                FamilyInstance ElecU = this.doc.Create.NewFamilyInstance(new XYZ(), fmsym, this.singleLineView);
+                FamilyInstance ElecU = this.doc.Create.NewFamilyInstance(insertionPt, fmsym, this.singleLineView);
 
 
                 ElecU.LookupParameter("Corrente do disjuntor").Set(elecUdata.CorrenteDisjuntor);
@@ -276,6 +298,9 @@ namespace PlayingWithMEP
                 circIden.LookupParameter("Não Reserva").Set(circuitsIdentifierData.NaoReserva);
                 circIden.LookupParameter("Secção dos cabos").SetValueString(circuitsIdentifierData.SeccaoCabos);
                 circIden.LookupParameter("Potência Circuito").Set(circuitsIdentifierData.Potencia);
+                circIden.LookupParameter("Número Circuito").Set(circuitsIdentifierData.NumeroCircuito);
+                circIden.LookupParameter("Tensão").Set(circuitsIdentifierData.Tensao);
+                circIden.LookupParameter("Frequência").Set(circuitsIdentifierData.Frequencia);
 
                 trans.Commit();
 
@@ -286,7 +311,7 @@ namespace PlayingWithMEP
             {
                 double distanceBetweenBreakers = ut.metersToFeet(0.6);
 
-                double diagramHeight = ut.metersToFeet(3.5) + distanceBetweenBreakers * panelIdenData.numOfCircuits;
+                double diagramHeight = ut.metersToFeet(3.5) + distanceBetweenBreakers * panelIdenData.numOfCircuits + ut.metersToFeet(1);
 
                 Line spaceLine = Line.CreateBound(new XYZ(), new XYZ(0, ut.metersToFeet(0.4), 0));
                 Line line1 = Line.CreateBound(new XYZ(), new XYZ(ut.metersToFeet(-2), ut.metersToFeet(-3.4641), 0));
@@ -355,7 +380,7 @@ namespace PlayingWithMEP
 
                 if (circuitsIdentifierData.numOfPoles == 3)
                 {
-                    SetTriCircIdentifierElement(fmsym, circuitsIdentifierData, insertionPt);
+                    SetTriCircIdentifierElement(circIden, circuitsIdentifierData, insertionPt);
 
                     trans.Commit();
 
@@ -499,7 +524,7 @@ namespace PlayingWithMEP
                 this.doc.Create.NewDetailCurve(threeLineView, line);
             }
 
-            public void SetTriCircIdentifierElement(FamilySymbol circIden, ThreeLineCircuitsIdentifierData circuitsIdentifierData, XYZ insertionPt)
+            public void SetTriCircIdentifierElement(FamilyInstance circIden, ThreeLineCircuitsIdentifierData circuitsIdentifierData, XYZ insertionPt)
             {
                 string[] fases = circuitsIdentifierData.GetPhasesWithLoad().Split(',');
 
@@ -515,7 +540,7 @@ namespace PlayingWithMEP
 
                 }
 
-                circIden.LookupParameter("Corrente do Disjuntor").Set(circuitsIdentifierData.CorrenteDisjuntor);
+                circIden.LookupParameter("Corrente do Disjuntor").Set(50);
                 circIden.LookupParameter("Descrição Circuito").Set($"{circuitsIdentifierData.NumeroCircuito} - {circuitsIdentifierData.Descricao}");
                 circIden.LookupParameter("Fase 1 Circuito").Set(fase1);
                 circIden.LookupParameter("Fase 2 Circuito").Set(fase2);
@@ -534,25 +559,25 @@ namespace PlayingWithMEP
                     circIden.LookupParameter("Potência Circuito Fase 3").Set(Convert.ToInt32(circuitsIdentifierData.circuitLoadPerPhase[fase3]));
                 }
 
-                ut.CreateCircularFilledRegion(doc, this.threeLineView, ut.metersToFeet(0.1), insertionPt);
+                ut.CreateCircularFilledRegion(doc, this.threeLineView, ut.metersToFeet(0.1), insertionPt.Add(new XYZ(ut.metersToFeet(-4), ut.metersToFeet(0.754 * 2), 0)));
 
                 Line lineB = Line.CreateBound(insertionPt.Subtract(new XYZ(ut.metersToFeet(4), ut.metersToFeet(-0.752), 0)), insertionPt.Subtract(new XYZ(ut.metersToFeet(2), ut.metersToFeet(-0.752), 0)));
                 ut.CreateCircularFilledRegion(doc, this.threeLineView, ut.metersToFeet(0.1), lineB.GetEndPoint(1));
 
                 Line lineC = Line.CreateBound(insertionPt, insertionPt.Subtract(new XYZ(ut.metersToFeet(4), 0, 0)));
-                ut.CreateCircularFilledRegion(doc, this.threeLineView, ut.metersToFeet(0.1), lineC.GetEndPoint(1));
+                ut.CreateCircularFilledRegion(doc, this.threeLineView, ut.metersToFeet(0.1), lineC.GetEndPoint(0));
 
                 this.doc.Create.NewDetailCurve(threeLineView, lineB);
                 this.doc.Create.NewDetailCurve(threeLineView, lineC);
             }
 
-            public FamilyInstance GenPanelSymbol (PanelIdentifierData panelIdentifierData, FamilySymbol fmsym)
+            public FamilyInstance GenPanelSymbol (PanelIdentifierData panelIdentifierData, FamilySymbol fmsym, XYZ insertionPt)
             {
                 Transaction trans = new Transaction(this.doc);
 
                 trans.Start("Generating Single-line panel Symbol Diagram");
 
-                FamilyInstance panelIden = this.doc.Create.NewFamilyInstance(new XYZ(), fmsym, this.singleLineView);
+                FamilyInstance panelIden = this.doc.Create.NewFamilyInstance(insertionPt, fmsym, this.singleLineView);
 
                 panelIden.LookupParameter("Corrente do disjuntor").Set(panelIdentifierData.CorrenteDisjuntorGeral);
                 panelIden.LookupParameter("Secção dos Cabos").Set(panelIdentifierData.SeccaoCabos);
@@ -563,6 +588,8 @@ namespace PlayingWithMEP
                 panelIden.LookupParameter("Tensão nominal DPS").Set(panelIdentifierData.TensaoNominalDPS);
                 panelIden.LookupParameter("Classe de proteção DPS").SetValueString(panelIdentifierData.ClasseDeProtecaoDPS);
                 panelIden.LookupParameter("DPS para o Neutro").Set(panelIdentifierData.DPSneutro);
+                panelIden.LookupParameter("DPS Visível").Set(panelIdentifierData.HasDPS);
+                panelIden.LookupParameter("DR Visível").Set(panelIdentifierData.HasGeneralDR);
 
                 trans.Commit();
 
@@ -581,6 +608,8 @@ namespace PlayingWithMEP
                 circuitsIdentifierData.SeccaoCabos = this.cableSeccions[circuit.circuitNumber];
                 circuitsIdentifierData.NaoReserva = circuit.isNotReserveCircuit;
                 circuitsIdentifierData.CorrenteDisjuntor = Convert.ToInt32(this.breakers[circuit.circuitNumber]);
+                circuitsIdentifierData.Tensao = Convert.ToInt32(circuit.voltage);
+                circuitsIdentifierData.Frequencia = 60;
 
                 return circuitsIdentifierData;
             }
@@ -617,7 +646,7 @@ namespace PlayingWithMEP
 
 
 
-            public void GenSingleLineDiagramFromPanel (ECs.Panel panel, PanelIdentifierData panelIData, ElectricalUtilityData elecUData, bool ShowElecU)
+            public void GenSingleLineDiagramFromPanel (ECs.Panel panel, PanelIdentifierData panelIData, ElectricalUtilityData elecUData, XYZ insertionPt, bool ShowElecU)
             {
                 
                 this.GetCircuitsInfosFromSpreadsheet(panel);
@@ -628,14 +657,12 @@ namespace PlayingWithMEP
 
                 if (ShowElecU)
                 {
-                    GenElectricalUtilitySymbol(elecUData, fsymEU);
+                    GenElectricalUtilitySymbol(elecUData, fsymEU, insertionPt);
                 }
 
-                
+                GenPanelSymbol(panelIData, fsymPanel, insertionPt);
 
-                GenPanelSymbol(panelIData, fsymPanel);
-
-                List<XYZ> distribuitedInsertionPoints = this.diagrams.GetDitribuitedCircuitsIdentifiersPosList(panel.AssignedCircuits.Count());
+                List<XYZ> distribuitedInsertionPoints = this.diagrams.GetDitribuitedCircuitsIdentifiersPosList(panel.AssignedCircuits.Count(), insertionPt);
 
                 int counter = 0;
 

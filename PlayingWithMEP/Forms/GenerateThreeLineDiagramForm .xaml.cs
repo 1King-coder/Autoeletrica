@@ -15,15 +15,15 @@ using System.Windows.Shapes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
-using PlayingWithMEP;
+using AutoEletrica;
 using ricaun.Revit.Mvvm;
 using ricaun.Revit.UI.Tasks;
-using ECs = PlayingWithMEP.ElectricalClasses;
-using Automations = PlayingWithMEP.ProjectAutomations;
-using PlayingWithMEP.Sources;
+using ECs = AutoEletrica.ElectricalClasses;
+using Automations = AutoEletrica.ProjectAutomations;
+using AutoEletrica.Sources;
 
 
-namespace PlayingWithMEP
+namespace AutoEletrica
 {
     /// <summary>
     /// Interação lógica para UserControl1.xam
@@ -197,11 +197,12 @@ namespace PlayingWithMEP
             catch (Exception ex)
             {
                 TaskDialog.Show("Erro", ex.ToString());
+                return;
             }
 
 
 
-            TaskDialog.Show("Sucesso", "Diagrama Unifilar gerado com Sucesso!");
+            TaskDialog.Show("Sucesso", "Diagrama Trifilar gerado com Sucesso!");
             this.Show();
 
 

@@ -1,9 +1,9 @@
-﻿<Window x:Class="PlayingWithMEP.GenerateThreeLineDiagramForm"
+﻿<Window x:Class="AutoEletrica.GenerateThreeLineDiagramForm"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:PlayingWithMEP"
+             xmlns:local="clr-namespace:AutoEletrica"
              mc:Ignorable="d" Height="587" Width="900">
     <Grid>
         <StackPanel HorizontalAlignment="Left" Height="180" Margin="27,30,0,0" VerticalAlignment="Top" Width="376">
@@ -23,11 +23,11 @@
                 </ListView.View>
             </ListView>
         </StackPanel>
-        <StackPanel HorizontalAlignment="Left" Height="197" Margin="27,233,0,0" VerticalAlignment="Top" Width="376">
+        <StackPanel HorizontalAlignment="Left" Height="328" Margin="27,233,0,0" VerticalAlignment="Top" Width="376">
             <Label x:Name="lbl1" Content="Insira o link da Planilha:" Background="White" VerticalAlignment="Top" HorizontalAlignment="Center"/>
             <TextBox x:Name="SheetsLinkTxtBox" TextWrapping="Wrap" FontSize="16" BorderBrush="Black"/>
             <Button x:Name="verifyLinkBtn" Content="Verificar" BorderBrush="Black" FontSize="16" Click="verifyLinkBtn_Click"/>
-            <Label x:Name="SpreadsheetTitleLbl" Content="TíTULO DA PLANILHA" Background="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="30" Height="123"/>
+            <Label x:Name="SpreadsheetTitleLbl" Content="TíTULO DA PLANILHA" Background="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="30" Height="105"/>
         </StackPanel>
         <StackPanel HorizontalAlignment="Left" Height="83" Margin="448,54,0,0" VerticalAlignment="Top" Width="214" Background="#FFB3B2B2">
             <Label Content="Quadro de Distribuição" Background="Black" Foreground="White" FontSize="16" HorizontalContentAlignment="Center"/>

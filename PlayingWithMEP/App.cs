@@ -1,6 +1,6 @@
 ﻿
 
-namespace PlayingWithMEP
+namespace AutoEletrica
 {
     using Autodesk.Revit.UI;
     using System.Reflection;

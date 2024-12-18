@@ -8,7 +8,7 @@ using Autodesk.Revit.UI;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.UI.Selection;
 using Autodesk.Revit.DB.Electrical;
-using ECs = PlayingWithMEP.ElectricalClasses;
+using ECs = AutoEletrica.ElectricalClasses;
 using System.Windows.Forms;
 using System.Windows;
 using ricaun.Revit.UI.Tasks;
@@ -16,7 +16,7 @@ using ricaun.Revit.Mvvm;
 
 
 
-namespace PlayingWithMEP
+namespace AutoEletrica
 {
     [Transaction(TransactionMode.Manual)]
     [Regeneration(RegenerationOption.Manual)]
