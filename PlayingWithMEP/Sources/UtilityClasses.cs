@@ -14,6 +14,35 @@ namespace AutoEletrica.Sources
 
     }
 
+    internal interface IThreeLineDiagramBody
+    {
+        int CorrenteDR { get; set; }
+        int CorrenteDisjuntorGeral { get; set; }
+        int CorrenteDeProtecaoDR { get; set; }
+        int CorrenteDeCurtoCircuito { get; set; }
+        int Frequencia { get; set; }
+        int Tensao { get; set; }
+        String NomeDoQD { get; set; }
+        bool TemDPSParaNeutro { get; set; }
+        int QtdeDeCircuitos { get; set; }
+        bool TemDPS { get; set; }
+        bool TemDR { get; set; }
+
+        // Declare methods to set the parameters of the interface directly in revit using lookupParameter
+        void SetCorrenteDR(int value);
+        void SetCorrenteDisjuntorGeral(int value);
+        void SetCorrenteDeProtecaoDR(int value);
+        void SetCorrenteDeCurtoCircuito(int value);
+        void SetFrequencia(int value);
+        void SetTensao(int value);
+        void SetNomeDoQD(string value);
+        void SetTemDPSParaNeutro(bool value);
+        void SetQtdeDeCircuitos(int value);
+        void SetTemDPS(bool value);
+        void SetTemDR(bool value);
+    }
+
+
     internal interface ICircuitsIdentifierData
     {
         int CorrenteDisjuntor { get; set; }
@@ -129,6 +158,11 @@ namespace AutoEletrica.Sources
 
             return result;
         }
+
+    }
+
+    internal class ThreeLineDiagramBody : IThreeLineDiagramBody
+    {
 
     }
 
