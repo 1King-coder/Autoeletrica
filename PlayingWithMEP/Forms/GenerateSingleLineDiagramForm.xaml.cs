@@ -308,7 +308,7 @@ namespace AutoEletrica
                 Convert.ToDouble(SeccionsPaneltxtbox.Text),
                 (bool) DPSforNeutralUchkbox.IsChecked ? 1 : 0,
                 (bool) HasDPSchkbox.IsChecked ? 1 : 0,
-                (bool) HasGeneraDRchkBox.IsChecked ? 1 : 0
+                (bool) HasGeneralDRchkBox.IsChecked ? 1 : 0
                 );
 
             ElectricalUtilityData elecUData = SetUpElecetricalUtilityData(Convert.ToInt32(DisjuntorElecUtxtbox.Text), Convert.ToDouble(SeccionsElecUtxtbox.Text));
@@ -320,10 +320,22 @@ namespace AutoEletrica
                 {
                     Document doc = uiapp.ActiveUIDocument.Document;
                     Automations.GenerateDiagramsClass diagGen = new Automations.GenerateDiagramsClass(doc, planilha);
-                    uiapp.ActiveUIDocument.RequestViewChange(diagGen.singleLineView);
+                    // uiapp.ActiveUIDocument.RequestViewChange(diagGen.singleLineView);
+                    uiapp.ActiveUIDocument.ActiveView = diagGen.singleLineView;
                     this.Hide();
+                    
                     Selection sel = uiapp.ActiveUIDocument.Selection;
-                    XYZ insertionPt = sel.PickPoint("Selecione onde gerar o diagrama");
+                    XYZ insertionPt = null;
+
+                    try
+                    {
+                        insertionPt = sel.PickPoint("Selecione onde gerar o diagrama");
+                    }
+                    catch (Autodesk.Revit.Exceptions.OperationCanceledException e)
+                    {
+                       insertionPt = new XYZ();
+                    }
+
                     diagGen.GenSingleLineDiagramFromPanel(this.selectedPanel, panelIData, elecUData, insertionPt, (bool)ShowElecUchkbox.IsChecked);
                     this.Show();
                 });

@@ -40,6 +40,10 @@ namespace AutoEletrica.Sources
         int NaoReserva { get; set; }
         string NumeroCircuito { get; set; }
 
+        int Tensao { get; set; }
+
+        int Frequencia { get; set; }
+
         List<string> Potencias { get; set; }
 
         Dictionary<string, string> circuitLoadPerPhase { get; set; }
@@ -71,6 +75,10 @@ namespace AutoEletrica.Sources
         int NumeroPolosDR { get; set; }
         double SeccaoCabos { get; set; }
         int DPSneutro { get; set; }
+
+        int HasDPS {  get; set; }
+
+        int HasGeneralDR { get; set; }
     }
 
     internal class ElectricalUtilityData : IElectricalUtilityData
@@ -152,6 +160,10 @@ namespace AutoEletrica.Sources
         public List<string> Potencias { get; set; }
 
         public int totalLoad { get; set; }
+
+        public int Tensao {  get; set; }
+
+        public int Frequencia { get; set; }
 
         public Dictionary<string, string> circuitLoadPerPhase { get; set; }
 

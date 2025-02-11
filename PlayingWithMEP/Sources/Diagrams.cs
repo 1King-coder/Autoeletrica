@@ -92,7 +92,7 @@ namespace AutoEletrica
             posY.Sort();
             posY.Reverse();
 
-            posY.ForEach(y => result.Add(new XYZ((3.45/ 0.3048) + insertionPt.X, y, 0)));
+            posY.ForEach(y => result.Add(new XYZ((3.45/ 0.3048) + insertionPt.X, y + insertionPt.Y, 0)));
 
             return result;
         }

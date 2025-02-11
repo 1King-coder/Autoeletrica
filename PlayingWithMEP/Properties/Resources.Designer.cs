@@ -61,6 +61,16 @@ namespace AutoEletrica.Properties {
         }
         
         /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Byte[].
+        /// </summary>
+        internal static byte[] associateSwitchs {
+            get {
+                object obj = ResourceManager.GetObject("associateSwitchs", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a {
         ///  &quot;type&quot;: &quot;service_account&quot;,
         ///  &quot;project_id&quot;: &quot;sheetsapi-423316&quot;,

@@ -191,7 +191,7 @@ namespace AutoEletrica
                     Document doc = uiapp.ActiveUIDocument.Document;
                     Automations.GenerateDiagramsClass diagGen = new Automations.GenerateDiagramsClass(doc, planilha);
                     diagGen.GenThreeLineDiagramFromPanel(selectedPanel, Convert.ToInt32(DisjuntorPaneltxtbox.Text), SeccionsPaneltxtbox.Text);
-                    uiapp.ActiveUIDocument.RequestViewChange(diagGen.threeLineView);
+                    uiapp.ActiveUIDocument.ActiveView = diagGen.threeLineView;
                 });
             }
             catch (Exception ex)

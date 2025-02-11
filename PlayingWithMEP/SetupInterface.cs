@@ -32,7 +32,7 @@ namespace AutoEletrica
             string threeLineFullDPath = Path.Combine(Path.GetDirectoryName(thisdirectorypath), "Icons", "DiagramaTri.png");
             string identifyCircsPath = Path.Combine(Path.GetDirectoryName(thisdirectorypath), "Icons", "indentificadorEsquema.png");
             string updateCircsPath = Path.Combine(Path.GetDirectoryName(thisdirectorypath), "Icons", "updateCircuits.png");
-            string associateSwitchesPath = Path.Combine(Path.GetDirectoryName(thisdirectorypath), "Icons", "associateSwitchs.png");
+            string associateSwitchesPath = Path.Combine(Path.GetDirectoryName(thisdirectorypath), "Icons", "associateSwitches.png");
 
 
             application.CreateRibbonTab(tabName);

@@ -427,6 +427,9 @@ namespace AutoEletrica
 
             public void SetMonoCircIdentifierElement (FamilyInstance circIden, ThreeLineCircuitsIdentifierData circuitsIdentifierData, XYZ insertionPt)
             {
+
+                circIden.LookupParameter("Tensão").Set(circuitsIdentifierData.Tensao);
+                circIden.LookupParameter("Frequência").Set(circuitsIdentifierData.Frequencia);
                 circIden.LookupParameter("Corrente do Disjuntor").Set(circuitsIdentifierData.CorrenteDisjuntor);
                 circIden.LookupParameter("Descrição Circuito").Set($"{circuitsIdentifierData.NumeroCircuito} - {circuitsIdentifierData.Descricao}");
                 circIden.LookupParameter("Fase Circuito").Set(circuitsIdentifierData.GetPhasesWithLoad());
@@ -471,6 +474,9 @@ namespace AutoEletrica
                     fase2 = fases[1].Trim();
 
                 }
+
+                circIden.LookupParameter("Tensão").Set(circuitsIdentifierData.Tensao);
+                circIden.LookupParameter("Frequência").Set(circuitsIdentifierData.Frequencia);
 
                 circIden.LookupParameter("Corrente do Disjuntor").Set(circuitsIdentifierData.CorrenteDisjuntor);
                 circIden.LookupParameter("Descrição Circuito").Set($"{circuitsIdentifierData.NumeroCircuito} - {circuitsIdentifierData.Descricao}");
@@ -539,7 +545,8 @@ namespace AutoEletrica
                     fase3 = fases[2].Trim();
 
                 }
-
+                circIden.LookupParameter("Tensão").Set(circuitsIdentifierData.Tensao);
+                circIden.LookupParameter("Frequência").Set(circuitsIdentifierData.Frequencia);
                 circIden.LookupParameter("Corrente do Disjuntor").Set(50);
                 circIden.LookupParameter("Descrição Circuito").Set($"{circuitsIdentifierData.NumeroCircuito} - {circuitsIdentifierData.Descricao}");
                 circIden.LookupParameter("Fase 1 Circuito").Set(fase1);
@@ -625,6 +632,8 @@ namespace AutoEletrica
                 circuitsIdentifierData.CorrenteDisjuntor = Convert.ToInt32(this.breakers[circuit.circuitNumber]);
                 circuitsIdentifierData.totalLoad = circuit.apparentload;
                 circuitsIdentifierData.numOfPoles = circuit.numOfPoles;
+                circuitsIdentifierData.Tensao = circuit.voltage;
+                circuitsIdentifierData.Frequencia = 60;
 
                 return circuitsIdentifierData;
             }
@@ -676,8 +685,12 @@ namespace AutoEletrica
 
                     counter++;
                 }
+                Transaction trans = new Transaction(doc);
+                trans.Start("Creating single line diagram rectangle");
 
+                ut.DrawRectangle(this.singleLineView, new XYZ(insertionPt.X + ut.metersToFeet(0.2), distribuitedInsertionPoints.First().Y + ut.metersToFeet(2), 0), new XYZ(insertionPt.X + ut.metersToFeet(6), distribuitedInsertionPoints.Last().Y - ut.metersToFeet(0.5), 0));
 
+                trans.Commit();
             }
             public void GenThreeLineDiagramFromPanel(ECs.Panel panel, int CorrenteDisjuntor, string SeccaoCabos)
             {
@@ -720,10 +733,7 @@ namespace AutoEletrica
                     GenThreeLineCircuitIdentifierSymbol(circuitIData, pt, fsymCircuit);
 
                     counter += 0.6f;
-
-
-
-                    
+  
                 }
 
 
