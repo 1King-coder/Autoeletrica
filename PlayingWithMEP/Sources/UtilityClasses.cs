@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Autodesk.Revit.DB;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,7 @@ namespace AutoEletrica.Sources
 
     internal interface IThreeLineDiagramBody
     {
+        FamilyInstance ThreeLineDiagramFI { get; set; }
         int CorrenteDR { get; set; }
         int CorrenteDisjuntorGeral { get; set; }
         int CorrenteDeProtecaoDR { get; set; }
@@ -163,7 +165,84 @@ namespace AutoEletrica.Sources
 
     internal class ThreeLineDiagramBody : IThreeLineDiagramBody
     {
+        public FamilyInstance ThreeLineDiagramFI { get; set; }
+        public int CorrenteDR { get; set; }
+        public int CorrenteDisjuntorGeral { get; set; }
+        public int CorrenteDeProtecaoDR { get; set; }
+        public int CorrenteDeCurtoCircuito { get; set; }
+        public int Frequencia { get; set; }
+        public int Tensao { get; set; }
+        public string NomeDoQD { get; set; }
+        public bool TemDPSParaNeutro { get; set; }
+        public int QtdeDeCircuitos { get; set; }
+        public bool TemDPS { get; set; }
+        public bool TemDR { get; set; }
 
+        public void SetParamCorrenteDR(int value)
+        {
+            CorrenteDR = value;
+            ThreeLineDiagramFI.LookupParameter("Corrente DR").Set(value);
+        }
+
+        public void SetParamCorrenteDisjuntorGeral(int value)
+        {
+            CorrenteDisjuntorGeral = value;
+            ThreeLineDiagramFI.LookupParameter("Corrente Disjuntor Geral").Set(value);
+        }
+
+        public void SetParamCorrenteDeProtecaoDR(int value)
+        {
+            CorrenteDeProtecaoDR = value;
+            ThreeLineDiagramFI.LookupParameter("Corrente de Proteção DR").Set(value);
+        }
+
+        public void SetParamCorrenteDeCurtoCircuito(int value)
+        {
+            CorrenteDeCurtoCircuito = value;
+            ThreeLineDiagramFI.LookupParameter("Corrente de curto-circuito").Set(value);
+        }
+
+        public void SetParamFrequencia(int value)
+        {
+            Frequencia = value;
+            ThreeLineDiagramFI.LookupParameter("Frequência").Set(value);
+        }
+
+        public void SetParamTensao(int value)
+        {
+            Tensao = value;
+            ThreeLineDiagramFI.LookupParameter("Tensão").Set(value);
+        }
+
+        public void SetParamNomeDoQD(string value)
+        {
+            NomeDoQD = value;
+            ThreeLineDiagramFI.LookupParameter("Nome do QD").Set(value);
+        }
+
+        public void SetParamTemDPSParaNeutro(bool value)
+        {
+            TemDPSParaNeutro = value;
+            ThreeLineDiagramFI.LookupParameter("DPS para o neutro").Set(value ? 1 : 0);
+        }
+
+        public void SetParamQtdeDeCircuitos(int value)
+        {
+            QtdeDeCircuitos = value;
+            ThreeLineDiagramFI.LookupParameter("Qtde circuitos").Set(value);
+        }
+
+        public void SetParamTemDPS(bool value)
+        {
+            TemDPS = value;
+            ThreeLineDiagramFI.LookupParameter("Tem DPS").Set(value ? 1 : 0);
+        }
+
+        public void SetParamTemDR(bool value)
+        {
+            TemDR = value;
+            ThreeLineDiagramFI.LookupParameter("Tem DR").Set(value ? 1 : 0);
+        }
     }
 
     internal class PanelIdentifierData : IPanelIdentifierData
