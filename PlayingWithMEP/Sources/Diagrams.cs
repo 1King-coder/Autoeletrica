@@ -37,6 +37,11 @@ namespace AutoEletrica
             return symbolFsym;
         }
 
+        public FamilySymbol GetThreeLineDiagramBodySymbol (string type)
+        {
+            return GetGenericAnnotationFamilySymbolByFamilyNameAndTypeName("Diagrama Trifilar - Corpo", type);
+        }
+
         public FamilySymbol GetElectricalUtilityFamilySymbol (string scheme)
         {
             return GetGenericAnnotationFamilySymbolByFamilyNameAndTypeName("Diagrama Medidor Concessionária Unifilar", scheme);
