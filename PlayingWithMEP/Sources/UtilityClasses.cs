@@ -24,7 +24,7 @@ namespace AutoEletrica.Sources
         int CorrenteDeCurtoCircuito { get; set; }
         int Frequencia { get; set; }
         int Tensao { get; set; }
-        String NomeDoQD { get; set; }
+        string NomeDoQD { get; set; }
         bool TemDPSParaNeutro { get; set; }
         int QtdeDeCircuitos { get; set; }
         bool TemDPS { get; set; }
