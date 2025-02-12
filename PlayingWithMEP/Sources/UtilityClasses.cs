@@ -190,67 +190,56 @@ namespace AutoEletrica.Sources
 
         public void SetParamCorrenteDR(int value)
         {
-            CorrenteDR = value;
             ThreeLineDiagramFI.LookupParameter("Corrente DR").Set(value);
         }
 
         public void SetParamCorrenteDisjuntorGeral(int value)
         {
-            CorrenteDisjuntorGeral = value;
             ThreeLineDiagramFI.LookupParameter("Corrente Disjuntor Geral").Set(value);
         }
 
         public void SetParamCorrenteDeProtecaoDR(int value)
         {
-            CorrenteDeProtecaoDR = value;
             ThreeLineDiagramFI.LookupParameter("Corrente de Proteção DR").Set(value);
         }
 
         public void SetParamCorrenteDeCurtoCircuito(int value)
         {
-            CorrenteDeCurtoCircuito = value;
             ThreeLineDiagramFI.LookupParameter("Corrente de curto-circuito").Set(value);
         }
 
         public void SetParamFrequencia(int value)
         {
-            Frequencia = value;
             ThreeLineDiagramFI.LookupParameter("Frequência").Set(value);
         }
 
         public void SetParamTensao(int value)
         {
-            Tensao = value;
             ThreeLineDiagramFI.LookupParameter("Tensão").Set(value);
         }
 
         public void SetParamNomeDoQD(string value)
         {
-            NomeDoQD = value;
             ThreeLineDiagramFI.LookupParameter("Nome do QD").Set(value);
         }
 
         public void SetParamTemDPSParaNeutro(bool value)
         {
-            TemDPSParaNeutro = value;
             ThreeLineDiagramFI.LookupParameter("DPS para o neutro").Set(value ? 1 : 0);
         }
 
         public void SetParamQtdeDeCircuitos(int value)
         {
-            QtdeDeCircuitos = value;
             ThreeLineDiagramFI.LookupParameter("Qtde circuitos").Set(value);
         }
 
         public void SetParamTemDPS(bool value)
         {
-            TemDPS = value;
             ThreeLineDiagramFI.LookupParameter("Tem DPS").Set(value ? 1 : 0);
         }
 
         public void SetParamTemDR(bool value)
         {
-            TemDR = value;
             ThreeLineDiagramFI.LookupParameter("Tem DR").Set(value ? 1 : 0);
         }
     }
