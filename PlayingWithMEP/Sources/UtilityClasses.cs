@@ -31,17 +31,27 @@ namespace AutoEletrica.Sources
         bool TemDR { get; set; }
 
         // Declare methods to set the parameters of the interface directly in revit using lookupParameter
-        void SetCorrenteDR(int value);
-        void SetCorrenteDisjuntorGeral(int value);
-        void SetCorrenteDeProtecaoDR(int value);
-        void SetCorrenteDeCurtoCircuito(int value);
-        void SetFrequencia(int value);
-        void SetTensao(int value);
-        void SetNomeDoQD(string value);
-        void SetTemDPSParaNeutro(bool value);
-        void SetQtdeDeCircuitos(int value);
-        void SetTemDPS(bool value);
-        void SetTemDR(bool value);
+        void SetParamCorrenteDR(int value);
+
+        void SetParamCorrenteDisjuntorGeral(int value);
+
+        void SetParamCorrenteDeProtecaoDR(int value);
+
+        void SetParamCorrenteDeCurtoCircuito(int value);
+
+        void SetParamFrequencia(int value);
+
+        void SetParamTensao(int value);
+
+        void SetParamNomeDoQD(string value);
+
+        void SetParamTemDPSParaNeutro(bool value);
+
+        void SetParamQtdeDeCircuitos(int value);
+
+        void SetParamTemDPS(bool value);
+
+        void SetParamTemDR(bool value);
     }
 
 

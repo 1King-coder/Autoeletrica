@@ -692,14 +692,14 @@ namespace AutoEletrica
 
                 trans.Commit();
             }
-            public void GenThreeLineDiagramFromPanel(ECs.Panel panel, int CorrenteDisjuntor, string SeccaoCabos)
+            public void GenThreeLineDiagramFromPanel(ECs.Panel panel, string NomeDoQD, int Tensao, int CorrenteDisjuntor, string SeccaoCabos)
             {
 
                 this.GetCircuitsInfosFromSpreadsheet(panel);
 
-                ThreeLinePanelIdenfierData threeLinePanelIdenfierData = this.SetUpThreeLinePanelData(panel, CorrenteDisjuntor, SeccaoCabos);
+                ThreeLinePanelIdenfierData threeLinePanelIdenfierBody= this.SetUpThreeLinePanelData(panel, CorrenteDisjuntor, SeccaoCabos);
 
-                this.CreateThreeLineDiagramBody(threeLinePanelIdenfierData);
+                // this.CreateThreeLineDiagramBody(threeLinePanelIdenfierData);
 
                 float counter = 0;
                 
