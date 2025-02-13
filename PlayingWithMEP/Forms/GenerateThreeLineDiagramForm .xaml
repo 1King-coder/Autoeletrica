@@ -29,17 +29,41 @@
             <Button x:Name="verifyLinkBtn" Content="Verificar" BorderBrush="Black" FontSize="16" Click="verifyLinkBtn_Click"/>
             <Label x:Name="SpreadsheetTitleLbl" Content="TíTULO DA PLANILHA" Background="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="30" Height="105"/>
         </StackPanel>
-        <StackPanel HorizontalAlignment="Left" Height="83" Margin="448,54,0,0" VerticalAlignment="Top" Width="214" Background="#FFB3B2B2">
+        <StackPanel HorizontalAlignment="Left" Height="442" Margin="448,54,0,0" VerticalAlignment="Top" Width="214" Background="#FFB3B2B2">
             <Label Content="Quadro de Distribuição" Background="Black" Foreground="White" FontSize="16" HorizontalContentAlignment="Center"/>
-            <Label Content="Corrente do Disjuntor:" Background="#FFD6D5D5" HorizontalContentAlignment="Right"/>
+            <Label Content="Corrente do Disjuntor Geral:" Background="#FFD6D5D5" HorizontalContentAlignment="Right"/>
             <Label Content="Secção dos cabos:" Background="#FFD6D5D5" HorizontalContentAlignment="Right"/>
+            <Label Content="Tensão de alimentação:" Background="#FFD6D5D5" HorizontalContentAlignment="Right"/>
+            <Label Content="Corrente de curto-circuito:" Background="#FFD6D5D5" HorizontalContentAlignment="Right"/>
+            <Label Content="DR" Background="Black" Foreground="White" FontSize="16" HorizontalContentAlignment="Center"/>
+            <Label Content="Tem DR geral:" Background="#FFD6D5D5" HorizontalContentAlignment="Right"/>
+            <Label Content="Corrente suportada:" Background="#FFD6D5D5" HorizontalContentAlignment="Right"/>
+            <Label Content="Corrente de proteção (mA):" Background="#FFD6D5D5" HorizontalContentAlignment="Right"/>
+            <Label Content="DPS" Background="Black" Foreground="White" FontSize="16" HorizontalContentAlignment="Center"/>
+            <Label Content="Tem DPS:" Background="#FFD6D5D5" HorizontalContentAlignment="Right"/>
+            <Label Content="Tem DPS para o neutro:" Background="#FFD6D5D5" HorizontalContentAlignment="Right"/>
+            <Label Content="Tensão nominal:" Background="#FFD6D5D5" HorizontalContentAlignment="Right"/>
+            <Label Content="Corrente de proteção:" Background="#FFD6D5D5" HorizontalContentAlignment="Right"/>
+            <Label Content="Classe:" Background="#FFD6D5D5" HorizontalContentAlignment="Right"/>
         </StackPanel>
-        <StackPanel HorizontalAlignment="Left" Height="79" Margin="662,54,0,0" VerticalAlignment="Top" Width="219" Background="#FFB3B2B2">
+        <StackPanel HorizontalAlignment="Left" Height="442" Margin="662,54,0,0" VerticalAlignment="Top" Width="219" Background="#FFB3B2B2">
             <Label Content="" Background="Black" Foreground="White" FontSize="16" HorizontalContentAlignment="Center"/>
             <TextBox x:Name="DisjuntorPaneltxtbox" TextWrapping="Wrap" Width="219" Height="24" FontSize="14"/>
             <TextBox x:Name="SeccionsPaneltxtbox" TextWrapping="Wrap" Height="28" FontSize="14"/>
+            <TextBox x:Name="TensaoDeAlimentacaotxtbox" TextWrapping="Wrap" Height="28" FontSize="14"/>
+            <TextBox x:Name="CorrenteDeCCtxtbox" TextWrapping="Wrap" Height="24" FontSize="14"/>
+            <Label Content="" Background="Black" Foreground="White" FontSize="16" HorizontalContentAlignment="Center"/>
+            <CheckBox x:Name="TemDRgeralChkbox" Content="Sim/Não" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Height="30"/>
+            <TextBox x:Name="CorrenteSuportadaDRtxtbox" TextWrapping="Wrap" Width="219" Height="24" FontSize="14"/>
+            <TextBox x:Name="CorrenteDeProtecaoDRtxtbox" TextWrapping="Wrap" Width="219" Height="24" FontSize="14"/>
+            <Label Content="" Background="Black" Foreground="White" FontSize="16" HorizontalContentAlignment="Center"/>
+            <CheckBox x:Name="TemDPSchkbox" Content="Sim/Não" FontSize="14" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBox x:Name="TemDPSParaNeutrochkbox" TextWrapping="Wrap" Width="219" Height="24" FontSize="14"/>
+            <TextBox x:Name="TensaoNominalDPStxtbox" TextWrapping="Wrap" Width="219" Height="24" FontSize="14"/>
+            <TextBox x:Name="CorrenteDeProtecaoDPStxtbox" TextWrapping="Wrap" Width="219" Height="24" FontSize="14"/>
+            <TextBox x:Name="ClasseDPStxtbox" TextWrapping="Wrap" Width="219" Height="24" FontSize="14"/>
         </StackPanel>
-        <Button x:Name="GenDiagramBtn" Content="Gerar Diagrama" HorizontalAlignment="Left" Height="60" Margin="450,150,0,0" VerticalAlignment="Top" Width="433" Background="#FFD0CFCF" FontSize="24" Click="GenDiagramBtn_Click_1"/>
+        <Button x:Name="GenDiagramBtn" Content="Gerar Diagrama" HorizontalAlignment="Left" Height="60" Margin="450,501,0,0" VerticalAlignment="Top" Width="433" Background="#FFD0CFCF" FontSize="24" Click="GenDiagramBtn_Click_1"/>
     </Grid>
 
 
