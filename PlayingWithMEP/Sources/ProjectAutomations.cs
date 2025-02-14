@@ -14,6 +14,10 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Security.Cryptography;
 using Autodesk.Revit.Exceptions;
+using System.Net;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
+using System.Reflection;
+using System.Windows.Ink;
 
 
 namespace AutoEletrica
@@ -693,9 +697,11 @@ namespace AutoEletrica
                 trans.Commit();
             }
 
-            public SetupThreeLineDiagramBody (ThreeLineDiagramBody threeLineDiagramObj)
+            public void SetupThreeLineDiagramBody (ThreeLineDiagramBody threeLineDiagramObj)
             {
-                threeLineDiagramObj.GetType().GetProperties().ToList().ForEach(p => p.SetValue(threeLineDiagramObj, null));
+                List<MemberInfo> test = threeLineDiagramObj.GetType().GetMembers().ToList();
+
+                const string tester = "teste";
             }
 
             public void GenThreeLineDiagramFromPanel(ECs.Panel panel, ThreeLineDiagramBody threeLineDiagObj)
@@ -711,7 +717,7 @@ namespace AutoEletrica
                 //ThreeLinePanelIdenfierData threeLinePanelIdenfierBody= this.SetUpThreeLinePanelData(panel, CorrenteDisjuntor, SeccaoCabos);
 
                 // this.CreateThreeLineDiagramBody(threeLinePanelIdenfierData);
-
+                /*
                 float counter = 0;
                 
 
@@ -746,6 +752,7 @@ namespace AutoEletrica
                     counter += 0.6f;
   
                 }
+                */
 
 
             }

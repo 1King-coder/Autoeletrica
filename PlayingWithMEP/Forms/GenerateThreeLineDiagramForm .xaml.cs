@@ -180,9 +180,6 @@ namespace AutoEletrica
 
             PlanilhaDimensionamentoEletrico planilha = new PlanilhaDimensionamentoEletrico(spreadsheetId);
 
-            
-
-
             this.Hide();
             try
             {
@@ -206,7 +203,7 @@ namespace AutoEletrica
                     threeLineDiagObj.CorrenteDeProtecaoDPS.Add("Corrente de proteção DPS", Convert.ToInt32(CorrenteDeProtecaoDPStxtbox.Text));
                     threeLineDiagObj.ClasseDeProtecaoDPS.Add("Classe DPS", ClasseDPStxtbox.Text);
 
-                    diagGen.GenThreeLineDiagramFromPanel(selectedPanel, Convert.ToInt32(DisjuntorPaneltxtbox.Text), SeccionsPaneltxtbox.Text);
+                    diagGen.GenThreeLineDiagramFromPanel(selectedPanel, threeLineDiagObj);
                     uiapp.ActiveUIDocument.ActiveView = diagGen.threeLineView;
                 });
             }
