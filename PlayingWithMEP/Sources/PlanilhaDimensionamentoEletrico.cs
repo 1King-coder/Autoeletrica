@@ -32,7 +32,7 @@ namespace AutoEletrica
             panel.AssignedCircuits.ForEach ((ElectricalClasses.Circuit c) => circsLengths.Add(new List<object>() { c.length}));
 
             string range1 = $"B8:Z{panel.AssignedCircuits.Count() + 8}";
-            string range2 = $"N9:N{panel.AssignedCircuits.Count() + 9}";
+            string range2 = $"O9:O{panel.AssignedCircuits.Count() + 9}";
             try
             {
 
