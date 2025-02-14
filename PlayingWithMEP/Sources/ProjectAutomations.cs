@@ -844,7 +844,7 @@ namespace AutoEletrica
                     );
 
                     sideFlag = !sideFlag;
-                    circYpos += 1.5;
+                    circYpos += 1.4;
 
 
                     Transaction circuitIdenTrans = new Transaction(this.doc);
