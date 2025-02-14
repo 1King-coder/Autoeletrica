@@ -111,22 +111,38 @@ namespace AutoEletrica
             catch (Exception ex) { TaskDialog.Show("Sheets ID é inválido", "ID da planilha é inválido!"); }
         }
 
-        private List<string> GetAllFieldsContent ()
+        private List<System.Windows.Controls.TextBox> GetAllFields ()
         {
-            return new List<string>()
+            return new List<System.Windows.Controls.TextBox>()
             {
-                DisjuntorPaneltxtbox.Text,
-                SeccionsPaneltxtbox.Text,
+                DisjuntorPaneltxtbox,
+                SeccionsPaneltxtbox,
+                TensaoDeAlimentacaotxtbox,
+                CorrenteDeCCtxtbox,
+                CorrenteSuportadaDRtxtbox,
+                CorrenteDeProtecaoDRtxtbox,
+                TensaoNominalDPStxtbox,
+                CorrenteDeProtecaoDPStxtbox,
+                ClasseDPStxtbox,
             };
         }
 
         private bool VerifyFieldsAreFilled ()
         {
             
-
-            foreach (string field in GetAllFieldsContent())
+            
+            foreach ( System.Windows.Controls.TextBox field in GetAllFields())
             {
-                if (string.IsNullOrEmpty(field)) { return false; }
+                if (string.IsNullOrEmpty(field.Text))
+                {
+                    if (!TemDPSchkbox.IsChecked.Value && field == ClasseDPStxtbox) continue;
+                    if (!TemDPSchkbox.IsChecked.Value && field == CorrenteDeProtecaoDPStxtbox) continue;
+                    if (!TemDPSchkbox.IsChecked.Value && field == TensaoNominalDPStxtbox) continue;
+                    if (!TemDRgeralChkbox.IsChecked.Value && field == CorrenteDeProtecaoDRtxtbox) continue;
+                    if (!TemDRgeralChkbox.IsChecked.Value && field == CorrenteSuportadaDRtxtbox) continue;
+
+                    return false;
+                }
             }
 
             return true;
