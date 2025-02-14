@@ -201,7 +201,7 @@ namespace AutoEletrica
                     threeLineDiagObj.CorrenteDisjuntorGeral.Add("Corrente Disjuntor Geral", Convert.ToInt32(DisjuntorPaneltxtbox.Text));
                     threeLineDiagObj.Frequencia.Add("Frequência", 60);
                     threeLineDiagObj.SeccaoCabos.Add("Secção dos cabos", SeccionsPaneltxtbox.Text);
-                    threeLineDiagObj.Tensao.Add("Tensão", Convert.ToInt32(TensaoDeAlimentacaotxtbox.Text));
+                    threeLineDiagObj.Tensao.Add("Tensão", TensaoDeAlimentacaotxtbox.Text);
                     threeLineDiagObj.CorrenteDeCurtoCircuito.Add("Corrente de curto-circuito", Convert.ToInt32(CorrenteDeCCtxtbox.Text));
                     if (TemDRgeralChkbox.IsChecked.Value)
                     {

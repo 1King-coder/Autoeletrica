@@ -23,7 +23,7 @@ namespace AutoEletrica.Sources
         Dictionary<string, int> CorrenteDeProtecaoDR { get; set; }
         Dictionary<string, int> CorrenteDeCurtoCircuito { get; set; }
         Dictionary<string, int> Frequencia { get; set; }
-        Dictionary<string, int> Tensao { get; set; }
+        Dictionary<string, string> Tensao { get; set; }
         Dictionary<string, string> NomeDoQD { get; set; }
         Dictionary<string, bool> TemDPSParaNeutro { get; set; }
         Dictionary<string, int> QtdeDeCircuitos { get; set; }
@@ -163,7 +163,7 @@ namespace AutoEletrica.Sources
         public Dictionary<string, int> CorrenteDeProtecaoDR { get; set; }
         public Dictionary<string, int> CorrenteDeCurtoCircuito { get; set; }
         public Dictionary<string, int> Frequencia { get; set; }
-        public Dictionary<string, int> Tensao { get; set; }
+        public Dictionary<string, string> Tensao { get; set; }
         public Dictionary<string, string> NomeDoQD { get; set; }
         public Dictionary<string, bool> TemDPSParaNeutro { get; set; }
         public Dictionary<string, int> QtdeDeCircuitos { get; set; }
@@ -181,7 +181,7 @@ namespace AutoEletrica.Sources
             CorrenteDeProtecaoDR = new Dictionary<string, int>();
             CorrenteDeCurtoCircuito = new Dictionary<string, int>();
             Frequencia = new Dictionary<string, int>();
-            Tensao = new Dictionary<string, int>();
+            Tensao = new Dictionary<string, string>();
             NomeDoQD = new Dictionary<string, string>();
             TemDPSParaNeutro = new Dictionary<string, bool>();
             QtdeDeCircuitos = new Dictionary<string, int>();
