@@ -157,12 +157,12 @@ namespace AutoEletrica
         public Dictionary<string, string> GetAllCircuitsCableSeccion (ElectricalClasses.Panel panel)
         {
 
-            return GetAllCircuitsDataFromCalcColumn(panel, "R");
+            return GetAllCircuitsDataFromCalcColumn(panel, "S");
         }
 
         public Dictionary<string, string> GetAllCircuitsBreakersAmps(ElectricalClasses.Panel panel)
         {
-            return GetAllCircuitsDataFromCalcColumn(panel, "V");
+            return GetAllCircuitsDataFromCalcColumn(panel, "W");
         }
 
         public Dictionary<string, string> GetAllCircuitsTemperatureFactors(ElectricalClasses.Panel panel)
@@ -177,7 +177,7 @@ namespace AutoEletrica
 
         public Dictionary<string, string> GetAllCircuitsVoltageDrops(ElectricalClasses.Panel panel)
         {
-            return GetAllCircuitsDataFromCalcColumn(panel, "P");
+            return GetAllCircuitsDataFromCalcColumn(panel, "Q");
         }
 
         public string GetDemandedLoadFromPanel ()
