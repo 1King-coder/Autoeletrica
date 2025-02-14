@@ -738,7 +738,7 @@ namespace AutoEletrica
             {
                 List<PropertyInfo> properties = threeLineDiagCircuitIden.GetType().GetProperties().ToList();
                 properties.Remove(properties.Find(e => e.Name == "CircuitIdentifierFI"));
-                properties.ForEach(e =>
+                foreach (PropertyInfo e in properties) 
                 {
                     var value = e.GetValue(threeLineDiagCircuitIden);
                     if (value is Dictionary<string, int> intDict)
@@ -765,7 +765,7 @@ namespace AutoEletrica
                             {
                                 threeLineDiagCircuitIden.CircuitIdentifierFI.LookupParameter(paramName).Set(boolDict[paramName] ? 1 : 0);
                             });
-                            return;
+                            continue;
                         }
                         if (boolDict.Keys.Count() != 0)
                         {
@@ -773,7 +773,7 @@ namespace AutoEletrica
                             threeLineDiagCircuitIden.CircuitIdentifierFI.LookupParameter(paramName).Set(boolDict[paramName] ? 1 : 0);
                         }
                     }
-                });
+                };
             }
 
             public void GenThreeLineDiagramFromPanel(ECs.Panel panel, ThreeLineDiagramBody threeLineDiagObj)
