@@ -692,7 +692,7 @@ namespace AutoEletrica
 
                 trans.Commit();
             }
-            public void GenThreeLineDiagramFromPanel(ECs.Panel panel, string NomeDoQD, int Tensao, int CorrenteDisjuntor, string SeccaoCabos)
+            public void GenThreeLineDiagramFromPanel(ECs.Panel panel, ThreeLineDiagramBody threeLineDiagObj)
             {
 
                 this.GetCircuitsInfosFromSpreadsheet(panel);

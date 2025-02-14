@@ -206,8 +206,6 @@ namespace AutoEletrica
                     threeLineDiagObj.CorrenteDeProtecaoDPS = Convert.ToInt32(CorrenteDeProtecaoDPStxtbox.Text);
                     threeLineDiagObj.ClasseDeProtecaoDPS = ClasseDPStxtbox.Text;
 
-
-
                     diagGen.GenThreeLineDiagramFromPanel(selectedPanel, Convert.ToInt32(DisjuntorPaneltxtbox.Text), SeccionsPaneltxtbox.Text);
                     uiapp.ActiveUIDocument.ActiveView = diagGen.threeLineView;
                 });

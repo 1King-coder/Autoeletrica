@@ -44,7 +44,7 @@
             <Label Content="Tem DPS para o neutro:" Background="#FFD6D5D5" HorizontalContentAlignment="Right"/>
             <Label Content="Tensão nominal:" Background="#FFD6D5D5" HorizontalContentAlignment="Right"/>
             <Label Content="Corrente de proteção:" Background="#FFD6D5D5" HorizontalContentAlignment="Right"/>
-            <Label Content="Classe:" Background="#FFD6D5D5" HorizontalContentAlignment="Right"/>
+            <Label Content="Classe:" Background="#FFD6D5D5" HorizontalContentAlignment="Right" Height="23"/>
         </StackPanel>
         <StackPanel HorizontalAlignment="Left" Height="442" Margin="662,54,0,0" VerticalAlignment="Top" Width="219" Background="#FFB3B2B2">
             <Label Content="" Background="Black" Foreground="White" FontSize="16" HorizontalContentAlignment="Center"/>
@@ -57,8 +57,8 @@
             <TextBox x:Name="CorrenteSuportadaDRtxtbox" TextWrapping="Wrap" Width="219" Height="24" FontSize="14"/>
             <TextBox x:Name="CorrenteDeProtecaoDRtxtbox" TextWrapping="Wrap" Width="219" Height="24" FontSize="14"/>
             <Label Content="" Background="Black" Foreground="White" FontSize="16" HorizontalContentAlignment="Center"/>
-            <CheckBox x:Name="TemDPSchkbox" Content="Sim/Não" FontSize="14" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <TextBox x:Name="TemDPSParaNeutrochkbox" TextWrapping="Wrap" Width="219" Height="24" FontSize="14"/>
+            <CheckBox x:Name="TemDPSchkbox" Content="Sim/Não" FontSize="14" Height="30" HorizontalAlignment="Center"/>
+            <CheckBox x:Name="TemDPSParaNeutrochkbox" Content="Sim/Não" FontSize="14" HorizontalAlignment="Center" Height="25"/>
             <TextBox x:Name="TensaoNominalDPStxtbox" TextWrapping="Wrap" Width="219" Height="24" FontSize="14"/>
             <TextBox x:Name="CorrenteDeProtecaoDPStxtbox" TextWrapping="Wrap" Width="219" Height="24" FontSize="14"/>
             <TextBox x:Name="ClasseDPStxtbox" TextWrapping="Wrap" Width="219" Height="24" FontSize="14"/>
