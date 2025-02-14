@@ -27,11 +27,14 @@ namespace AutoEletrica.Sources
         string NomeDoQD { get; set; }
         bool TemDPSParaNeutro { get; set; }
         int QtdeDeCircuitos { get; set; }
-
         string SeccaoCabos { get; set; }
-
         bool TemDPS { get; set; }
         bool TemDR { get; set; }
+        int CorrenteDeProtecaoDPS { get; set; }
+        int TensaoNominalDPS { get; set; }
+        string ClasseDeProtecaoDPS { get; set; }
+
+
 
         // Declare methods to set the parameters of the interface directly in revit using lookupParameter
         void SetParamCorrenteDR(int value);
@@ -57,6 +60,10 @@ namespace AutoEletrica.Sources
         void SetParamTemDPS(bool value);
 
         void SetParamTemDR(bool value);
+
+        void SetParamCorrenteDeProtecaoDPS(int value);
+        void SetParamTensaoNominalDPS(int value);
+        void SetParamClasseDeProtecaoDPS(string value);
     }
 
 
@@ -193,6 +200,9 @@ namespace AutoEletrica.Sources
         public int QtdeDeCircuitos { get; set; }
         public bool TemDPS { get; set; }
         public bool TemDR { get; set; }
+        public int CorrenteDeProtecaoDPS { get; set; }
+        public int TensaoNominalDPS { get; set; }
+        public string ClasseDeProtecaoDPS { get; set; }
 
         public void SetParamCorrenteDR(int value)
         {
@@ -252,6 +262,21 @@ namespace AutoEletrica.Sources
         public void SetParamTemDR(bool value)
         {
             ThreeLineDiagramFI.LookupParameter("Tem DR").Set(value ? 1 : 0);
+        }
+
+        public void SetParamCorrenteDeProtecaoDPS(int value)
+        {
+            ThreeLineDiagramFI.LookupParameter("Corrente de Proteção DPS").Set(value);
+        }
+
+        public void SetParamTensaoNominalDPS(int value)
+        {
+            ThreeLineDiagramFI.LookupParameter("Tensão Nominal DPS").Set(value);
+        }
+
+        public void SetParamClasseDeProtecaoDPS(string value)
+        {
+            ThreeLineDiagramFI.LookupParameter("Classe de proteção DPS").Set(value);
         }
     }
 
