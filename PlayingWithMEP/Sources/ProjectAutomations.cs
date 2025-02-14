@@ -734,6 +734,48 @@ namespace AutoEletrica
                 });
             }
 
+            public void SetupThreeLineDiagramCircuitIdentifier (ThreeLineDiagramCircuitIdentifier threeLineDiagCircuitIden)
+            {
+                List<PropertyInfo> properties = threeLineDiagCircuitIden.GetType().GetProperties().ToList();
+                properties.Remove(properties.Find(e => e.Name == "CircuitIdentifierFI"));
+                properties.ForEach(e =>
+                {
+                    var value = e.GetValue(threeLineDiagCircuitIden);
+                    if (value is Dictionary<string, int> intDict)
+                    {
+                        if (intDict.Keys.Count() != 0)
+                        {
+                            string paramName = intDict.Keys.ToList()[0];
+                            threeLineDiagCircuitIden.CircuitIdentifierFI.LookupParameter(paramName).Set(intDict[paramName]);
+                        }
+                    }
+                    else if (value is Dictionary<string, string> stringDict)
+                    {
+                        if (stringDict.Keys.Count() != 0)
+                        {
+                            string paramName = stringDict.Keys.ToList()[0];
+                            threeLineDiagCircuitIden.CircuitIdentifierFI.LookupParameter(paramName).Set(stringDict[paramName]);
+                        }
+                    }
+                    else if (value is Dictionary<string, bool> boolDict)
+                    {
+                        if (e.Name == "Conexoes")
+                        {
+                            boolDict.Keys.ToList().ForEach(paramName =>
+                            {
+                                threeLineDiagCircuitIden.CircuitIdentifierFI.LookupParameter(paramName).Set(boolDict[paramName] ? 1 : 0);
+                            });
+                            return;
+                        }
+                        if (boolDict.Keys.Count() != 0)
+                        {
+                            string paramName = boolDict.Keys.ToList()[0];
+                            threeLineDiagCircuitIden.CircuitIdentifierFI.LookupParameter(paramName).Set(boolDict[paramName] ? 1 : 0);
+                        }
+                    }
+                });
+            }
+
             public void GenThreeLineDiagramFromPanel(ECs.Panel panel, ThreeLineDiagramBody threeLineDiagObj)
             {
 
@@ -752,39 +794,67 @@ namespace AutoEletrica
                 trans.Commit();
 
 
-                float counter = 0;
-                
+                float circYpos = 0;
+                float rightCircXpos = 4;
+                float leftCircXpos = 0;
+                bool sideFlag = true;
+                FamilySymbol fsymCircuit;
+                string tipoAlimentacao;
 
                 foreach (ECs.Circuit circuit in panel.AssignedCircuits)
                 {
                     if (circuit.Name.ToLower().Contains("reserva")) { continue; }
 
-                    ThreeLineCircuitsIdentifierData circuitIData = SetUpThreeLineCircuitData(circuit);
-
-                    FamilySymbol fsymCircuit = this.diagrams.GetThreeLineMonoCircuitIdentifierFamilySymbol();
-
-                    if (circuit.numOfPoles == 2)
+                    switch (circuit.numOfPoles)
                     {
-                        counter += 1.2f;
-                        fsymCircuit = this.diagrams.GetThreeLineBiCircuitIdentifierFamilySymbol();
-                    }
-                    if (circuit.numOfPoles == 3)
-                    {
-                        counter += 2.4f;
-                        fsymCircuit = this.diagrams.GetThreeLineTriCircuitIdentifierFamilySymbol();
+                        case 1:
+                            tipoAlimentacao = "monofasico";
+                            break;
+                        case 2:
+                            tipoAlimentacao = "bifasico";
+                            break;
+                        default:
+                            tipoAlimentacao = "trifasico";
+                            break;
                     }
 
-                    if (circuit.isNotReserveCircuit == 0)
+                    if (sideFlag)
                     {
-                        counter--;
+                        fsymCircuit = this.diagrams.GetThreeLineDiagramRightCircuitSymbol(tipoAlimentacao);
+                        sideFlag = !sideFlag;
+                    } else
+                    {
+                        fsymCircuit = this.diagrams.GetThreeLineDiagramLeftCircuitSymbol(tipoAlimentacao);
+                        sideFlag = !sideFlag;
                     }
 
-                    XYZ pt = new XYZ(ut.metersToFeet(2), -ut.metersToFeet(0.76 * counter) - ut.metersToFeet(3.8), 0);
+                    ThreeLineDiagramCircuitIdentifier circuitIdenData = new ThreeLineDiagramCircuitIdentifier();
 
-                    GenThreeLineCircuitIdentifierSymbol(circuitIData, pt, fsymCircuit);
+                    circuitIdenData.Conexoes = circuitIdenData.GetConexoes(circuit);
+                    circuitIdenData.CorrenteDisjuntor.Add("Corrente do Disjuntor", Convert.ToInt32(this.breakers[circuit.circuitNumber]));
+                    circuitIdenData.DescricaoCircuito.Add("Descrição Circuito", circuit.Name);
+                    circuitIdenData.NumeroDoCircuito.Add("Número Circuito", circuit.circuitNumber);
+                    circuitIdenData.SeccaoCabos.Add("Secção dos cabos", this.cableSeccions[circuit.circuitNumber]);
+                    circuitIdenData.Tensao.Add("Tensão", circuit.voltage);
+                    circuitIdenData.Frequencia.Add("Frequência", 60);
+                    circuitIdenData.Potencia.Add("Potência Circuito", circuit.apparentload);
 
-                    counter += 0.6f;
-  
+                    XYZ pt = new XYZ(
+                        sideFlag ? rightCircXpos : leftCircXpos,
+                        -ut.metersToFeet(circYpos),
+                        0
+                    );
+                    circYpos += 1.5f;
+
+                    circuitIdenData.CircuitIdentifierFI = this.doc.Create.NewFamilyInstance(pt, fsymCircuit, this.threeLineView);
+
+                    Transaction circuitIdenTrans = new Transaction(this.doc);
+                    circuitIdenTrans.Start($"Generating circuit {circuit.circuitNumber} identifier");
+
+                    SetupThreeLineDiagramCircuitIdentifier(circuitIdenData);
+
+                    circuitIdenTrans.Commit();
+
                 }
                 
 
