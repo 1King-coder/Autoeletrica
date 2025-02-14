@@ -41,6 +41,16 @@ namespace AutoEletrica
         {
             return GetGenericAnnotationFamilySymbolByFamilyNameAndTypeName("Diagrama Trifilar - Corpo", type);
         }
+        
+        public FamilySymbol GetThreeLineDiagramRightCircuitSymbol (string type)
+        {
+            return GetGenericAnnotationFamilySymbolByFamilyNameAndTypeName("Diagrama identificação de circuitos trifilar - Direita", type);
+        }
+
+        public FamilySymbol GetThreeLineDiagramLeftCircuitSymbol(string type)
+        {
+            return GetGenericAnnotationFamilySymbolByFamilyNameAndTypeName("Diagrama identificação de circuitos trifilar - Esquerda", type);
+        }
 
         public FamilySymbol GetElectricalUtilityFamilySymbol (string scheme)
         {

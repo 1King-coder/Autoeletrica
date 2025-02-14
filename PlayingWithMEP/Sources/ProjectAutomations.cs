@@ -752,10 +752,6 @@ namespace AutoEletrica
                 trans.Commit();
 
 
-                //ThreeLinePanelIdenfierData threeLinePanelIdenfierBody= this.SetUpThreeLinePanelData(panel, CorrenteDisjuntor, SeccaoCabos);
-
-                // this.CreateThreeLineDiagramBody(threeLinePanelIdenfierData);
-                /*
                 float counter = 0;
                 
 
@@ -790,7 +786,7 @@ namespace AutoEletrica
                     counter += 0.6f;
   
                 }
-                */
+                
 
 
             }
