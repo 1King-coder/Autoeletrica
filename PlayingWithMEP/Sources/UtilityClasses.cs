@@ -27,6 +27,9 @@ namespace AutoEletrica.Sources
         string NomeDoQD { get; set; }
         bool TemDPSParaNeutro { get; set; }
         int QtdeDeCircuitos { get; set; }
+
+        string SeccaoCabos { get; set; }
+
         bool TemDPS { get; set; }
         bool TemDR { get; set; }
 
@@ -34,6 +37,8 @@ namespace AutoEletrica.Sources
         void SetParamCorrenteDR(int value);
 
         void SetParamCorrenteDisjuntorGeral(int value);
+
+        void SetParamSeccaoCabos(int value);
 
         void SetParamCorrenteDeProtecaoDR(int value);
 
@@ -178,6 +183,7 @@ namespace AutoEletrica.Sources
         public FamilyInstance ThreeLineDiagramFI { get; set; }
         public int CorrenteDR { get; set; }
         public int CorrenteDisjuntorGeral { get; set; }
+        public string SeccaoCabos { get; set; }
         public int CorrenteDeProtecaoDR { get; set; }
         public int CorrenteDeCurtoCircuito { get; set; }
         public int Frequencia { get; set; }
@@ -196,6 +202,11 @@ namespace AutoEletrica.Sources
         public void SetParamCorrenteDisjuntorGeral(int value)
         {
             ThreeLineDiagramFI.LookupParameter("Corrente Disjuntor Geral").Set(value);
+        }
+
+        public void SetParamSeccaoCabos(int value)
+        {
+            ThreeLineDiagramFI.LookupParameter("Secção dos cabos").Set(value);
         }
 
         public void SetParamCorrenteDeProtecaoDR(int value)
