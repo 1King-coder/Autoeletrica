@@ -241,9 +241,9 @@ namespace AutoEletrica.Sources
         {
             Dictionary<string, bool> conexoes = new Dictionary<string, bool>
             {
-                { "Conectado a Fase A", Convert.ToInt32(circuit.phaseALoad) != 0 },
-                { "Conectado a Fase B", Convert.ToInt32(circuit.phaseBLoad) != 0 },
-                { "Conectado a Fase C", Convert.ToInt32(circuit.phaseCLoad) != 0 },
+                { "Conectado a Fase A", Convert.ToDouble(circuit.phaseALoad) != 0 },
+                { "Conectado a Fase B", Convert.ToDouble(circuit.phaseBLoad) != 0 },
+                { "Conectado a Fase C", Convert.ToDouble(circuit.phaseCLoad) != 0 },
                 { "Conectado ao Neutro", circuit.numOfNeutrals != 0 },
                 { "Conectado ao Terra", circuit.numOfGrounds != 0 }
             };
