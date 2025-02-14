@@ -821,11 +821,9 @@ namespace AutoEletrica
                     if (sideFlag)
                     {
                         fsymCircuit = this.diagrams.GetThreeLineDiagramRightCircuitSymbol(tipoAlimentacao);
-                        sideFlag = !sideFlag;
                     } else
                     {
                         fsymCircuit = this.diagrams.GetThreeLineDiagramLeftCircuitSymbol(tipoAlimentacao);
-                        sideFlag = !sideFlag;
                     }
 
                     ThreeLineDiagramCircuitIdentifier circuitIdenData = new ThreeLineDiagramCircuitIdentifier();
@@ -845,6 +843,7 @@ namespace AutoEletrica
                         0
                     );
 
+                    sideFlag = !sideFlag;
                     circYpos += 1.5;
 
 
