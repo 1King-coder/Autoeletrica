@@ -173,7 +173,7 @@ namespace AutoEletrica.Sources
         public Dictionary<string, int> TensaoNominalDPS { get; set; }
         public Dictionary<string, string> ClasseDeProtecaoDPS { get; set; }
 
-        ThreeLineDiagramBody ()
+        public ThreeLineDiagramBody ()
         {
             CorrenteDR = new Dictionary<string, int>();
             CorrenteDisjuntorGeral = new Dictionary<string, int>();
