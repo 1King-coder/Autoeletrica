@@ -702,12 +702,36 @@ namespace AutoEletrica
             {
                 List<PropertyInfo> properties = threeLineDiagramObj.GetType().GetProperties().ToList();
                 properties.Remove(properties.Find(e => e.Name == "ThreeLineDiagramFI"));
-                string debugStr = "";
                 
-                properties.ForEach(e => { debugStr += $"{((Dictionary<string, string>) e.GetValue(threeLineDiagramObj)).Keys.ToList()[0]} \n"; });
-
-                TaskDialog.Show("Debug", debugStr);
-
+                properties.ForEach(e =>
+                {
+                    var value = e.GetValue(threeLineDiagramObj);
+                    
+                    if (value is Dictionary<string, int> intDict)
+                    {
+                        if (intDict.Keys.Count() != 0)
+                        {
+                            string paramName = intDict.Keys.ToList()[0];
+                            threeLineDiagramObj.ThreeLineDiagramFI.LookupParameter(paramName).Set(intDict[paramName]);
+                        }
+                    }
+                    else if (value is Dictionary<string, string> stringDict)
+                    {
+                        if (stringDict.Keys.Count() != 0)
+                        {
+                            string paramName = stringDict.Keys.ToList()[0];
+                            threeLineDiagramObj.ThreeLineDiagramFI.LookupParameter(paramName).Set(stringDict[paramName]);
+                        }
+                    }
+                    else if (value is Dictionary<string, bool> boolDict)
+                    {
+                        if (boolDict.Keys.Count() != 0)
+                        {
+                            string paramName = boolDict.Keys.ToList()[0];
+                            threeLineDiagramObj.ThreeLineDiagramFI.LookupParameter(paramName).Set(boolDict[paramName] ? 1 : 0);
+                        }
+                    }
+                });
             }
 
             public void GenThreeLineDiagramFromPanel(ECs.Panel panel, ThreeLineDiagramBody threeLineDiagObj)
@@ -719,11 +743,13 @@ namespace AutoEletrica
                 threeLineDiagObj.NomeDoQD.Add("Nome do QD", panel.Name);
                 threeLineDiagObj.QtdeDeCircuitos.Add("Qtde circuitos", panel.AssignedCircuits.Count());
 
+                Transaction trans = new Transaction(doc);
+                trans.Start("Generating Three-line diagram body");
 
+                threeLineDiagObj.ThreeLineDiagramFI = this.doc.Create.NewFamilyInstance(new XYZ(), threelineDiagFS, this.threeLineView);
                 SetupThreeLineDiagramBody(threeLineDiagObj);
 
-                //threeLineDiagObj.ThreeLineDiagramFI = this.doc.Create.NewFamilyInstance(new XYZ(), threelineDiagFS, this.threeLineView);
-
+                trans.Commit();
 
 
                 //ThreeLinePanelIdenfierData threeLinePanelIdenfierBody= this.SetUpThreeLinePanelData(panel, CorrenteDisjuntor, SeccaoCabos);

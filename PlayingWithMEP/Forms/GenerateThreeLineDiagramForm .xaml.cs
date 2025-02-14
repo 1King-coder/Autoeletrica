@@ -203,16 +203,17 @@ namespace AutoEletrica
                     threeLineDiagObj.SeccaoCabos.Add("Secção dos cabos", SeccionsPaneltxtbox.Text);
                     threeLineDiagObj.Tensao.Add("Tensão", TensaoDeAlimentacaotxtbox.Text);
                     threeLineDiagObj.CorrenteDeCurtoCircuito.Add("Corrente de curto-circuito", Convert.ToInt32(CorrenteDeCCtxtbox.Text));
+                    
+                    threeLineDiagObj.TemDR.Add("Tem DR", TemDRgeralChkbox.IsChecked.Value);
                     if (TemDRgeralChkbox.IsChecked.Value)
                     {
-                        threeLineDiagObj.TemDR.Add("Tem DR", TemDRgeralChkbox.IsChecked.Value);
                         threeLineDiagObj.CorrenteDR.Add("Corrente DR", Convert.ToInt32(CorrenteSuportadaDRtxtbox.Text));
                         threeLineDiagObj.CorrenteDeProtecaoDR.Add("Corrente de Proteção DR", Convert.ToInt32(CorrenteDeProtecaoDRtxtbox.Text));
                     }
 
+                    threeLineDiagObj.TemDPS.Add("Tem DPS", TemDPSchkbox.IsChecked.Value);
                     if (TemDPSchkbox.IsChecked.Value)
                     {
-                        threeLineDiagObj.TemDPS.Add("Tem DPS", TemDPSchkbox.IsChecked.Value);
                         threeLineDiagObj.TemDPSParaNeutro.Add("DPS para o neutro", TemDPSParaNeutrochkbox.IsChecked.Value);
                         threeLineDiagObj.TensaoNominalDPS.Add("Tensão Nominal DPS", Convert.ToInt32(TensaoNominalDPStxtbox.Text));
                         threeLineDiagObj.CorrenteDeProtecaoDPS.Add("Corrente de proteção DPS", Convert.ToInt32(CorrenteDeProtecaoDPStxtbox.Text));
