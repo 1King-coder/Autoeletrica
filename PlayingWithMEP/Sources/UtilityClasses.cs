@@ -50,7 +50,7 @@ namespace AutoEletrica.Sources
         Dictionary<string, int> Tensao { get; set; }
         Dictionary<string, int> Frequencia { get; set; }
 
-        Dictionary<string, string> GetFasesConectadas(ECs.Circuit circuit);
+        Dictionary<string, string> GetConexoes(ECs.Circuit circuit);
     }
 
     internal interface ICircuitsIdentifierData
