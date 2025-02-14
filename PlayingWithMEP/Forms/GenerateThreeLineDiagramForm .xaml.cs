@@ -1,17 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
@@ -202,14 +193,16 @@ namespace AutoEletrica
                 await revitTask.Run((uiapp) =>
                 {
                     Document doc = uiapp.ActiveUIDocument.Document;
+
                     Automations.GenerateDiagramsClass diagGen = new Automations.GenerateDiagramsClass(doc, planilha);
 
                     ThreeLineDiagramBody threeLineDiagObj = new ThreeLineDiagramBody();
 
                     threeLineDiagObj.CorrenteDisjuntorGeral.Add("Corrente Disjuntor Geral", Convert.ToInt32(DisjuntorPaneltxtbox.Text));
+                    threeLineDiagObj.Frequencia.Add("Frequência", 60);
                     threeLineDiagObj.SeccaoCabos.Add("Secção dos cabos", SeccionsPaneltxtbox.Text);
                     threeLineDiagObj.Tensao.Add("Tensão", Convert.ToInt32(TensaoDeAlimentacaotxtbox.Text));
-                    threeLineDiagObj.CorrenteDeCurtoCircuito.Add("Corrente de Curto Circuito", Convert.ToInt32(CorrenteDeCCtxtbox.Text));
+                    threeLineDiagObj.CorrenteDeCurtoCircuito.Add("Corrente de curto-circuito", Convert.ToInt32(CorrenteDeCCtxtbox.Text));
                     threeLineDiagObj.TemDR.Add("Tem DR", TemDRgeralChkbox.IsChecked.Value);
                     threeLineDiagObj.CorrenteDR.Add("Corrente DR", Convert.ToInt32(CorrenteSuportadaDRtxtbox.Text));
                     threeLineDiagObj.CorrenteDeProtecaoDR.Add("Corrente de Proteção DR", Convert.ToInt32(CorrenteDeProtecaoDRtxtbox.Text));

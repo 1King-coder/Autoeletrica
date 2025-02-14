@@ -173,6 +173,25 @@ namespace AutoEletrica.Sources
         public Dictionary<string, int> TensaoNominalDPS { get; set; }
         public Dictionary<string, string> ClasseDeProtecaoDPS { get; set; }
 
+        ThreeLineDiagramBody ()
+        {
+            CorrenteDR = new Dictionary<string, int>();
+            CorrenteDisjuntorGeral = new Dictionary<string, int>();
+            SeccaoCabos = new Dictionary<string, string>();
+            CorrenteDeProtecaoDR = new Dictionary<string, int>();
+            CorrenteDeCurtoCircuito = new Dictionary<string, int>();
+            Frequencia = new Dictionary<string, int>();
+            Tensao = new Dictionary<string, int>();
+            NomeDoQD = new Dictionary<string, string>();
+            TemDPSParaNeutro = new Dictionary<string, bool>();
+            QtdeDeCircuitos = new Dictionary<string, int>();
+            TemDPS = new Dictionary<string, bool>();
+            TemDR = new Dictionary<string, bool>();
+            CorrenteDeProtecaoDPS = new Dictionary<string, int>();
+            TensaoNominalDPS = new Dictionary<string, int>();
+            ClasseDeProtecaoDPS = new Dictionary<string, string>();
+        }
+
     }
 
     internal class PanelIdentifierData : IPanelIdentifierData

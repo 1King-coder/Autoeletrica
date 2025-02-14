@@ -699,9 +699,8 @@ namespace AutoEletrica
 
             public void SetupThreeLineDiagramBody (ThreeLineDiagramBody threeLineDiagramObj)
             {
-                List<MemberInfo> test = threeLineDiagramObj.GetType().GetMembers().ToList();
+                threeLineDiagramObj.GetType().GetMembers().ToList().ForEach(e => TaskDialog.Show("debug", e.CustomAttributes.ToString()));
 
-                const string tester = "teste";
             }
 
             public void GenThreeLineDiagramFromPanel(ECs.Panel panel, ThreeLineDiagramBody threeLineDiagObj)
@@ -710,8 +709,14 @@ namespace AutoEletrica
                 this.GetCircuitsInfosFromSpreadsheet(panel);
                 FamilySymbol threelineDiagFS = this.diagrams.GetThreeLineDiagramBodySymbol("Trifasico");
 
-                threeLineDiagObj.ThreeLineDiagramFI = this.doc.Create.NewFamilyInstance(new XYZ(), threelineDiagFS, this.threeLineView);
-                
+                threeLineDiagObj.NomeDoQD.Add("Nome do QD", panel.Name);
+                threeLineDiagObj.QtdeDeCircuitos.Add("Qtde circuitos", panel.AssignedCircuits.Count());
+
+
+                SetupThreeLineDiagramBody(threeLineDiagObj);
+
+                //threeLineDiagObj.ThreeLineDiagramFI = this.doc.Create.NewFamilyInstance(new XYZ(), threelineDiagFS, this.threeLineView);
+
 
 
                 //ThreeLinePanelIdenfierData threeLinePanelIdenfierBody= this.SetUpThreeLinePanelData(panel, CorrenteDisjuntor, SeccaoCabos);
