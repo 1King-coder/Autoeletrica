@@ -193,18 +193,18 @@ namespace AutoEletrica
 
                     ThreeLineDiagramBody threeLineDiagObj = new ThreeLineDiagramBody();
 
-                    threeLineDiagObj.CorrenteDisjuntorGeral = Convert.ToInt32(DisjuntorPaneltxtbox.Text);
-                    threeLineDiagObj.SeccaoCabos = SeccionsPaneltxtbox.Text;
-                    threeLineDiagObj.Tensao = Convert.ToInt32(TensaoDeAlimentacaotxtbox.Text);
-                    threeLineDiagObj.CorrenteDeCurtoCircuito = Convert.ToInt32(CorrenteDeCCtxtbox.Text);
-                    threeLineDiagObj.TemDR = TemDRgeralChkbox.IsChecked.Value;
-                    threeLineDiagObj.CorrenteDR = Convert.ToInt32(CorrenteSuportadaDRtxtbox.Text);
-                    threeLineDiagObj.CorrenteDeProtecaoDR = Convert.ToInt32(CorrenteDeProtecaoDRtxtbox.Text);
-                    threeLineDiagObj.TemDPS = TemDPSchkbox.IsChecked.Value;
-                    threeLineDiagObj.TemDPSParaNeutro = TemDPSParaNeutrochkbox.IsChecked.Value;
-                    threeLineDiagObj.TensaoNominalDPS = Convert.ToInt32(TensaoNominalDPStxtbox.Text);
-                    threeLineDiagObj.CorrenteDeProtecaoDPS = Convert.ToInt32(CorrenteDeProtecaoDPStxtbox.Text);
-                    threeLineDiagObj.ClasseDeProtecaoDPS = ClasseDPStxtbox.Text;
+                    threeLineDiagObj.CorrenteDisjuntorGeral.Add("Corrente Disjuntor Geral", Convert.ToInt32(DisjuntorPaneltxtbox.Text));
+                    threeLineDiagObj.SeccaoCabos.Add("Secção dos cabos", SeccionsPaneltxtbox.Text);
+                    threeLineDiagObj.Tensao.Add("Tensão", Convert.ToInt32(TensaoDeAlimentacaotxtbox.Text));
+                    threeLineDiagObj.CorrenteDeCurtoCircuito.Add("Corrente de Curto Circuito", Convert.ToInt32(CorrenteDeCCtxtbox.Text));
+                    threeLineDiagObj.TemDR.Add("Tem DR", TemDRgeralChkbox.IsChecked.Value);
+                    threeLineDiagObj.CorrenteDR.Add("Corrente DR", Convert.ToInt32(CorrenteSuportadaDRtxtbox.Text));
+                    threeLineDiagObj.CorrenteDeProtecaoDR.Add("Corrente de Proteção DR", Convert.ToInt32(CorrenteDeProtecaoDRtxtbox.Text));
+                    threeLineDiagObj.TemDPS.Add("Tem DPS", TemDPSchkbox.IsChecked.Value);
+                    threeLineDiagObj.TemDPSParaNeutro.Add("DPS para o neutro", TemDPSParaNeutrochkbox.IsChecked.Value);
+                    threeLineDiagObj.TensaoNominalDPS.Add("Tensão Nominal DPS", Convert.ToInt32(TensaoNominalDPStxtbox.Text));
+                    threeLineDiagObj.CorrenteDeProtecaoDPS.Add("Corrente de proteção DPS", Convert.ToInt32(CorrenteDeProtecaoDPStxtbox.Text));
+                    threeLineDiagObj.ClasseDeProtecaoDPS.Add("Classe DPS", ClasseDPStxtbox.Text);
 
                     diagGen.GenThreeLineDiagramFromPanel(selectedPanel, Convert.ToInt32(DisjuntorPaneltxtbox.Text), SeccionsPaneltxtbox.Text);
                     uiapp.ActiveUIDocument.ActiveView = diagGen.threeLineView;
