@@ -239,13 +239,14 @@ namespace AutoEletrica.Sources
 
         public Dictionary<string, bool> GetConexoes(ECs.Circuit circuit)
         {
-            Dictionary<string, bool> conexoes = new Dictionary<string, bool>();
-
-            conexoes.Add("Conectado a Fase A", Convert.ToInt32(circuit.phaseALoad) != 0);
-            conexoes.Add("Conectado a Fase B", Convert.ToInt32(circuit.phaseBLoad) != 0);
-            conexoes.Add("Conectado a Fase C", Convert.ToInt32(circuit.phaseCLoad) != 0);
-            conexoes.Add("Conectado ao Neutro", circuit.numOfNeutrals != 0);
-            conexoes.Add("Conectado ao Terra", circuit.numOfGrounds != 0);
+            Dictionary<string, bool> conexoes = new Dictionary<string, bool>
+            {
+                { "Conectado a Fase A", Convert.ToInt32(circuit.phaseALoad) != 0 },
+                { "Conectado a Fase B", Convert.ToInt32(circuit.phaseBLoad) != 0 },
+                { "Conectado a Fase C", Convert.ToInt32(circuit.phaseCLoad) != 0 },
+                { "Conectado ao Neutro", circuit.numOfNeutrals != 0 },
+                { "Conectado ao Terra", circuit.numOfGrounds != 0 }
+            };
 
             return conexoes;
         }

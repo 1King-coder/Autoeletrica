@@ -794,9 +794,9 @@ namespace AutoEletrica
                 trans.Commit();
 
 
-                float circYpos = 0;
-                float rightCircXpos = 4;
-                float leftCircXpos = 0;
+                double circYpos = 0;
+                double rightCircXpos = ut.metersToFeet(4);
+                double leftCircXpos = 0;
                 bool sideFlag = true;
                 FamilySymbol fsymCircuit;
                 string tipoAlimentacao;
@@ -844,7 +844,8 @@ namespace AutoEletrica
                         -ut.metersToFeet(circYpos),
                         0
                     );
-                    circYpos += 1.5f;
+
+                    circYpos += 1.5;
 
                     circuitIdenData.CircuitIdentifierFI = this.doc.Create.NewFamilyInstance(pt, fsymCircuit, this.threeLineView);
 
