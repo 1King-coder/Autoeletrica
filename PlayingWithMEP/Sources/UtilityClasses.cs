@@ -50,7 +50,7 @@ namespace AutoEletrica.Sources
         Dictionary<string, int> Tensao { get; set; }
         Dictionary<string, int> Frequencia { get; set; }
 
-        Dictionary<string, string> GetConexoes(ECs.Circuit circuit);
+        Dictionary<string, bool> GetConexoes(ECs.Circuit circuit);
     }
 
     internal interface ICircuitsIdentifierData
@@ -210,6 +210,47 @@ namespace AutoEletrica.Sources
         }
 
     }
+
+    internal class ThreeLineDiagramCircuitIdentifier : IThreeLineCircuitIdentifier
+    {
+        public FamilyInstance CircuitIdentifierFI { get; set; }
+        public Dictionary<string, int> CorrenteDisjuntor { get; set; }
+        public Dictionary<string, string> NumeroDoCircuito { get; set; }
+        public Dictionary<string, string> DescricaoCircuito { get; set; }
+        public Dictionary<string, string> SeccaoCabos { get; set; }
+        public Dictionary<string, bool> Conexoes { get; set; }
+        public Dictionary<string, int> Potencia { get; set; }
+        public Dictionary<string, bool> EReserva { get; set; }
+        public Dictionary<string, int> Tensao { get; set; }
+        public Dictionary<string, int> Frequencia { get; set; }
+
+        public ThreeLineDiagramCircuitIdentifier()
+        {
+            CorrenteDisjuntor = new Dictionary<string, int>();
+            NumeroDoCircuito = new Dictionary<string, string>();
+            DescricaoCircuito = new Dictionary<string, string>();
+            SeccaoCabos = new Dictionary<string, string>();
+            Conexoes = new Dictionary<string, bool>();
+            Potencia = new Dictionary<string, int>();
+            EReserva = new Dictionary<string, bool>();
+            Tensao = new Dictionary<string, int>();
+            Frequencia = new Dictionary<string, int>();
+        }
+
+        public Dictionary<string, bool> GetConexoes(ECs.Circuit circuit)
+        {
+            Dictionary<string, bool> conexoes = new Dictionary<string, bool>();
+
+            conexoes.Add("Conectado a Fase A", Convert.ToInt32(circuit.phaseALoad) != 0);
+            conexoes.Add("Conectado a Fase B", Convert.ToInt32(circuit.phaseBLoad) != 0);
+            conexoes.Add("Conectado a Fase C", Convert.ToInt32(circuit.phaseCLoad) != 0);
+            conexoes.Add("Conectado ao Neutro", circuit.numOfNeutrals != 0);
+            conexoes.Add("Conectado ao Terra", circuit.numOfGrounds != 0);
+
+            return conexoes;
+        }
+    }
+
 
     internal class PanelIdentifierData : IPanelIdentifierData
     {
