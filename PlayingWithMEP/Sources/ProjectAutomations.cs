@@ -847,11 +847,11 @@ namespace AutoEletrica
 
                     circYpos += 1.5;
 
-                    circuitIdenData.CircuitIdentifierFI = this.doc.Create.NewFamilyInstance(pt, fsymCircuit, this.threeLineView);
 
                     Transaction circuitIdenTrans = new Transaction(this.doc);
                     circuitIdenTrans.Start($"Generating circuit {circuit.circuitNumber} identifier");
 
+                    circuitIdenData.CircuitIdentifierFI = this.doc.Create.NewFamilyInstance(pt, fsymCircuit, this.threeLineView);
                     SetupThreeLineDiagramCircuitIdentifier(circuitIdenData);
 
                     circuitIdenTrans.Commit();
