@@ -18,52 +18,21 @@ namespace AutoEletrica.Sources
     internal interface IThreeLineDiagramBody
     {
         FamilyInstance ThreeLineDiagramFI { get; set; }
-        int CorrenteDR { get; set; }
-        int CorrenteDisjuntorGeral { get; set; }
-        int CorrenteDeProtecaoDR { get; set; }
-        int CorrenteDeCurtoCircuito { get; set; }
-        int Frequencia { get; set; }
-        int Tensao { get; set; }
-        string NomeDoQD { get; set; }
-        bool TemDPSParaNeutro { get; set; }
-        int QtdeDeCircuitos { get; set; }
-        string SeccaoCabos { get; set; }
-        bool TemDPS { get; set; }
-        bool TemDR { get; set; }
-        int CorrenteDeProtecaoDPS { get; set; }
-        int TensaoNominalDPS { get; set; }
-        string ClasseDeProtecaoDPS { get; set; }
-
-
-
-        // Declare methods to set the parameters of the interface directly in revit using lookupParameter
-        void SetParamCorrenteDR(int value);
-
-        void SetParamCorrenteDisjuntorGeral(int value);
-
-        void SetParamSeccaoCabos(int value);
-
-        void SetParamCorrenteDeProtecaoDR(int value);
-
-        void SetParamCorrenteDeCurtoCircuito(int value);
-
-        void SetParamFrequencia(int value);
-
-        void SetParamTensao(int value);
-
-        void SetParamNomeDoQD(string value);
-
-        void SetParamTemDPSParaNeutro(bool value);
-
-        void SetParamQtdeDeCircuitos(int value);
-
-        void SetParamTemDPS(bool value);
-
-        void SetParamTemDR(bool value);
-
-        void SetParamCorrenteDeProtecaoDPS(int value);
-        void SetParamTensaoNominalDPS(int value);
-        void SetParamClasseDeProtecaoDPS(string value);
+        Dictionary<string, int> CorrenteDR { get; set; }
+        Dictionary<string, int> CorrenteDisjuntorGeral { get; set; }
+        Dictionary<string, int> CorrenteDeProtecaoDR { get; set; }
+        Dictionary<string, int> CorrenteDeCurtoCircuito { get; set; }
+        Dictionary<string, int> Frequencia { get; set; }
+        Dictionary<string, int> Tensao { get; set; }
+        Dictionary<string, string> NomeDoQD { get; set; }
+        Dictionary<string, bool> TemDPSParaNeutro { get; set; }
+        Dictionary<string, int> QtdeDeCircuitos { get; set; }
+        Dictionary<string, string> SeccaoCabos { get; set; }
+        Dictionary<string, bool> TemDPS { get; set; }
+        Dictionary<string, bool> TemDR { get; set; }
+        Dictionary<string, int> CorrenteDeProtecaoDPS { get; set; }
+        Dictionary<string, int> TensaoNominalDPS { get; set; }
+        Dictionary<string, string> ClasseDeProtecaoDPS { get; set; }
     }
 
 
@@ -188,96 +157,22 @@ namespace AutoEletrica.Sources
     internal class ThreeLineDiagramBody : IThreeLineDiagramBody
     {
         public FamilyInstance ThreeLineDiagramFI { get; set; }
-        public int CorrenteDR { get; set; }
-        public int CorrenteDisjuntorGeral { get; set; }
-        public string SeccaoCabos { get; set; }
-        public int CorrenteDeProtecaoDR { get; set; }
-        public int CorrenteDeCurtoCircuito { get; set; }
-        public int Frequencia { get; set; }
-        public int Tensao { get; set; }
-        public string NomeDoQD { get; set; }
-        public bool TemDPSParaNeutro { get; set; }
-        public int QtdeDeCircuitos { get; set; }
-        public bool TemDPS { get; set; }
-        public bool TemDR { get; set; }
-        public int CorrenteDeProtecaoDPS { get; set; }
-        public int TensaoNominalDPS { get; set; }
-        public string ClasseDeProtecaoDPS { get; set; }
+        public Dictionary<string, int> CorrenteDR { get; set; }
+        public Dictionary<string, int> CorrenteDisjuntorGeral { get; set; }
+        public Dictionary<string, string> SeccaoCabos { get; set; }
+        public Dictionary<string, int> CorrenteDeProtecaoDR { get; set; }
+        public Dictionary<string, int> CorrenteDeCurtoCircuito { get; set; }
+        public Dictionary<string, int> Frequencia { get; set; }
+        public Dictionary<string, int> Tensao { get; set; }
+        public Dictionary<string, string> NomeDoQD { get; set; }
+        public Dictionary<string, bool> TemDPSParaNeutro { get; set; }
+        public Dictionary<string, int> QtdeDeCircuitos { get; set; }
+        public Dictionary<string, bool> TemDPS { get; set; }
+        public Dictionary<string, bool> TemDR { get; set; }
+        public Dictionary<string, int> CorrenteDeProtecaoDPS { get; set; }
+        public Dictionary<string, int> TensaoNominalDPS { get; set; }
+        public Dictionary<string, string> ClasseDeProtecaoDPS { get; set; }
 
-        public void SetParamCorrenteDR(int value)
-        {
-            ThreeLineDiagramFI.LookupParameter("Corrente DR").Set(value);
-        }
-
-        public void SetParamCorrenteDisjuntorGeral(int value)
-        {
-            ThreeLineDiagramFI.LookupParameter("Corrente Disjuntor Geral").Set(value);
-        }
-
-        public void SetParamSeccaoCabos(int value)
-        {
-            ThreeLineDiagramFI.LookupParameter("Secção dos cabos").Set(value);
-        }
-
-        public void SetParamCorrenteDeProtecaoDR(int value)
-        {
-            ThreeLineDiagramFI.LookupParameter("Corrente de Proteção DR").Set(value);
-        }
-
-        public void SetParamCorrenteDeCurtoCircuito(int value)
-        {
-            ThreeLineDiagramFI.LookupParameter("Corrente de curto-circuito").Set(value);
-        }
-
-        public void SetParamFrequencia(int value)
-        {
-            ThreeLineDiagramFI.LookupParameter("Frequência").Set(value);
-        }
-
-        public void SetParamTensao(int value)
-        {
-            ThreeLineDiagramFI.LookupParameter("Tensão").Set(value);
-        }
-
-        public void SetParamNomeDoQD(string value)
-        {
-            ThreeLineDiagramFI.LookupParameter("Nome do QD").Set(value);
-        }
-
-        public void SetParamTemDPSParaNeutro(bool value)
-        {
-            ThreeLineDiagramFI.LookupParameter("DPS para o neutro").Set(value ? 1 : 0);
-        }
-
-        public void SetParamQtdeDeCircuitos(int value)
-        {
-            ThreeLineDiagramFI.LookupParameter("Qtde circuitos").Set(value);
-        }
-
-        public void SetParamTemDPS(bool value)
-        {
-            ThreeLineDiagramFI.LookupParameter("Tem DPS").Set(value ? 1 : 0);
-        }
-
-        public void SetParamTemDR(bool value)
-        {
-            ThreeLineDiagramFI.LookupParameter("Tem DR").Set(value ? 1 : 0);
-        }
-
-        public void SetParamCorrenteDeProtecaoDPS(int value)
-        {
-            ThreeLineDiagramFI.LookupParameter("Corrente de Proteção DPS").Set(value);
-        }
-
-        public void SetParamTensaoNominalDPS(int value)
-        {
-            ThreeLineDiagramFI.LookupParameter("Tensão Nominal DPS").Set(value);
-        }
-
-        public void SetParamClasseDeProtecaoDPS(string value)
-        {
-            ThreeLineDiagramFI.LookupParameter("Classe de proteção DPS").Set(value);
-        }
     }
 
     internal class PanelIdentifierData : IPanelIdentifierData
