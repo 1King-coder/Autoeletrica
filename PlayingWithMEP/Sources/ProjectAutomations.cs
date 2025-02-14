@@ -692,12 +692,23 @@ namespace AutoEletrica
 
                 trans.Commit();
             }
+
+            public SetupThreeLineDiagramBody (ThreeLineDiagramBody threeLineDiagramObj)
+            {
+                threeLineDiagramObj.GetType().GetProperties().ToList().ForEach(p => p.SetValue(threeLineDiagramObj, null));
+            }
+
             public void GenThreeLineDiagramFromPanel(ECs.Panel panel, ThreeLineDiagramBody threeLineDiagObj)
             {
 
                 this.GetCircuitsInfosFromSpreadsheet(panel);
+                FamilySymbol threelineDiagFS = this.diagrams.GetThreeLineDiagramBodySymbol("Trifasico");
 
-                ThreeLinePanelIdenfierData threeLinePanelIdenfierBody= this.SetUpThreeLinePanelData(panel, CorrenteDisjuntor, SeccaoCabos);
+                threeLineDiagObj.ThreeLineDiagramFI = this.doc.Create.NewFamilyInstance(new XYZ(), threelineDiagFS, this.threeLineView);
+                
+
+
+                //ThreeLinePanelIdenfierData threeLinePanelIdenfierBody= this.SetUpThreeLinePanelData(panel, CorrenteDisjuntor, SeccaoCabos);
 
                 // this.CreateThreeLineDiagramBody(threeLinePanelIdenfierData);
 
