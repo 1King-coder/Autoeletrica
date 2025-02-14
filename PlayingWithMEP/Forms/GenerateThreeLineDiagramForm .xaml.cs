@@ -194,6 +194,16 @@ namespace AutoEletrica
                     ThreeLineDiagramBody threeLineDiagObj = new ThreeLineDiagramBody();
 
                     threeLineDiagObj.CorrenteDisjuntorGeral = Convert.ToInt32(DisjuntorPaneltxtbox.Text);
+                    threeLineDiagObj.SeccaoCabos = SeccionsPaneltxtbox.Text;
+                    threeLineDiagObj.Tensao = Convert.ToInt32(TensaoDeAlimentacaotxtbox.Text);
+                    threeLineDiagObj.CorrenteDeCurtoCircuito = Convert.ToInt32(CorrenteDeCCtxtbox.Text);
+                    threeLineDiagObj.TemDR = TemDRgeralChkbox.IsChecked.Value;
+                    threeLineDiagObj.CorrenteDR = Convert.ToInt32(CorrenteSuportadaDRtxtbox.Text);
+                    threeLineDiagObj.CorrenteDeProtecaoDR = Convert.ToInt32(CorrenteDeProtecaoDRtxtbox.Text);
+                    threeLineDiagObj.TemDPS = TemDPSchkbox.IsChecked.Value;
+                    threeLineDiagObj.TemDPSParaNeutro = TemDPSParaNeutrochkbox.IsChecked.Value;
+
+
 
                     diagGen.GenThreeLineDiagramFromPanel(selectedPanel, Convert.ToInt32(DisjuntorPaneltxtbox.Text), SeccionsPaneltxtbox.Text);
                     uiapp.ActiveUIDocument.ActiveView = diagGen.threeLineView;
