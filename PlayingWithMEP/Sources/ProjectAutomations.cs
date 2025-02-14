@@ -18,6 +18,7 @@ using System.Net;
 using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using System.Reflection;
 using System.Windows.Ink;
+using System.Collections.ObjectModel;
 
 
 namespace AutoEletrica
@@ -699,7 +700,13 @@ namespace AutoEletrica
 
             public void SetupThreeLineDiagramBody (ThreeLineDiagramBody threeLineDiagramObj)
             {
-                threeLineDiagramObj.GetType().GetMembers().ToList().ForEach(e => TaskDialog.Show("debug", e.CustomAttributes.ToString()));
+                List<PropertyInfo> properties = threeLineDiagramObj.GetType().GetProperties().ToList();
+                properties.Remove(properties.Find(e => e.Name == "ThreeLineDiagramFI"));
+                string debugStr = "";
+                
+                properties.ForEach(e => { debugStr += $"{((Dictionary<string, string>) e.GetValue(threeLineDiagramObj)).Keys.ToList()[0]} \n"; });
+
+                TaskDialog.Show("Debug", debugStr);
 
             }
 
