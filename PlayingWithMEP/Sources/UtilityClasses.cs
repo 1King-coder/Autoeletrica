@@ -35,6 +35,25 @@ namespace AutoEletrica.Sources
         Dictionary<string, string> ClasseDeProtecaoDPS { get; set; }
     }
 
+    internal interface IThreeLineCircuitIdentifier
+    {
+        FamilyInstance CircuitIdentifierFI { get; set; }
+        Dictionary<string, int> CorrenteDisjuntor { get; set; }
+        Dictionary<string, string> NumeroDoCircuito { get; set; }
+        Dictionary<string, string> DescricaoCircuito { get; set; }
+        Dictionary<string, string> SeccaoCabos { get; set; }
+        Dictionary<string, bool> FasesConectadas { get; set; }
+        Dictionary<string, bool> ConectadoNeutro { get; set; }
+        Dictionary<string, bool> ConectadoTerra { get; set; }
+        Dictionary<string, int> Potencia { get; set; }
+        Dictionary<string, bool> EReserva { get; set; }
+        Dictionary<string, int> Tensao { get; set; }
+        Dictionary<string, int> Frequencia { get; set; }
+
+        Dictionary<string, string> GetFasesConectadas();
+    }
+
+
 
     internal interface ICircuitsIdentifierData
     {
