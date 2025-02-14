@@ -202,6 +202,9 @@ namespace AutoEletrica
                     threeLineDiagObj.CorrenteDeProtecaoDR = Convert.ToInt32(CorrenteDeProtecaoDRtxtbox.Text);
                     threeLineDiagObj.TemDPS = TemDPSchkbox.IsChecked.Value;
                     threeLineDiagObj.TemDPSParaNeutro = TemDPSParaNeutrochkbox.IsChecked.Value;
+                    threeLineDiagObj.TensaoNominalDPS = Convert.ToInt32(TensaoNominalDPStxtbox.Text);
+                    threeLineDiagObj.CorrenteDeProtecaoDPS = Convert.ToInt32(CorrenteDeProtecaoDPStxtbox.Text);
+                    threeLineDiagObj.ClasseDeProtecaoDPS = ClasseDPStxtbox.Text;
 
 
 
