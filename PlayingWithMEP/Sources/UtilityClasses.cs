@@ -49,6 +49,10 @@ namespace AutoEletrica.Sources
         Dictionary<string, bool> EReserva { get; set; }
         Dictionary<string, int> Tensao { get; set; }
         Dictionary<string, int> Frequencia { get; set; }
+        Dictionary<string, bool> TemDR { get; set; }
+        Dictionary<string, int> CorrenteDoDR { get; set; }
+        Dictionary<string, int> CorrenteDeProtecaoDR { get; set; }
+        Dictionary<string, int> NumeroDePolosDR { get; set; }
 
         Dictionary<string, bool> GetConexoes(ECs.Circuit circuit);
     }
@@ -224,6 +228,11 @@ namespace AutoEletrica.Sources
         public Dictionary<string, int> Tensao { get; set; }
         public Dictionary<string, int> Frequencia { get; set; }
 
+        public Dictionary<string, bool> TemDR { get; set; }
+        public Dictionary<string, int> CorrenteDoDR { get; set; }
+        public Dictionary<string, int> CorrenteDeProtecaoDR { get; set; }
+        public Dictionary<string, int> NumeroDePolosDR { get; set; }
+
         public ThreeLineDiagramCircuitIdentifier()
         {
             CorrenteDisjuntor = new Dictionary<string, int>();
@@ -235,6 +244,10 @@ namespace AutoEletrica.Sources
             EReserva = new Dictionary<string, bool>();
             Tensao = new Dictionary<string, int>();
             Frequencia = new Dictionary<string, int>();
+            TemDR = new Dictionary<string, bool>();
+            CorrenteDoDR = new Dictionary<string, int>();
+            CorrenteDeProtecaoDR = new Dictionary<string, int>();
+            NumeroDePolosDR = new Dictionary<string, int>();
         }
 
         public Dictionary<string, bool> GetConexoes(ECs.Circuit circuit)

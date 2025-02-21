@@ -566,6 +566,8 @@ namespace AutoEletrica
                     circuitIdenData.Tensao.Add("Tensão", circuit.voltage);
                     circuitIdenData.Frequencia.Add("Frequência", 60);
                     circuitIdenData.Potencia.Add("Potência Circuito", circuit.apparentload);
+                    circuitIdenData.EReserva.Add("Não Reserva", circuit.isNotReserveCircuit == 1);
+                    circuitIdenData.TemDR.Add("Tem DR", );
 
                     XYZ pt = new XYZ(
                         sideFlag ? rightCircXpos : leftCircXpos,
