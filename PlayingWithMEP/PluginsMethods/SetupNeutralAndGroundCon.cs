@@ -34,7 +34,7 @@ namespace AutoEletrica
 
             Utils utils = new Utils(doc);
 
-            FamilyInstance el = utils.pickElement(sel);
+            FamilyInstance el = utils.pickElement(sel, new SelectionFilterPanels());
 
             ElectricalClasses.Panel panel = new ElectricalClasses.Panel(el, doc);
 
