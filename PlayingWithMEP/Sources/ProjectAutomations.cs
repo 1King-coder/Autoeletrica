@@ -571,7 +571,7 @@ namespace AutoEletrica
 
                     if (circuit.TemDR == 1)
                     {
-                        circuitIdenData.CorrenteDoDR.Add("Corrente DR", circuit.CorrenteSuportadaDR);
+                        circuitIdenData.CorrenteDoDR.Add("Corrente do DR", circuit.CorrenteSuportadaDR);
                         circuitIdenData.NumeroDePolosDR.Add("Número de polos DR", circuit.NumeroDePolosDR);
                         circuitIdenData.CorrenteDeProtecaoDR.Add("Corrente de proteção DR", circuit.CorrenteDeProtecaoDR);
                     }
