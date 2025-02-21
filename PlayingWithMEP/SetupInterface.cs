@@ -107,10 +107,10 @@ namespace AutoEletrica
             PushButton GenerateThreeLineDiagrambtn = panelAnnotation.AddItem(GenerateThreeLineDiagrambtnData) as PushButton;
             PushButton IdentifyElectricalElementsbtn = panelAnnotation.AddItem(IdentifyElectricalElementsbtnData) as PushButton;
             PushButton UpdateCircuitsInRevitbtn = panelAnnotation.AddItem(UpdateCircuitsInRevitbtnData) as PushButton;
-            PushButton AssociateSwitchesbtn = panelAnnotation.AddItem(AssociateSwitchesbtnData) as PushButton;
 
             PulldownButton ShortAutosPdBtn = panelAnnotation.AddItem(ShortAutosPd) as PulldownButton;
             ShortAutosPdBtn.AddPushButton(SetupNeutralAndGroundConbtnData);
+            ShortAutosPdBtn.AddPushButton(AssociateSwitchesbtnData);
 
 
 
