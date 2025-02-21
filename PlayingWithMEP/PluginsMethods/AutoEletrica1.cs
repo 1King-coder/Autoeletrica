@@ -43,7 +43,7 @@ namespace AutoEletrica.PluginsMethods
             {
 
                 (new ProjectAutomations.GeneralShortAutomations(doc)).SetupCircuitsConnections(panel);
-                TaskDialog.Show("macro executado", "circuitos configurados!");
+                TaskDialog.Show("Sucesso", "circuitos configurados!");
             }
             catch (Exception e)
             {
