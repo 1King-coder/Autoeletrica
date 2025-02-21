@@ -567,7 +567,14 @@ namespace AutoEletrica
                     circuitIdenData.Frequencia.Add("Frequência", 60);
                     circuitIdenData.Potencia.Add("Potência Circuito", circuit.apparentload);
                     circuitIdenData.EReserva.Add("Não Reserva", circuit.isNotReserveCircuit == 1);
-                    circuitIdenData.TemDR.Add("Tem DR", );
+                    circuitIdenData.TemDR.Add("Tem DR", circuit.TemDR == 1);
+
+                    if (circuit.TemDR == 1)
+                    {
+                        circuitIdenData.CorrenteDoDR.Add("Corrente DR", circuit.CorrenteSuportadaDR);
+                        circuitIdenData.NumeroDePolosDR.Add("Número de polos DR", circuit.NumeroDePolosDR);
+                        circuitIdenData.CorrenteDeProtecaoDR.Add("Corrente de proteção DR", circuit.CorrenteDeProtecaoDR);
+                    }
 
                     XYZ pt = new XYZ(
                         sideFlag ? rightCircXpos : leftCircXpos,
