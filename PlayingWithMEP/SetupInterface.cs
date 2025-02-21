@@ -93,7 +93,7 @@ namespace AutoEletrica
 
             PulldownButtonData ShortAutosPd = new PulldownButtonData("Automatizações curtas", "Automatizações curtas");
 
-            ShortAutosPd.Image = new BitmapImage(new System.Uri(shortAutosFullPath));
+            ShortAutosPd.SetLargeImage( new BitmapImage(new System.Uri(shortAutosFullPath)));
 
             var SetupNeutralAndGroundConbtnData = new PushButtonData("Configurar Neutro e Terra", "Configurar \nNeutro e Terra", Assembly.GetExecutingAssembly().Location, "AutoEletrica.SetupNeutralAndGroundCon")
             {
@@ -108,7 +108,6 @@ namespace AutoEletrica
             PushButton IdentifyElectricalElementsbtn = panelAnnotation.AddItem(IdentifyElectricalElementsbtnData) as PushButton;
             PushButton UpdateCircuitsInRevitbtn = panelAnnotation.AddItem(UpdateCircuitsInRevitbtnData) as PushButton;
             PushButton AssociateSwitchesbtn = panelAnnotation.AddItem(AssociateSwitchesbtnData) as PushButton;
-            PushButton SetupNeutralAndGroundConbtn = panelAnnotation.AddItem(SetupNeutralAndGroundConbtnData) as PushButton;
 
             PulldownButton ShortAutosPdBtn = panelAnnotation.AddItem(ShortAutosPd) as PulldownButton;
             ShortAutosPdBtn.AddPushButton(SetupNeutralAndGroundConbtnData);

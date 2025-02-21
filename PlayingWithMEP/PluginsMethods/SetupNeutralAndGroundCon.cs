@@ -12,7 +12,7 @@ using Autodesk.Revit.DB.Electrical;
 using ECs = AutoEletrica.ElectricalClasses;
 using Automations = AutoEletrica.ProjectAutomations;
 
-namespace AutoEletrica.PluginsMethods
+namespace AutoEletrica
 {
     [Transaction(TransactionMode.Manual)]
     [Regeneration(RegenerationOption.Manual)]
