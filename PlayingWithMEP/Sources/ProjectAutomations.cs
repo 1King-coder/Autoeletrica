@@ -598,12 +598,12 @@ namespace AutoEletrica
         {
             public GeneralShortAutomations(Document doc) : base(doc) { }
 
-            public void SetupCircuitsConnections(ECs.Panel panel, Document doc)
+            public void SetupCircuitsConnections(ECs.Panel panel)
             {
                 foreach (ECs.Circuit circ in panel.AssignedCircuits)
                 {
 
-                    Transaction t = new Transaction(doc);
+                    Transaction t = new Transaction(this.doc);
 
                     t.Start("Setting circuit " + circ.Name);
                     if (circ.Name.ToLower().Contains("iluminação") || circ.numOfGrounds == 0)

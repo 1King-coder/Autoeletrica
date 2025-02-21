@@ -39,9 +39,17 @@ namespace AutoEletrica.PluginsMethods
             ElectricalClasses.Panel panel = new ElectricalClasses.Panel(el, doc);
 
 
+            try
+            {
 
-            SetupCircuitsConnections(GetPanel(panel), doc);
-            TaskDialog.Show("macro executado", "circuitos configurados!");
+                (new ProjectAutomations.GeneralShortAutomations(doc)).SetupCircuitsConnections(panel);
+                TaskDialog.Show("macro executado", "circuitos configurados!");
+            }
+            catch (Exception e)
+            {
+                TaskDialog.Show("Erro", e.Message);
+            }
+
             return Result.Succeeded;
         }
     }
