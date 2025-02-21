@@ -594,7 +594,35 @@ namespace AutoEletrica
             }
 
         }
+        public class GeneralShortAutomations : ProjectAutomations
+        {
+            public GeneralShortAutomations(Document doc) : base(doc) { }
 
+            public void SetupCircuitsConnections(ECs.Panel panel, Document doc)
+            {
+                foreach (ECs.Circuit circ in panel.AssignedCircuits)
+                {
+
+                    Transaction t = new Transaction(doc);
+
+                    t.Start("Setting circuit " + circ.Name);
+                    if (circ.Name.ToLower().Contains("iluminação") || circ.numOfGrounds == 0)
+                    {
+                        circ.CircuitObj.LookupParameter("Circuito com Terra").Set(0);
+                    }
+
+                    if (circ.numOfNeutrals == 0)
+                    {
+                        circ.CircuitObj.LookupParameter("Circuito com Neutro").Set(0);
+                    }
+                    t.Commit();
+                }
+            }
+
+        }
 
     }
+    
+
+
 }
