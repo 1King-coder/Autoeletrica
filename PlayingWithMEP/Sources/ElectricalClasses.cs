@@ -159,6 +159,13 @@ namespace AutoEletrica
 
                 this.isNotReserveCircuit = this.Name.Contains("Reserva") ? 0 : 1;
 
+                this.TemDR = ES.LookupParameter("Tem DR").AsInteger();
+                this.CorrenteSuportadaDR = ES.LookupParameter("Corrente Suportada DR").AsInteger();
+                this.CorrenteDeProtecaoDR = ES.LookupParameter("Corrente de proteção DR").AsInteger();
+                this.TemNeutro = ES.LookupParameter("Circuito com Neutro").AsInteger();
+                this.TemTerra = ES.LookupParameter("Circuito com Terra").AsInteger();
+                this.NumeroDePolosDR = this.numOfPoles == 1 ? 2 : (this.numOfPoles == 2 && this.TemNeutro == 1 ? 4 : (this.numOfPoles == 3 ? 4 : 2));
+
 
             }
 
@@ -199,7 +206,13 @@ namespace AutoEletrica
             public string phaseALoad {  get; set; }
             public string phaseBLoad {  get; set; }
             public string phaseCLoad {  get; set; }
+            public int TemDR { get; set; }
+            public int CorrenteSuportadaDR { get; set; }
+            public int CorrenteDeProtecaoDR { get; set; }
+            public int NumeroDePolosDR { get; set; }
             public ElectricalSystem CircuitObj { get; set; }
+            public int TemNeutro { get; set; }
+            public int TemTerra { get; set; }
 
             public string circuitNumber { get; set; }
 
