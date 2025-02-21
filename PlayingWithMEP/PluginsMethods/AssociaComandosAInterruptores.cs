@@ -29,6 +29,7 @@ namespace AutoEletrica
 
             ElectricalClasses.Panel panel = new ElectricalClasses.Panel(el, doc);
             String abcd = "abcdefghijklmnopqrstuvwxyz";
+
             int counter = 0;
             panel.AssignedCircuits.ForEach(
                 (ElectricalClasses.Circuit circ) =>
@@ -41,7 +42,7 @@ namespace AutoEletrica
                                 Transaction trans = new Transaction(doc);
 
                                 trans.Start("Changing commands Ids");
-                                disp.dispositiveElement.LookupParameter("ID do comando").Set($"{panel.panelElement.LookupParameter("Comentários").AsValueString()}{abcd[counter]}");
+                                disp.dispositiveElement.LookupParameter("ID do comando").Set($"{panel.panelElement.LookupParameter("Número do QD").AsValueString()}{abcd[counter]}");
                                 trans.Commit();
                                 counter++;
                             }
