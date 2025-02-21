@@ -33,6 +33,8 @@ namespace AutoEletrica
             string identifyCircsPath = Path.Combine(Path.GetDirectoryName(thisdirectorypath), "Icons", "indentificadorEsquema.png");
             string updateCircsPath = Path.Combine(Path.GetDirectoryName(thisdirectorypath), "Icons", "updateCircuits.png");
             string associateSwitchesPath = Path.Combine(Path.GetDirectoryName(thisdirectorypath), "Icons", "associateSwitches.png");
+            string shortAutosFullPath = Path.Combine(Path.GetDirectoryName(thisdirectorypath), "Icons", "shortAutosFullPath.png");
+            string SetupNeutralAndGroundConPath = Path.Combine(Path.GetDirectoryName(thisdirectorypath), "Icons", "SetupNeutralAndGroundCon.png");
 
 
             application.CreateRibbonTab(tabName);
@@ -89,7 +91,16 @@ namespace AutoEletrica
 
             AssociateSwitchesbtnData.SetLargeImage(new BitmapImage(new System.Uri(associateSwitchesPath)));
 
+            PulldownButtonData ShortAutosPd = new PulldownButtonData("Automatizações curtas", "Automatizações curtas");
 
+            ShortAutosPd.Image = new BitmapImage(new System.Uri(shortAutosFullPath));
+
+            var SetupNeutralAndGroundConbtnData = new PushButtonData("Configurar Neutro e Terra", "Configurar \nNeutro e Terra", Assembly.GetExecutingAssembly().Location, "AutoEletrica.SetupNeutralAndGroundCon")
+            {
+                ToolTip = "Essa ferramenta é usada para configurar os circuitos de um quadro de distribuição, configurando os circuitos de iluminação e tomadas, e configurando os circuitos de ar condicionado e tomadas."
+            };
+
+            SetupNeutralAndGroundConbtnData.SetLargeImage(new BitmapImage(new System.Uri(SetupNeutralAndGroundConPath)));
 
             PushButton SendCircuitsToSheetsbtn = panelAnnotation.AddItem(SendCircuitsToSheetsbtnData) as PushButton;
             PushButton GenerateSingleLineDiagrambtn = panelAnnotation.AddItem(GenerateSingleLineDiagrambtnData) as PushButton;
@@ -97,6 +108,10 @@ namespace AutoEletrica
             PushButton IdentifyElectricalElementsbtn = panelAnnotation.AddItem(IdentifyElectricalElementsbtnData) as PushButton;
             PushButton UpdateCircuitsInRevitbtn = panelAnnotation.AddItem(UpdateCircuitsInRevitbtnData) as PushButton;
             PushButton AssociateSwitchesbtn = panelAnnotation.AddItem(AssociateSwitchesbtnData) as PushButton;
+            PushButton SetupNeutralAndGroundConbtn = panelAnnotation.AddItem(SetupNeutralAndGroundConbtnData) as PushButton;
+
+            PulldownButton ShortAutosPdBtn = panelAnnotation.AddItem(ShortAutosPd) as PulldownButton;
+            ShortAutosPdBtn.AddPushButton(SetupNeutralAndGroundConbtnData);
 
 
 

@@ -16,7 +16,7 @@ namespace AutoEletrica.PluginsMethods
 {
     [Transaction(TransactionMode.Manual)]
     [Regeneration(RegenerationOption.Manual)]
-    internal class AutoEletrica1 : IExternalCommand
+    internal class SetupNeutralAndGroundCon : IExternalCommand
     {
         private UIApplication uiapp;
         private Document doc;
