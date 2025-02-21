@@ -8,6 +8,7 @@ using Autodesk.Revit.UI;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.UI.Selection;
 using Autodesk.Revit.DB.Electrical;
+using AutoEletrica.Sources;
 
 namespace AutoEletrica
 {
@@ -25,7 +26,7 @@ namespace AutoEletrica
 
             
 
-            FamilyInstance el = utils.pickElement(sel);
+            FamilyInstance el = utils.pickElement(sel, new SelectionFilterPanels());
 
             ElectricalClasses.Panel panel = new ElectricalClasses.Panel(el, doc);
             String abcd = "abcdefghijklmnopqrstuvwxyz";
