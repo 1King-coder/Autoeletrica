@@ -569,6 +569,7 @@ namespace AutoEletrica
                     circuitIdenData.EReserva.Add("Não Reserva", circuit.isNotReserveCircuit == 1);
                     circuitIdenData.TemDR.Add("DR Visível", circuit.TemDR == 1);
                     
+                    
                     if (circuit.TemDR == 1)
                     {
                         circuitIdenData.CorrenteDoDR.Add("Corrente DR", circuit.CorrenteSuportadaDR);
@@ -618,13 +619,19 @@ namespace AutoEletrica
                     if (circ.LoadName.ToLower().Contains("iluminação") || numOfGrounds == 0)
                     {
                         circ.LookupParameter("Circuito com Terra").Set(0);
+                    } else
+                    {
+                        circ.LookupParameter("Circuito com Terra").Set(1);
                     }
 
                     if (numOfNeutrals == 0)
                     {
                         circ.LookupParameter("Circuito com Neutro").Set(0);
+                    } else
+                    {
+                        circ.LookupParameter("Circuito com Neutro").Set(1);
                     }
-                    t.Commit();
+                        t.Commit();
                 }
             }
 
