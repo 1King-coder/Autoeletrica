@@ -257,8 +257,8 @@ namespace AutoEletrica.Sources
                 { "Conectado a Fase A", Convert.ToDouble(circuit.phaseALoad) != 0 },
                 { "Conectado a Fase B", Convert.ToDouble(circuit.phaseBLoad) != 0 },
                 { "Conectado a Fase C", Convert.ToDouble(circuit.phaseCLoad) != 0 },
-                { "Conectado ao Neutro", circuit.TemNeutro != 0 },
-                { "Conectado ao Terra", circuit.TemTerra != 0 }
+                { "Conectado ao Neutro", circuit.TemNeutro == 1 },
+                { "Conectado ao Terra", circuit.TemTerra == 1}
             };
 
             return conexoes;
