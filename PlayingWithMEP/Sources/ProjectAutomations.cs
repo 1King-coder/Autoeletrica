@@ -605,22 +605,24 @@ namespace AutoEletrica
         {
             public GeneralShortAutomations(Document doc) : base(doc) { }
 
-            public void SetupCircuitsConnections(ECs.Panel panel)
+            public void SetupCircuitsConnections(ElectricalEquipment panel)
             {
-                foreach (ECs.Circuit circ in panel.AssignedCircuits)
+                foreach (ElectricalSystem circ in panel.GetAssignedElectricalSystems())
                 {
+                    int numOfGrounds = circ.get_Parameter(BuiltInParameter.RBS_ELEC_CIRCUIT_WIRE_NUM_GROUNDS_PARAM).AsInteger();
+                    int numOfNeutrals = circ.get_Parameter(BuiltInParameter.RBS_ELEC_CIRCUIT_WIRE_NUM_NEUTRALS_PARAM).AsInteger();
 
                     Transaction t = new Transaction(this.doc);
 
                     t.Start("Setting circuit " + circ.Name);
-                    if (circ.Name.ToLower().Contains("iluminação") || circ.numOfGrounds == 0)
+                    if (circ.LoadName.ToLower().Contains("iluminação") || numOfGrounds == 0)
                     {
-                        circ.CircuitObj.LookupParameter("Circuito com Terra").Set(0);
+                        circ.LookupParameter("Circuito com Terra").Set(0);
                     }
 
-                    if (circ.numOfNeutrals == 0)
+                    if (numOfNeutrals == 0)
                     {
-                        circ.CircuitObj.LookupParameter("Circuito com Neutro").Set(0);
+                        circ.LookupParameter("Circuito com Neutro").Set(0);
                     }
                     t.Commit();
                 }

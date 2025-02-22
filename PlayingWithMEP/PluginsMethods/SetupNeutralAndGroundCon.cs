@@ -36,7 +36,7 @@ namespace AutoEletrica
 
             FamilyInstance el = utils.pickElement(sel, new SelectionFilterPanels());
 
-            ElectricalClasses.Panel panel = new ElectricalClasses.Panel(el, doc);
+            ElectricalEquipment panel = el.MEPModel as ElectricalEquipment;
 
 
             try
