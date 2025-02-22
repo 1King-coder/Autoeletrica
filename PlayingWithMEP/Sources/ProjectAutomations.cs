@@ -567,7 +567,7 @@ namespace AutoEletrica
                     circuitIdenData.Frequencia.Add("Frequência", 60);
                     circuitIdenData.Potencia.Add("Potência Circuito", circuit.apparentload);
                     circuitIdenData.EReserva.Add("Não Reserva", circuit.isNotReserveCircuit == 1);
-                    circuitIdenData.TemDR.Add("Tem DR", circuit.TemDR == 1);
+                    circuitIdenData.TemDR.Add("DR Visível", circuit.TemDR == 1);
                     
                     if (circuit.TemDR == 1)
                     {
