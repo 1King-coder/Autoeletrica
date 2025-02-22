@@ -24,33 +24,34 @@ namespace AutoEletrica
 
             Utils utils = new Utils(doc);
 
-            
+
 
             FamilyInstance el = utils.pickElement(sel, new SelectionFilterPanels());
 
-            ElectricalClasses.Panel panel = new ElectricalClasses.Panel(el, doc);
+            ElectricalEquipment panel = el.MEPModel as ElectricalEquipment;
             String abcd = "abcdefghijklmnopqrstuvwxyz";
 
             int counter = 0;
-            panel.AssignedCircuits.ForEach(
-                (ElectricalClasses.Circuit circ) =>
-                {
-                    circ.dispositives.ForEach(
-                        (ElectricalClasses.Dispositive disp) =>
-                        {
-                            if (disp.categoryName == "Dispositivos de iluminação")
-                            {
-                                Transaction trans = new Transaction(doc);
+            foreach (ElectricalSystem circ in panel.GetAssignedElectricalSystems())
+            {
 
-                                trans.Start("Changing commands Ids");
-                                disp.dispositiveElement.LookupParameter("ID do comando").Set($"{panel.panelElement.LookupParameter("Número do QD").AsValueString()}{abcd[counter]}");
-                                trans.Commit();
-                                counter++;
-                            }
-                        }
-                    );
-                }
-            );
+
+                foreach (FamilyInstance disp in circ.Elements) {
+                    
+                    
+                    if (disp.Category.Name == "Dispositivos de iluminação")
+                    {
+                        Transaction trans = new Transaction(doc);
+
+                        trans.Start("Changing commands Ids");
+                        disp.LookupParameter("ID do comando").Set($"{el.LookupParameter("Número do QD").AsValueString()}{abcd[counter]}");
+                        trans.Commit();
+                        counter++;
+                    }
+                    
+                };
+                
+            };
 
             
 
