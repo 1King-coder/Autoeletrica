@@ -193,6 +193,8 @@ namespace AutoEletrica.Sources
         public Dictionary<string, int> CorrenteDeProtecaoDPS { get; set; }
         public Dictionary<string, int> TensaoNominalDPS { get; set; }
         public Dictionary<string, string> ClasseDeProtecaoDPS { get; set; }
+        public Dictionary<string, int> PotenciaInstalada { get; set; }
+        public Dictionary<string, int> PotenciaDemandada { get; set; }
 
         public ThreeLineDiagramBody ()
         {
@@ -211,6 +213,8 @@ namespace AutoEletrica.Sources
             CorrenteDeProtecaoDPS = new Dictionary<string, int>();
             TensaoNominalDPS = new Dictionary<string, int>();
             ClasseDeProtecaoDPS = new Dictionary<string, string>();
+            PotenciaInstalada = new Dictionary<string, int>();
+            PotenciaDemandada = new Dictionary<string, int>();
         }
 
     }

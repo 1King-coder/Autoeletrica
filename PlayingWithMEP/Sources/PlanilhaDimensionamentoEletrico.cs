@@ -180,11 +180,17 @@ namespace AutoEletrica
             return GetAllCircuitsDataFromCalcColumn(panel, "Q");
         }
 
-        public string GetDemandedLoadFromPanel ()
+        public int GetDemandedLoadFromPanel ()
         {
-            string demandedLoad = this.readData("Cálculo de Demanda", "G17:G17").Last().Last() as string;
+            int demandedLoad = (int)  ((float) this.readData("Cálculo de Demanda", "G17:G17").Last().Last() * 1000);
 
             return demandedLoad;
+        }
+
+        public int GetTotalLoadFromPanel()
+        {
+            List<int> totalLoad = this.readData("Quadro de Cargas", "X7:Z7").Last() as List<int>;
+            return totalLoad.Sum();
         }
 
         public Dictionary<string, Dictionary<string, string>> GetCircuitsLoadPerPhase (ElectricalClasses.Panel panel)

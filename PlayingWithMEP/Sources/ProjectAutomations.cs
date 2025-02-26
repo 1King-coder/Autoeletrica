@@ -255,6 +255,8 @@ namespace AutoEletrica
             public View singleLineView;
             public View threeLineView;
             private PlanilhaDimensionamentoEletrico planilha;
+            public int totalLoad { get; set; }
+            public int demandedLoad { get; set; }
 
 
             public GenerateDiagramsClass(Document doc, PlanilhaDimensionamentoEletrico planilha) : base(doc) 
@@ -270,6 +272,8 @@ namespace AutoEletrica
                 this.breakers = this.planilha.GetAllCircuitsBreakersAmps(panel);
                 this.cableSeccions = this.planilha.GetAllCircuitsCableSeccion(panel);
                 this.circuitsLoadsPerPhase = this.planilha.GetCircuitsLoadPerPhase(panel);
+                this.totalLoad = this.planilha.GetTotalLoadFromPanel();
+                this.demandedLoad = this.planilha.GetDemandedLoadFromPanel();
             }
 
             public FamilyInstance GenElectricalUtilitySymbol (ElectricalUtilityData elecUdata, FamilySymbol fmsym, XYZ insertionPt)
@@ -514,6 +518,8 @@ namespace AutoEletrica
 
                 threeLineDiagObj.NomeDoQD.Add("Nome do QD", panel.Name);
                 threeLineDiagObj.QtdeDeCircuitos.Add("Qtde circuitos", panel.AssignedCircuits.Count());
+                threeLineDiagObj.PotenciaInstalada.Add("Potência instalada", this.totalLoad);
+                threeLineDiagObj.PotenciaInstalada.Add("Potência demandada", this.demandedLoad);
 
                 Transaction trans = new Transaction(doc);
                 trans.Start("Generating Three-line diagram body");
@@ -527,7 +533,7 @@ namespace AutoEletrica
                 double circYpos = 0;
                 double rightCircXpos = ut.metersToFeet(4);
                 double leftCircXpos = 0;
-                bool sideFlag = true;
+                bool sideFlag = false;
                 FamilySymbol fsymCircuit;
                 string tipoAlimentacao;
 
