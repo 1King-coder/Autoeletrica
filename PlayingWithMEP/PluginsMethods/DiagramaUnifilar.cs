@@ -21,15 +21,8 @@ namespace AutoEletrica
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elementSet)
         {
-            UIApplication uiapp = commandData.Application;
-            Document doc = uiapp.ActiveUIDocument.Document;
-            Selection sel = uiapp.ActiveUIDocument.Selection;
-            Diagrams diagrams = new Diagrams(doc);
 
             new GenerateSingleLineDiagramForm(App.RevitTask).Show();
-
-
-
 
             return Result.Succeeded;
         }

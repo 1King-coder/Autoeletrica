@@ -108,6 +108,9 @@
     <Compile Include="Forms\GenerateSingleLineDiagramForm.xaml.cs">
       <DependentUpon>GenerateSingleLineDiagramForm.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\SendRoomsToSheets.xaml.cs">
+      <DependentUpon>SendRoomsToSheets.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\UpdateInRevitCircuits.xaml.cs">
       <DependentUpon>UpdateInRevitCircuits.xaml</DependentUpon>
     </Compile>
@@ -121,7 +124,7 @@
     <Compile Include="Forms\SendCircuitsToSheets.xaml.cs">
       <DependentUpon>SendCircuitsToSheets.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PluginsMethods\02_GettingEquipmentWithClasses  - Cópia .cs" />
+    <Compile Include="PluginsMethods\SendRoomsDataToSheets.cs" />
     <Compile Include="PluginsMethods\DiagramaUnifilar.cs" />
     <Compile Include="PluginsMethods\SendingCircuitsDataToSheets.cs" />
     <Compile Include="PluginsMethods\AssociaComandosAInterruptores.cs" />
@@ -161,6 +164,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Forms\GenerateSingleLineDiagramForm.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Forms\SendRoomsToSheets.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

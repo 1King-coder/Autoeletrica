@@ -27,12 +27,14 @@ namespace AutoEletrica
     internal class Utils
     {
 
-        private Document doc;
+        private Document doc { get; set; }
 
         public Utils (Document doc)
         {
             this.doc = doc;
         }
+
+        public Utils () { }
 
         public FamilyInstance pickElement (Selection sel)
         {

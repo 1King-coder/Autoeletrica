@@ -35,7 +35,7 @@ namespace AutoEletrica
             string associateSwitchesPath = Path.Combine(Path.GetDirectoryName(thisdirectorypath), "Icons", "associateSwitches.png");
             string shortAutosFullPath = Path.Combine(Path.GetDirectoryName(thisdirectorypath), "Icons", "shortAutosFullPath.png");
             string SetupNeutralAndGroundConPath = Path.Combine(Path.GetDirectoryName(thisdirectorypath), "Icons", "SetupNeutralAndGroundCon.png");
-
+            string SendRoomsToSheetsPath = Path.Combine(Path.GetDirectoryName(thisdirectorypath), "Icons", "EnviaAmbientesImg.png");
 
             application.CreateRibbonTab(tabName);
             RibbonPanel panelAnnotation = application.CreateRibbonPanel(tabName, panelAnnotationName);
@@ -102,6 +102,15 @@ namespace AutoEletrica
 
             SetupNeutralAndGroundConbtnData.SetLargeImage(new BitmapImage(new System.Uri(SetupNeutralAndGroundConPath)));
 
+            var sendRoomsToSheetsbtnData = new PushButtonData("Enviar Ambientes para Planilha", "Envia Ambientes", Assembly.GetExecutingAssembly().Location, "AutoEletrica.SendRoomsDataToSheets")
+            {
+                ToolTipImage = new BitmapImage(new System.Uri(SendRoomsToSheetsPath))
+                ,
+                ToolTip = "Essa ferramenta é usada para enviar dados dos ambientes de um projeto para planilha de dimensionamento"
+            };
+
+            sendRoomsToSheetsbtnData.SetLargeImage(new BitmapImage(new System.Uri(SendRoomsToSheetsPath)));
+
             PushButton SendCircuitsToSheetsbtn = panelAnnotation.AddItem(SendCircuitsToSheetsbtnData) as PushButton;
             PushButton GenerateSingleLineDiagrambtn = panelAnnotation.AddItem(GenerateSingleLineDiagrambtnData) as PushButton;
             PushButton GenerateThreeLineDiagrambtn = panelAnnotation.AddItem(GenerateThreeLineDiagrambtnData) as PushButton;
@@ -111,6 +120,7 @@ namespace AutoEletrica
             PulldownButton ShortAutosPdBtn = panelAnnotation.AddItem(ShortAutosPd) as PulldownButton;
             ShortAutosPdBtn.AddPushButton(SetupNeutralAndGroundConbtnData);
             ShortAutosPdBtn.AddPushButton(AssociateSwitchesbtnData);
+            ShortAutosPdBtn.AddPushButton(sendRoomsToSheetsbtnData);
 
 
 

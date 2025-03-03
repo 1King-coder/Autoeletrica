@@ -43,21 +43,19 @@ namespace AutoEletrica
             InitializeComponent();
             sendToSheetsCmd = new AsyncRelayCommand(SendToSheetsBtn_Click);
             loadRoomsDataCmd = new AsyncRelayCommand(loadRoomsToTable);
-            loadRoomsDataCmd.Execute(null);
             this.revitTask = revitTask;
-
-
         }
 
         private async Task loadRoomsToTable ()
         {
-            await revitTask.Run((uiapp) =>
+            this.Hide();
+            this.projectRooms = await revitTask.Run((uiapp) =>
             {
                 Document doc = uiapp.ActiveUIDocument.Document;
                 Utils utils = new Utils(doc);
                 List<RevitLinkInstance> rlis = utils.GetRevitLinks();
-
-                if (rlis.Count == 0) { TaskDialog.Show("Erro", "Não há vínculos de Revit no projeto."); return; }
+                List<Room> rooms = new List<Room>();
+                if (rlis.Count == 0) { TaskDialog.Show("Erro", "Não há vínculos de Revit no projeto."); return new List<Room>(); }
 
                 foreach (RevitLinkInstance rli in rlis )
                 {
@@ -67,19 +65,31 @@ namespace AutoEletrica
 
                     pjRooms.ForEach((Room r) =>
                     {
-                        RoomsDataGrid.Items.Add(
-                        new {
-                            Nome = r.Name,
-                            Area = utils.feetToMeters2(r.Area),
-                            Perimetro = utils.feetToMeters(r.Perimeter),
-                            level = r.Level.Name
-                        });
+                        rooms.Add(r);
                     });
-
-                    this.projectRooms.AddRange(pjRooms);
                 }
+
+                return rooms;
+                
             });
-            
+
+            Utils ut = new Utils();
+
+            this.projectRooms.ForEach((Room r) =>
+            {
+                RoomsDataGrid.Items.Add(new
+                {
+                    Name = r.Name,
+                    Area = ut.feetToMeters2(r.Area),
+                    Perimeter = ut.feetToMeters(r.Perimeter),
+                    level = r.Level.Name
+                });
+
+            });
+            this.Show();
+
+
+
         }
 
         private void SendToSheetsBtn_Click_1 (object sender, RoutedEventArgs e)
@@ -114,15 +124,16 @@ namespace AutoEletrica
             }
             TaskDialog.Show("Sucesso", $"Os dados de todos os Ambientes foram inseridos na planilha com sucesso!");
 
-
-
         }
 
         private void verifyLinkBtn_Click(object sender, RoutedEventArgs e)
         {
-            string spreadsheetLink = SheetsLinkTxtBox.Text.Trim();
+            string spreadsheetLink = SheetsLinkTxtBox.Text;
 
             if (spreadsheetLink == null) { TaskDialog.Show("Link inválido!", "O link que você inseriu não é válido."); return; }
+
+            spreadsheetLink = spreadsheetLink.Trim();
+
 
             string spreadsheetId = spreadsheetLink.Split('/')[5];
 
@@ -133,6 +144,11 @@ namespace AutoEletrica
                 SpreadsheetTitleLbl.Content = gSheets.GetSpreadsheetTitle();
             }
             catch (Exception ex) { TaskDialog.Show("Sheets ID é inválido", "ID da planilha é inválido!"); }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            loadRoomsDataCmd.Execute(null);
         }
     }
 }

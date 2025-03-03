@@ -192,7 +192,7 @@ namespace AutoEletrica
 
         public int GetTotalLoadFromPanel()
         {
-            List<int> totalLoad = this.readData("Quadro de Cargas", "X7:Z7").Last() as List<int>;
+            List<int> totalLoad = this.readData("Quadro de Carga", "X7:Z7").Last() as List<int>;
             return totalLoad.Sum();
         }
 
