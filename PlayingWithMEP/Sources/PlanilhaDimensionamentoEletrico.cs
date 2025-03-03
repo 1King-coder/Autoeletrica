@@ -78,9 +78,9 @@ namespace AutoEletrica
                     null,
                     null,
                     null,
-                    c.phaseALoad,
-                    c.phaseBLoad,
-                    c.phaseCLoad
+                    c.isNotReserveCircuit == 1 ? c.phaseALoad : "0",
+                    c.isNotReserveCircuit == 1 ? c.phaseBLoad : "0",
+                    c.isNotReserveCircuit == 1 ? c.phaseCLoad : "0"
                 };
 
                 formattedData.Add(circuitData_1);
