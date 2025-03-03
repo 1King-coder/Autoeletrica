@@ -427,7 +427,19 @@ namespace AutoEletrica
                 Transaction trans = new Transaction(doc);
                 trans.Start("Creating single line diagram rectangle");
 
-                ut.DrawRectangle(this.singleLineView, new XYZ(insertionPt.X + ut.metersToFeet(0.2), distribuitedInsertionPoints.First().Y + ut.metersToFeet(2), 0), new XYZ(insertionPt.X + ut.metersToFeet(6), distribuitedInsertionPoints.Last().Y - ut.metersToFeet(0.5), 0));
+                XYZ topLeftCorner = new XYZ(insertionPt.X + ut.metersToFeet(0.2), distribuitedInsertionPoints.First().Y + ut.metersToFeet(2), 0);
+                XYZ bottomRightCorner = new XYZ(insertionPt.X + ut.metersToFeet(6), distribuitedInsertionPoints.Last().Y - ut.metersToFeet(0.5), 0);
+
+                ut.DrawRectangle(this.singleLineView, topLeftCorner, bottomRightCorner);
+
+                FamilySymbol panelDataSym = this.diagrams.GetSingleLineDiagramPanelDataSymbol();
+                FamilyInstance panelDataInstance = this.doc.Create.NewFamilyInstance(topLeftCorner + new XYZ(ut.metersToFeet(0.1), ut.metersToFeet(0.1), 0), panelDataSym, this.singleLineView);
+                panelDataInstance.LookupParameter("Nome do Painel").Set(panel.Name);
+                panelDataInstance.LookupParameter("Pot. Instalada (VA)").Set(this.totalLoad);
+                panelDataInstance.LookupParameter("Pot. Demandada (VA)").Set(this.demandedLoad);
+                panelDataInstance.LookupParameter("Tensão").Set(panel.PanelObj.DistributionSystem.Name);
+                panelDataInstance.LookupParameter("Frequência").Set(60);
+
 
                 trans.Commit();
             }

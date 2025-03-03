@@ -36,6 +36,11 @@ namespace AutoEletrica
 
             return symbolFsym;
         }
+        
+        public FamilySymbol GetSingleLineDiagramPanelDataSymbol()
+        {
+            return GetGenericAnnotationFamilySymbolByFamilyNameAndTypeName("Dados do Painel", "Dados do Painel");
+        }
 
         public FamilySymbol GetThreeLineDiagramBodySymbol (string type)
         {
