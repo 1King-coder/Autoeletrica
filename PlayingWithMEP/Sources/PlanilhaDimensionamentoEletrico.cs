@@ -91,41 +91,44 @@ namespace AutoEletrica
             return formattedData;
         }
 
-        //public void SendRoomsToSheets(Document doc)
-        //{
+        public void SendRoomsToSheets(List<Room> projectRooms)
+        {
 
-        //    // TODO: Implementar a escrita dos dados de circuitos na planilha
-        //    // B8:C8;E8:F8;N8:R8;
-        //    string getRange(int rowNum)
-        //    {
-        //        return $"A{rowNum}:D{rowNum}";
-        //    }
-        //    Utils ut = new Utils(doc);
+            // TODO: Implementar a escrita dos dados de circuitos na planilha
+            // B8:C8;E8:F8;N8:R8;
+            string getRange(int row1, int row2)
+            {
+                return $"A{row1}:D{row2}";
+            }
 
-        //    List<Room> projectRooms = ut.getRoomsFromLevel(doc, doc.GetElement(doc.ActiveView.LevelId) as Level);
+            string sheet = "Informações do projeto";
 
-        //    string sheet = "Informações do projeto";
+            int row = 7;
 
-        //    int row = 7;
+            List<IList<object>> roomsData = new List<IList<object>>();
 
-        //    foreach (Room r in projectRooms)
-        //    {
-        //        List<object> roomData = new List<object>() {
-        //            r.Name,
-        //            "",
-        //            Math.Round(r.Area*Math.Pow(0.3048, 2), 2),
-        //            Math.Round(r.Perimeter*0.3048, 2),
-        //        };
+            foreach (Room r in projectRooms)
+            {
+                IList<object> roomData = new List<object>()
+                {
+                    r.Name,
+                    null,
+                    r.Area,
+                    r.Perimeter,
+                };
+                roomsData.Add(roomData);
+            }
 
+            try
+            {
+                this.editData(sheet, getRange(row, roomsData.Count + row), roomsData);
+            }
+            catch (Exception e)
+            {
+                TaskDialog.Show("Error", e.ToString());
+            }
 
-        //        this.editData(sheet, getRange(row), roomData);
-                
-        //        Thread.Sleep(150);
-
-        //        row++;
-
-        //    }
-        //}
+        }
 
         private Dictionary<string, string> GetAllCircuitsDataFromCalcColumn(ElectricalClasses.Panel panel, string column)
         {

@@ -58,6 +58,10 @@ namespace AutoEletrica
         {
             return feetNum / 3.281;
         }
+        public double feetToMeters2(double feetNum)
+        {
+            return feetNum / Math.Pow(3.281, 2);
+        }
 
         public double metersToFeet(double metersNum)
         {
@@ -393,12 +397,18 @@ namespace AutoEletrica
 
         }
 
-        public List<Room> getRoomsFromLevel(Document document, Level level)
+        public List<RevitLinkInstance> GetRevitLinks()
         {
+            return new FilteredElementCollector(this.doc)
+                .OfClass(typeof(RevitLinkInstance))
+                .Cast<RevitLinkInstance>().ToList();
+        }
 
-            List<Element> Rooms = new FilteredElementCollector(document).OfClass(typeof(SpatialElement)).WhereElementIsNotElementType().Where(room => room.GetType() == typeof(Room)).ToList();
+        public List<Room> getRoomsFromProject(Document document)
+        {
+            List<Room> rooms = new FilteredElementCollector(document).OfClass(typeof(SpatialElement)).Cast<Room>().ToList();
 
-            return Rooms.Where(room => document.GetElement(room.LevelId) == level).Select(r => r as Room).ToList();
+            return rooms;
         }
 
         public FilledRegionType GetFilledRegionType(string name)

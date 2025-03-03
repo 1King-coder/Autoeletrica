@@ -19,6 +19,7 @@ using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using System.Reflection;
 using System.Windows.Ink;
 using System.Collections.ObjectModel;
+using Autodesk.Revit.DB.Architecture;
 
 
 namespace AutoEletrica
@@ -440,7 +441,6 @@ namespace AutoEletrica
                 panelDataInstance.LookupParameter("Tensão").Set(panel.PanelObj.DistributionSystem.Name);
                 panelDataInstance.LookupParameter("Frequência").Set(60);
 
-
                 trans.Commit();
             }
 
@@ -637,7 +637,8 @@ namespace AutoEletrica
                     if (circ.LoadName.ToLower().Contains("iluminação") || numOfGrounds == 0)
                     {
                         circ.LookupParameter("Circuito com Terra").Set(0);
-                    } else
+                    }
+                    else
                     {
                         circ.LookupParameter("Circuito com Terra").Set(1);
                     }
@@ -645,7 +646,8 @@ namespace AutoEletrica
                     if (numOfNeutrals == 0)
                     {
                         circ.LookupParameter("Circuito com Neutro").Set(0);
-                    } else
+                    }
+                    else
                     {
                         circ.LookupParameter("Circuito com Neutro").Set(1);
                     }
@@ -653,8 +655,20 @@ namespace AutoEletrica
                 }
             }
 
-        }
+            public void SendRoomsDataToSheets(Document doc)
+            {
+                Utils ut = new Utils(doc);
 
+                List<RevitLinkInstance> rli = ut.GetRevitLinks();
+
+                foreach (RevitLinkInstance link in rli)
+                {
+                    Document linkDoc = link.GetLinkDocument();
+                    List<Room> rooms = ut.getRoomsFromProject(linkDoc);
+
+                }
+            }
+        }
     }
     
 

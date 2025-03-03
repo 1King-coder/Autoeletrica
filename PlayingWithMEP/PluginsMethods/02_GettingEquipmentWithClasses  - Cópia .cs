@@ -9,6 +9,7 @@ using Autodesk.Revit.Attributes;
 using Autodesk.Revit.UI.Selection;
 using Autodesk.Revit.DB.Electrical;
 using ECs = AutoEletrica.ElectricalClasses;
+using Autodesk.Revit.DB.Architecture;
 
 
 namespace AutoEletrica
@@ -26,16 +27,18 @@ namespace AutoEletrica
 
             Utils utils = new Utils(doc);
 
-            Transaction trans = new Transaction(doc);
+            utils.GetRevitLinks().ForEach((RevitLinkInstance rl)=>
+            {
+                Document linkedDoc = rl.GetLinkDocument();
 
-            trans.Start("Selection");
+                FilteredElementCollector fec = new FilteredElementCollector(linkedDoc);
 
-            FamilyInstance el = utils.pickElement(sel);
-            
-            trans.Commit();
-
-            ECs.Panel panel = new ECs.Panel(el, doc);
-            
+                TaskDialog.Show("Revit Link", linkedDoc.Title);
+                fec.OfClass(typeof(SpatialElement)).WhereElementIsNotElementType().ToElements().Cast<Room>().ToList().ForEach((Room e) =>
+                {
+                    TaskDialog.Show("Element", $"Name: {e.Name} \nArea: {utils.feetToMeters2(e.Area)} \nPerimeter: {utils.feetToMeters(e.Perimeter)}");
+                });
+            });
 
             return Result.Succeeded;
         }
