@@ -105,6 +105,8 @@ namespace AutoEletrica
 
             int row = 7;
 
+            Utils ut = new Utils();
+
             List<IList<object>> roomsData = new List<IList<object>>();
 
             foreach (Room r in projectRooms)
@@ -113,8 +115,8 @@ namespace AutoEletrica
                 {
                     r.Name,
                     null,
-                    r.Area,
-                    r.Perimeter,
+                    Math.Round(ut.feetToMeters2(r.Area), 2),
+                    Math.Round(ut.feetToMeters(r.Perimeter), 2),
                 };
                 roomsData.Add(roomData);
             }

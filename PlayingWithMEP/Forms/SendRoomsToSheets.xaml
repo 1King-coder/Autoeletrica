@@ -32,7 +32,7 @@
         <Label x:Name="SpreadsheetTitleLbl" Content="TíTULO DA PLANILHA" HorizontalAlignment="Left" Height="107" Margin="271,458,0,0" VerticalAlignment="Top" Width="486" Background="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="24" Grid.RowSpan="2"/>
         <Button x:Name="SendToSheetsBtn" Content="ENVIAR" HorizontalAlignment="Left" Height="129" Margin="148,102,0,0" VerticalAlignment="Top" Width="732" Background="White" BorderBrush="Black" FontSize="48" Click="SendToSheetsBtn_Click_1" Grid.Row="1"/>
         <Button x:Name="verifyLinkBtn" Content="Verificar" HorizontalAlignment="Left" Height="29" Margin="701,403,0,0" VerticalAlignment="Top" Width="163" BorderBrush="Black" FontSize="16" Click="verifyLinkBtn_Click"/>
-        <Button Content="Button" HorizontalAlignment="Left" Height="87" Margin="388,71,0,0" VerticalAlignment="Top" Width="294" Click="Button_Click"/>
+        <Button Content="Carregar Ambientes" HorizontalAlignment="Left" Height="87" Margin="388,71,0,0" VerticalAlignment="Top" Width="294" Click="Button_Click"/>
 
     </Grid>
 </Window>

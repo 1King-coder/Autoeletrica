@@ -61,7 +61,6 @@ namespace AutoEletrica
             try
             {
                 PlanilhaDimensionamentoEletrico planilha = new PlanilhaDimensionamentoEletrico(spreadsheetId);
-                planilha.SendCircuitsDataToSheets(this.selectedPanel);
 
                 await revitTask.Run((uiapp) =>
                 {
