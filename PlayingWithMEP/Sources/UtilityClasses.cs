@@ -143,6 +143,14 @@ namespace AutoEletrica.Sources
 
         public int Frequencia { get; set; }
 
+        public int TemDR { get; set; }
+
+        public int CorrenteDoDR { get; set; }
+
+        public int CorrenteDeProtecaoDR { get; set; }
+
+        public int NumeroDePolosDR { get; set; }
+
         public Dictionary<string, string> circuitLoadPerPhase { get; set; }
 
         public string GetPhasesWithLoad()

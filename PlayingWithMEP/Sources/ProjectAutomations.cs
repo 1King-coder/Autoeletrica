@@ -311,6 +311,10 @@ namespace AutoEletrica
                 circIden.LookupParameter("Número Circuito").Set(circuitsIdentifierData.NumeroCircuito);
                 circIden.LookupParameter("Tensão").Set(circuitsIdentifierData.Tensao);
                 circIden.LookupParameter("Frequência").Set(circuitsIdentifierData.Frequencia);
+                circIden.LookupParameter("DR Visível").Set(circuitsIdentifierData.TemDR);
+                circIden.LookupParameter("Corrente de Proteção DR (mA)").Set(circuitsIdentifierData.CorrenteDeProtecaoDR);
+                circIden.LookupParameter("Corrente do DR").Set(circuitsIdentifierData.CorrenteDoDR);
+                circIden.LookupParameter("Número de polos DR").Set(circuitsIdentifierData.NumeroDePolosDR);
 
                 trans.Commit();
 
@@ -357,6 +361,10 @@ namespace AutoEletrica
                 circuitsIdentifierData.CorrenteDisjuntor = Convert.ToInt32(this.breakers[circuit.circuitNumber]);
                 circuitsIdentifierData.Tensao = Convert.ToInt32(circuit.voltage);
                 circuitsIdentifierData.Frequencia = 60;
+                circuitsIdentifierData.TemDR = circuit.TemDR;
+                circuitsIdentifierData.CorrenteDeProtecaoDR = circuit.CorrenteDeProtecaoDR;
+                circuitsIdentifierData.CorrenteDoDR = circuit.CorrenteSuportadaDR;
+                circuitsIdentifierData.NumeroDePolosDR = circuit.NumeroDePolosDR;
 
                 return circuitsIdentifierData;
             }
@@ -399,7 +407,6 @@ namespace AutoEletrica
             {
                 
                 this.GetCircuitsInfosFromSpreadsheet(panel);
-
 
                 FamilySymbol fsymEU = this.diagrams.GetElectricalUtilityFamilySymbol(this.ut.GetShemeToDiagrams("3F + N + T"));
                 FamilySymbol fsymPanel = this.diagrams.GetElectricalEquipmentFamilySymbol(this.ut.GetShemeToDiagrams(panel.scheme));

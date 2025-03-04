@@ -34,7 +34,6 @@ namespace AutoEletrica
         private ECs.Panel selectedPanel;
 
         public IAsyncRelayCommand sendToSheetsCmd { get; private set; }
-        public IAsyncRelayCommand loadRoomsDataCmd { get; private set; }
 
         public List<Room> projectRooms = new List<Room>();
 
@@ -42,55 +41,9 @@ namespace AutoEletrica
         {
             InitializeComponent();
             sendToSheetsCmd = new AsyncRelayCommand(SendToSheetsBtn_Click);
-            loadRoomsDataCmd = new AsyncRelayCommand(loadRoomsToTable);
             this.revitTask = revitTask;
         }
 
-        private async Task loadRoomsToTable ()
-        {
-            this.Hide();
-            this.projectRooms = await revitTask.Run((uiapp) =>
-            {
-                Document doc = uiapp.ActiveUIDocument.Document;
-                Utils utils = new Utils(doc);
-                List<RevitLinkInstance> rlis = utils.GetRevitLinks();
-                List<Room> rooms = new List<Room>();
-                if (rlis.Count == 0) { TaskDialog.Show("Erro", "Não há vínculos de Revit no projeto."); return new List<Room>(); }
-
-                foreach (RevitLinkInstance rli in rlis )
-                {
-                    List<Room> pjRooms = utils.getRoomsFromProject(rli.Document);
-
-                    if (pjRooms.Count == 0) continue;
-
-                    pjRooms.ForEach((Room r) =>
-                    {
-                        rooms.Add(r);
-                    });
-                }
-
-                return rooms;
-                
-            });
-
-            Utils ut = new Utils();
-
-            this.projectRooms.ForEach((Room r) =>
-            {
-                RoomsDataGrid.Items.Add(new
-                {
-                    Name = r.Name,
-                    Area = ut.feetToMeters2(r.Area),
-                    Perimeter = ut.feetToMeters(r.Perimeter),
-                    level = r.Level.Name
-                });
-
-            });
-            this.Show();
-
-
-
-        }
 
         private void SendToSheetsBtn_Click_1 (object sender, RoutedEventArgs e)
         {
@@ -148,7 +101,19 @@ namespace AutoEletrica
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            loadRoomsDataCmd.Execute(null);
+            Utils ut = new Utils();
+
+            this.projectRooms.ForEach((Room r) =>
+            {
+                RoomsDataGrid.Items.Add(new
+                {
+                    Name = r.Name,
+                    Area = Math.Round(ut.feetToMeters2(r.Area), 2),
+                    Perimeter = Math.Round(ut.feetToMeters(r.Perimeter), 2),
+                    level = r.Level.Name
+                });
+
+            });
         }
     }
 }

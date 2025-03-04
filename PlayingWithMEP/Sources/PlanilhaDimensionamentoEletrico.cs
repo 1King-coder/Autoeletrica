@@ -185,9 +185,9 @@ namespace AutoEletrica
 
         public int GetDemandedLoadFromPanel ()
         {
-            double demandedLoad = Convert.ToDouble(this.readData("Cálculo de Demanda", "G17:G17").Last().Last());
+            double demandedLoad = Convert.ToDouble(this.readData("Cálculo de Demanda", "G17:G17").Last().Last()) * 1000;
 
-            return Convert.ToInt32(demandedLoad * 1000);
+            return Convert.ToInt32(demandedLoad);
         }
 
         public int GetTotalLoadFromPanel()

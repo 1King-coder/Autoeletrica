@@ -30,7 +30,7 @@ namespace AutoEletrica.PluginsMethods
         {
             PlanilhaDimensionamentoEletrico p = new PlanilhaDimensionamentoEletrico("1wVtyuVu6z8GwxDdQ2vmJiUagvQQ_OKLVDvF5IUzW2bI");
 
-            TaskDialog.Show("Planilha", $"{Convert.ToInt32( p.readData("Quadro de Carga", "X7:Z7").Last()[2])}");
+            TaskDialog.Show("Planilha", $"{Convert.ToInt32(Convert.ToDouble( p.readData("Cálculo de Demanda", "G17:G17").Last().Last()) * 1000)}");
 
             return Result.Succeeded;
         }

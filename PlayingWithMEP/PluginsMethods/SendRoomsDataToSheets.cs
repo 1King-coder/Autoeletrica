@@ -20,9 +20,22 @@ namespace AutoEletrica
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elementSet)
         {
+            Document doc = commandData.Application.ActiveUIDocument.Document;
 
+            SendRoomsToSheets screen = new SendRoomsToSheets(App.RevitTask);
 
-            new SendRoomsToSheets(App.RevitTask).Show();
+            Utils utils = new Utils(doc);
+
+            utils.GetRevitLinks().ForEach( (RevitLinkInstance rli) => {
+                Document rliDoc = rli.GetLinkDocument();
+
+                utils.getRoomsFromProject(rliDoc).ForEach((Room r) =>
+                {
+                    screen.projectRooms.Add(r);
+                });
+            });
+
+            screen.Show();
 
             return Result.Succeeded;
         }
