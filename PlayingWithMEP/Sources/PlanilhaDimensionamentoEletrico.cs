@@ -185,15 +185,19 @@ namespace AutoEletrica
 
         public int GetDemandedLoadFromPanel ()
         {
-            int demandedLoad = (int)  ((float) this.readData("Cálculo de Demanda", "G17:G17").Last().Last() * 1000);
+            double demandedLoad = Convert.ToDouble(this.readData("Cálculo de Demanda", "G17:G17").Last().Last());
 
-            return demandedLoad;
+            return Convert.ToInt32(demandedLoad * 1000);
         }
 
         public int GetTotalLoadFromPanel()
         {
-            List<int> totalLoad = this.readData("Quadro de Carga", "X7:Z7").Last() as List<int>;
-            return totalLoad.Sum();
+            int totalLoad = 0;
+            foreach (object load in this.readData("Quadro de Carga", "X7:Z7").Last())
+            {
+                totalLoad += Convert.ToInt32(load);
+            }
+            return totalLoad;
         }
 
         public Dictionary<string, Dictionary<string, string>> GetCircuitsLoadPerPhase (ElectricalClasses.Panel panel)
