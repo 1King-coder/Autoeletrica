@@ -207,6 +207,15 @@ namespace AutoEletrica
             return CircuitFamilySymbols.Where(x => x.Name.Equals("Tag de N Circ Legenda Pt Tomada")).First();
         }
 
+        public FamilySymbol SymbolIdForPowerDispositivesBelow100load()
+        {
+            IEnumerable<FamilySymbol> CircuitFamilySymbols = new FilteredElementCollector(this.doc).OfClass(typeof(FamilySymbol))
+                .Cast<FamilySymbol>().Where(x => x.FamilyName.Equals("Tag Numero do circuito em Tomada"));
+
+
+            return CircuitFamilySymbols.Where(x => x.Name.Equals("Tag Numero do circuito em Tomada")).First();
+        }
+
         public FamilySymbol SymbolIdForIluminationDispositives(string scheme)
         {
             IEnumerable<FamilySymbol> LuminaryFamilySymbol = new FilteredElementCollector(this.doc).OfClass(typeof(FamilySymbol))

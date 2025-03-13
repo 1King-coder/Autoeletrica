@@ -144,7 +144,7 @@ namespace AutoEletrica
                 {
                     foreach (ECs.Dispositive dispositive in circ.dispositives)
                     {
-                        FamilySymbol fsym = ut.SymbolIdForPowerDispositives();
+                        FamilySymbol fsym = dispositive.apparentLoad == 100 ? ut.SymbolIdForPowerDispositivesBelow100load() : ut.SymbolIdForPowerDispositives();
 
                         if (dispositive.dispType == "Lamp")
                         {
