@@ -88,7 +88,9 @@ namespace AutoEletrica
             public List<Circuit> SortCircuitsByNumber (List<Circuit> Circuits)
             {
                 List<Circuit> sortedCircuits = new List<Circuit> (Circuits.OrderBy((c) => {
-                    if (c.circuitNumber.Split(',').ToList().Count() > 1) { return Convert.ToInt32(c.circuitNumber.Split(',')[0]); } else { return Convert.ToInt32(c.circuitNumber); };
+                    String circNum = c.circuitNumber;
+                    circNum = circNum.Contains("-") ? circNum.Split('-')[1] : circNum;
+                    if (circNum.Split(',').ToList().Count() > 1) { return Convert.ToInt32(circNum.Split(',')[0]); } else { return Convert.ToInt32(circNum); };
                 }));
 
                 return sortedCircuits;
@@ -99,7 +101,6 @@ namespace AutoEletrica
             public int numOfGrounds { get; set; }
 
             public int numOfPoles { get; set; }
-
 
             public FamilyInstance panelElement { get; set; }
 

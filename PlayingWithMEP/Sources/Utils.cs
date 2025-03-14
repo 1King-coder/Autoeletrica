@@ -490,5 +490,16 @@ namespace AutoEletrica
 
 
         }
+
+        public List<FamilyInstance> GetFamilyInstancesByFamilyName (string familyName, bool includeRevitLinks)
+        {
+            List<FamilyInstance> fminstances = new FilteredElementCollector(this.doc)
+                .OfClass(typeof(FamilyInstance))
+                .Cast<FamilyInstance>()
+                .Where(x => x.Symbol.FamilyName.Equals(familyName))
+                .ToList();
+
+            return fminstances;
+        }
     }
 }

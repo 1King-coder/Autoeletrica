@@ -49,6 +49,16 @@ namespace AutoEletrica
             XYZ leaderElbowPt = null;
             try
             {
+                if (els.Count == 1)
+                {
+                    FamilyInstance el = els.Last();
+                    if (utils.isElectricEquipment(els.Last()))
+                    {
+                        ECs.Panel panel = new ECs.Panel(el, doc);
+                        identify.indentifyAllDispositivesFromPanel(panel);
+                        return Result.Succeeded;
+                    }
+                }
                 leaderEndPt = sel1.PickPoint("Selecione a posição da ponta da linha de chamada");
                 leaderElbowPt = sel2.PickPoint("Selecione a posição do cotovelo da linha de chamada");
 
