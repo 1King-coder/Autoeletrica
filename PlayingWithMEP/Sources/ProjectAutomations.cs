@@ -403,12 +403,14 @@ namespace AutoEletrica
 
 
 
-            public void GenSingleLineDiagramFromPanel (ECs.Panel panel, PanelIdentifierData panelIData, ElectricalUtilityData elecUData, XYZ insertionPt, bool ShowElecU)
+            public void GenSingleLineDiagramFromPanel (ECs.Panel panel, PanelIdentifierData panelIData, ElectricalUtilityData elecUData=null, XYZ insertionPt = null, bool ShowElecU=false)
             {
                 
                 this.GetCircuitsInfosFromSpreadsheet(panel);
 
+                
                 FamilySymbol fsymEU = this.diagrams.GetElectricalUtilityFamilySymbol(this.ut.GetShemeToDiagrams("3F + N + T"));
+
                 FamilySymbol fsymPanel = this.diagrams.GetElectricalEquipmentFamilySymbol(this.ut.GetShemeToDiagrams(panel.scheme));
 
                 if (ShowElecU)
@@ -436,15 +438,15 @@ namespace AutoEletrica
                 trans.Start("Creating single line diagram rectangle");
 
                 XYZ topLeftCorner = new XYZ(insertionPt.X + ut.metersToFeet(0.2), distribuitedInsertionPoints.First().Y + ut.metersToFeet(2), 0);
-                XYZ bottomRightCorner = new XYZ(insertionPt.X + ut.metersToFeet(6), distribuitedInsertionPoints[counter-1].Y - ut.metersToFeet(0.5), 0);
+                XYZ bottomRightCorner = new XYZ(insertionPt.X + ut.metersToFeet(6), distribuitedInsertionPoints.Last().Y - ut.metersToFeet(0.5), 0);
 
                 ut.DrawRectangle(this.singleLineView, topLeftCorner, bottomRightCorner);
 
                 FamilySymbol panelDataSym = this.diagrams.GetSingleLineDiagramPanelDataSymbol();
                 FamilyInstance panelDataInstance = this.doc.Create.NewFamilyInstance(topLeftCorner + new XYZ(ut.metersToFeet(0.1), ut.metersToFeet(0.1), 0), panelDataSym, this.singleLineView);
                 panelDataInstance.LookupParameter("Nome do Painel").Set(panel.Name);
-                panelDataInstance.LookupParameter("Pot. Instalada (VA)").Set(this.totalLoad);
-                panelDataInstance.LookupParameter("Pot. Demandada (VA)").Set(this.demandedLoad);
+                panelDataInstance.LookupParameter("Pot. Instalada (VA)").Set(Convert.ToInt32(this.totalLoad));
+                panelDataInstance.LookupParameter("Pot. Demandada (VA)").Set(Convert.ToInt32(this.demandedLoad));
                 panelDataInstance.LookupParameter("Tensão").Set(panel.PanelObj.DistributionSystem.Name);
                 panelDataInstance.LookupParameter("Frequência").Set(60);
 

@@ -151,21 +151,26 @@ namespace AutoEletrica
 
         private int CheckFieldsContent ()
         {
-            try
+            if (ShowElecUchkbox.IsChecked.Value)
             {
-                Convert.ToInt32(DisjuntorElecUtxtbox.Text);
-            } catch ( FormatException e )
-            {
-                return 0;   
+                try
+                {
+                    Convert.ToInt32(DisjuntorElecUtxtbox.Text);
+                }
+                catch (FormatException e)
+                {
+                    return 0;
+                }
+                try
+                {
+                    Convert.ToDouble(SeccionsElecUtxtbox.Text);
+                }
+                catch (FormatException e)
+                {
+                    return 1;
+                }
             }
-            try
-            {
-                Convert.ToDouble(SeccionsElecUtxtbox.Text);
-            }
-            catch (FormatException e)
-            {
-                return 1;
-            }
+            
             try
             {
                 Convert.ToInt32(DisjuntorPaneltxtbox.Text);
@@ -182,52 +187,57 @@ namespace AutoEletrica
             {
                 return 3;
             }
-            try
+            if (HasGeneralDRchkBox.IsChecked.Value)
             {
-                Convert.ToInt32(NumPolosDRtxtbox.Text);
+                try
+                {
+                    Convert.ToInt32(NumPolosDRtxtbox.Text);
+                }
+                catch (FormatException e)
+                {
+                    return 4;
+                }
+                try
+                {
+                    Convert.ToInt32(CorrenteDRtxtbox.Text);
+                }
+                catch (FormatException e)
+                {
+                    return 5;
+                }
+                try
+                {
+                    Convert.ToInt32(CorrenteProtDRtxtbox.Text);
+                }
+                catch (FormatException e)
+                {
+                    return 6;
+                }
             }
-            catch (FormatException e)
+            if (HasDPSchkbox.IsChecked.Value)
             {
-                return 4;
+                try
+                {
+                    Convert.ToInt32(TensaoNomDPStxtbox.Text);
+                }
+                catch (FormatException e)
+                {
+                    return 7;
+                }
+                try
+                {
+                    Convert.ToInt32(CorrenteDPStxtbox.Text);
+                }
+                catch (FormatException e)
+                {
+                    return 8;
+                }
+                if (!ClasseDPStxtbox.Text.ToLower().Contains("i") && !ClasseDPStxtbox.Text.ToLower().Contains("ii") && !ClasseDPStxtbox.Text.ToLower().Contains("iii"))
+                {
+                    return 9;
+                }
             }
-            try
-            {
-                Convert.ToInt32(CorrenteDRtxtbox.Text);
-            }
-            catch (FormatException e)
-            {
-                return 5;
-            }
-            try
-            {
-                Convert.ToInt32(CorrenteProtDRtxtbox.Text);
-            }
-            catch (FormatException e)
-            {
-                return 6;
-            }
-            try
-            {
-                Convert.ToInt32(TensaoNomDPStxtbox.Text);
-            }
-            catch (FormatException e)
-            {
-                return 7;
-            }
-            try
-            {
-                Convert.ToInt32(CorrenteDPStxtbox.Text);
-            }
-            catch (FormatException e)
-            {
-                return 8;
-            }
-
-            if (!ClasseDPStxtbox.Text.ToLower().Contains("i") && !ClasseDPStxtbox.Text.ToLower().Contains("ii") && !ClasseDPStxtbox.Text.ToLower().Contains("iii"))
-            {
-                return 9;
-            }
-
+            
             return -1;
 
         }
@@ -244,31 +254,37 @@ namespace AutoEletrica
 
         private PanelIdentifierData SetUpPanelIdentifierData(
             int CorrenteDisjuntorGeral,
-            string ClasseProtecaoDPS,
-            int CorrenteNominalDPS,
-            int TensaoNominalDPS,
-            int CorrenteDR,
-            int CorrenteProtecaoDR,
-            int NumeroPolosDR,
             double SeccaoCabos,
             int DPSneutro,
             int HasDPS,
-            int HasGeneralDR
+            int HasGeneralDR,
+            string ClasseProtecaoDPS = "",
+            int CorrenteNominalDPS = 0,
+            int TensaoNominalDPS = 0,
+            int CorrenteDR = 0,
+            int CorrenteProtecaoDR = 0,
+            int NumeroPolosDR = 0
            )
         {
             PanelIdentifierData panelIdentifierData = new PanelIdentifierData();
 
             panelIdentifierData.CorrenteDisjuntorGeral = CorrenteDisjuntorGeral;
-            panelIdentifierData.HasDPS = HasDPS;
-            panelIdentifierData.HasGeneralDR = HasGeneralDR;
-            panelIdentifierData.DPSneutro = DPSneutro;
-            panelIdentifierData.TensaoNominalDPS = TensaoNominalDPS;
-            panelIdentifierData.ClasseDeProtecaoDPS = ClasseProtecaoDPS;
-            panelIdentifierData.CorrenteNominalDPS = CorrenteNominalDPS;
-            panelIdentifierData.CorrenteDR = CorrenteDR;
-            panelIdentifierData.CorrenteProtecaoDR = CorrenteProtecaoDR;
-            panelIdentifierData.NumeroPolosDR = NumeroPolosDR;
             panelIdentifierData.SeccaoCabos = SeccaoCabos;
+            if (HasGeneralDR == 1)
+            {
+                panelIdentifierData.HasGeneralDR = HasGeneralDR;
+                panelIdentifierData.CorrenteDR = CorrenteDR;
+                panelIdentifierData.CorrenteProtecaoDR = CorrenteProtecaoDR;
+                panelIdentifierData.NumeroPolosDR = NumeroPolosDR;
+            }
+            if (HasDPS == 1)
+            {
+                panelIdentifierData.HasDPS = HasDPS;
+                panelIdentifierData.DPSneutro = DPSneutro;
+                panelIdentifierData.TensaoNominalDPS = TensaoNominalDPS;
+                panelIdentifierData.ClasseDeProtecaoDPS = ClasseProtecaoDPS;
+                panelIdentifierData.CorrenteNominalDPS = CorrenteNominalDPS;
+            }
 
             return panelIdentifierData;
         }
@@ -299,19 +315,24 @@ namespace AutoEletrica
 
             PanelIdentifierData panelIData = SetUpPanelIdentifierData(
                 Convert.ToInt32(DisjuntorPaneltxtbox.Text),
+                Convert.ToDouble(SeccionsPaneltxtbox.Text),
+                (bool) DPSforNeutralUchkbox.IsChecked ? 1 : 0,
+                (bool) HasDPSchkbox.IsChecked ? 1 : 0,
+                (bool) HasGeneralDRchkBox.IsChecked ? 1 : 0,
                 ClasseDPStxtbox.Text,
                 Convert.ToInt32(CorrenteDPStxtbox.Text),
                 Convert.ToInt32(TensaoNomDPStxtbox.Text),
                 Convert.ToInt32(CorrenteDRtxtbox.Text),
                 Convert.ToInt32(CorrenteProtDRtxtbox.Text),
-                Convert.ToInt32(NumPolosDRtxtbox.Text),
-                Convert.ToDouble(SeccionsPaneltxtbox.Text),
-                (bool) DPSforNeutralUchkbox.IsChecked ? 1 : 0,
-                (bool) HasDPSchkbox.IsChecked ? 1 : 0,
-                (bool) HasGeneralDRchkBox.IsChecked ? 1 : 0
+                Convert.ToInt32(NumPolosDRtxtbox.Text)
                 );
 
-            ElectricalUtilityData elecUData = SetUpElecetricalUtilityData(Convert.ToInt32(DisjuntorElecUtxtbox.Text), Convert.ToDouble(SeccionsElecUtxtbox.Text));
+            ElectricalUtilityData elecUData = null;
+
+            if (ShowElecUchkbox.IsChecked.Value)
+            {
+                elecUData = SetUpElecetricalUtilityData(Convert.ToInt32(DisjuntorElecUtxtbox.Text), Convert.ToDouble(SeccionsElecUtxtbox.Text));
+            }
 
             this.Hide();
             try
