@@ -90,6 +90,7 @@ namespace AutoEletrica
                 List<Circuit> sortedCircuits = new List<Circuit> (Circuits.OrderBy((c) => {
                     String circNum = c.circuitNumber;
                     circNum = circNum.Contains("-") ? circNum.Split('-')[1] : circNum;
+                    if (!circNum.Contains(",")) return Convert.ToInt32(circNum);
                     if (circNum.Split(',').ToList().Count() > 1) { return Convert.ToInt32(circNum.Split(',')[0]); } else { return Convert.ToInt32(circNum); };
                 }));
 

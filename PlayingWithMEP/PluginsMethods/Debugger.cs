@@ -28,9 +28,12 @@ namespace AutoEletrica.PluginsMethods
 
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elementSet)
         {
-            PlanilhaDimensionamentoEletrico p = new PlanilhaDimensionamentoEletrico("1wVtyuVu6z8GwxDdQ2vmJiUagvQQ_OKLVDvF5IUzW2bI");
+            doc = commandData.Application.ActiveUIDocument.Document;
 
-            TaskDialog.Show("Planilha", $"{Convert.ToInt32(Convert.ToDouble( p.readData("Cálculo de Demanda", "G17:G17").Last().Last()) * 1000)}");
+            Utils ut = new Utils(doc);
+
+            List<IndependentTag> fminst = ut.GetIndependentTagsByName("Tag de N Circ Legenda Pt Tomada");
+
 
             return Result.Succeeded;
         }

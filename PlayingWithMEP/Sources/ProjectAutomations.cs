@@ -436,7 +436,7 @@ namespace AutoEletrica
                 trans.Start("Creating single line diagram rectangle");
 
                 XYZ topLeftCorner = new XYZ(insertionPt.X + ut.metersToFeet(0.2), distribuitedInsertionPoints.First().Y + ut.metersToFeet(2), 0);
-                XYZ bottomRightCorner = new XYZ(insertionPt.X + ut.metersToFeet(6), distribuitedInsertionPoints.Last().Y - ut.metersToFeet(0.5), 0);
+                XYZ bottomRightCorner = new XYZ(insertionPt.X + ut.metersToFeet(6), distribuitedInsertionPoints[counter-1].Y - ut.metersToFeet(0.5), 0);
 
                 ut.DrawRectangle(this.singleLineView, topLeftCorner, bottomRightCorner);
 
@@ -558,7 +558,6 @@ namespace AutoEletrica
 
                 foreach (ECs.Circuit circuit in panel.AssignedCircuits)
                 {
-                    if (circuit.Name.ToLower().Contains("reserva")) { continue; }
 
                     switch (circuit.numOfPoles)
                     {
