@@ -372,11 +372,13 @@ namespace AutoEletrica
 
         public View GetViewByName (string name)
         {
-            return new FilteredElementCollector(this.doc)
+            List<View> views = new FilteredElementCollector(this.doc)
                 .OfCategory(BuiltInCategory.OST_Views)
                 .OfClass(typeof(View))
                 .Where(x => x.Name.Equals(name))
-                .Cast<View>().ToList().Last();
+                .Cast<View>().ToList();
+
+            return views.Count == 0 ? null : views.Last();
         }
 
         public string GetShemeToDiagrams (string sheme)
