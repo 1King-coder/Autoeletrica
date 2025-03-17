@@ -22,6 +22,7 @@ using System.Collections.ObjectModel;
 using Autodesk.Revit.DB.Architecture;
 using ricaun.Revit.UI.Tasks;
 using ricaun.Revit.Mvvm;
+using static AutoEletrica.ElectricalClasses;
 
 
 namespace AutoEletrica
@@ -156,14 +157,14 @@ namespace AutoEletrica
                             {
                                 fsym = ut.symbolIdForIluminationDispositivesOnWall();
                             }
-
-                            if (dispositive.dispositiveElement.Category.Name == "Dispositivos de iluminação")
-                            {
-                                fsym = ut.SymbolIdForSwitches();
-                            }
                         }
 
-                        XYZ tagPt = dispositive.location.Point + (dispositive.dispType == "Lamp" ? new XYZ() : dispositive.dispositiveInstance.FacingOrientation.Multiply( 0.5 * 0.3048) + new XYZ(0, - 0.1*0.3048, 0));
+                        if (dispositive.dispositiveElement.Category.Name.ToLower() == "dispositivos de iluminação")
+                        {
+                            fsym = ut.SymbolIdForSwitches();
+                        }
+
+                        XYZ tagPt = dispositive.location.Point + (dispositive.dispType == "Lamp" ? new XYZ() : dispositive.dispositiveInstance.FacingOrientation.Multiply(ut.metersToFeet(0.35)));
                         Reference dispRef = new Reference(dispositive.dispositiveElement);
 
                         IndependentTag tag = IndependentTag.Create(this.doc, fsym.Id, this.doc.ActiveView.Id, dispRef, false, TagOrientation.Horizontal, tagPt);
@@ -179,7 +180,7 @@ namespace AutoEletrica
                 
                 ElementId tagId = ut.GetDispositiveCircuitShemeSymbolId(dispositive);
 
-                if (dispositive.dispositiveElement.Name.Contains("Interruptor"))
+                if (dispositive.dispositiveElement.Category.Name.ToLower() == "dispositivos de iluminação")
                 {
                     tagId = ut.SymbolIdForSwitchesScheme().Id;
                 }
@@ -728,22 +729,33 @@ namespace AutoEletrica
 
             }
 
-            public changeDispositiveTagFor100Load (UIApplication uiapp)
+            public void changeDispositiveTagFor100Load (UIApplication uiapp)
             {
                 Document doc = uiapp.ActiveUIDocument.Document;
                 Selection sel = uiapp.ActiveUIDocument.Selection;
                 Utils ut = new Utils(doc);
                 List<IndependentTag> tags = ut.GetIndependentTagsByName("Tag de N Circ Legenda Pt Tomada");
                 
-
                 tags.ForEach((IndependentTag e) =>
                 {
                     List<FamilyInstance> taggedDispositives = e.GetTaggedLocalElements().Cast<FamilyInstance>().ToList();
-                    if (taggedDispositives.Count != 0)
+                    if (taggedDispositives.Count != 0 && taggedDispositives.First().Category.Name.ToLower() != "dispositivos de iluminação")
                     {
-                        
+                        try
+                        {
+                            if (taggedDispositives.First().LookupParameter("Potência Aparente (VA)").AsValueString() == "100 VA")
+                            {
+                                string fmsymName = ut.SymbolIdForPowerDispositivesBelow100load().Name;
+                                ut.ChangeTagByName(e, fmsymName, fmsymName);
+                            }
+                        } catch (Exception ex)
+                        {
+                            TaskDialog.Show("Errors", $"Erro ao trocar tags: {ex.ToString()}");
+                        }
                     }
                 });
+
+
 
             }
         }

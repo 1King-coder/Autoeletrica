@@ -19,6 +19,7 @@ using System.Windows;
 using Google.Apis.Sheets.v4.Data;
 using System.Windows.Media.TextFormatting;
 using System.Linq.Expressions;
+using Autodesk.Revit.Exceptions;
 
 
 
@@ -189,39 +190,32 @@ namespace AutoEletrica
             }
         }
 
+        public FamilySymbol GetFamilySymbolByFamilyNameAndTypeName(string familyName, string typeName)
+        {
+            return new FilteredElementCollector(this.doc)
+                .OfClass(typeof(FamilySymbol))
+                .Cast<FamilySymbol>().Where(x => x.FamilyName.Equals(familyName))
+                .Where(x => x.Name.Equals(typeName)).First();
+        }
+
         public FamilySymbol SymbolIdForPowerDispositives (string scheme) 
         {
-            IEnumerable<FamilySymbol> CircuitFamilySymbols = new FilteredElementCollector(this.doc).OfClass(typeof(FamilySymbol))
-                .Cast<FamilySymbol>().Where(x => x.FamilyName.Equals("Fiação - Tags Eletrical Fixtures - Dispositivos"));
-
-
-            return CircuitFamilySymbols.Where(x => x.Name.Equals(scheme)).First(); 
+            return this.GetFamilySymbolByFamilyNameAndTypeName("Fiação - Tags Eletrical Fixtures - Dispositivos", scheme); 
         }
 
         public FamilySymbol SymbolIdForPowerDispositives ()
         {
-            IEnumerable<FamilySymbol> CircuitFamilySymbols = new FilteredElementCollector(this.doc).OfClass(typeof(FamilySymbol))
-                .Cast<FamilySymbol>().Where(x => x.FamilyName.Equals("Tag de N Circ Legenda Pt Tomada"));
-
-
-            return CircuitFamilySymbols.Where(x => x.Name.Equals("Tag de N Circ Legenda Pt Tomada")).First();
+            return this.GetFamilySymbolByFamilyNameAndTypeName("Tag de N Circ Legenda Pt Tomada", "Tag de N Circ Legenda Pt Tomada");
         }
 
         public FamilySymbol SymbolIdForPowerDispositivesBelow100load()
         {
-            IEnumerable<FamilySymbol> CircuitFamilySymbols = new FilteredElementCollector(this.doc).OfClass(typeof(FamilySymbol))
-                .Cast<FamilySymbol>().Where(x => x.FamilyName.Equals("Tag Numero do circuito em Tomada"));
-
-
-            return CircuitFamilySymbols.Where(x => x.Name.Equals("Tag Numero do circuito em Tomada")).First();
+            return this.GetFamilySymbolByFamilyNameAndTypeName("Tag Numero do circuito em Tomada", "Tag Numero do circuito em Tomada");
         }
 
         public FamilySymbol SymbolIdForIluminationDispositives(string scheme)
         {
-            IEnumerable<FamilySymbol> LuminaryFamilySymbol = new FilteredElementCollector(this.doc).OfClass(typeof(FamilySymbol))
-                .Cast<FamilySymbol>().Where(x => x.FamilyName.Equals("Fiação - Tags Lighting Fixture - Luminarias"));
-
-            return LuminaryFamilySymbol.Where(x => x.Name.Equals(scheme)).First();
+            return this.GetFamilySymbolByFamilyNameAndTypeName("Fiação - Tags Lighting Fixture - Luminarias", scheme);
         }
 
         public FamilySymbol SymbolIdForSwitchesScheme ()
@@ -234,34 +228,22 @@ namespace AutoEletrica
 
         public FamilySymbol SymbolIdForSwitches()
         {
-            IEnumerable<FamilySymbol> LuminaryFamilySymbol = new FilteredElementCollector(this.doc).OfClass(typeof(FamilySymbol))
-                .Cast<FamilySymbol>().Where(x => x.FamilyName.Equals("Tag para Interruptor - Switch ID"));
-
-            return LuminaryFamilySymbol.Where(x => x.Name.Equals("Tag para Interruptor - Switch ID")).First();
+            return this.GetFamilySymbolByFamilyNameAndTypeName("Tag para Interruptor - Switch ID", "Tag para Interruptor - Switch ID");
         }
 
         public FamilySymbol symbolIdForIluminationDispositivesOnRoof()
         {
-            IEnumerable<FamilySymbol> LuminaryFamilySymbol = new FilteredElementCollector(this.doc).OfClass(typeof(FamilySymbol))
-                .Cast<FamilySymbol>().Where(x => x.FamilyName.Equals("Tag de Luminárias de Teto Circular"));
-
-            return LuminaryFamilySymbol.Where(x => x.Name.Equals("Tag de Luminárias de Teto Circular")).First();
+            return this.GetFamilySymbolByFamilyNameAndTypeName("Tag de Luminárias de Teto Circular", "Tag de Luminárias de Teto Circular");
         }
 
         public FamilySymbol symbolIdForIluminationDispositivesOnWall()
         {
-            IEnumerable<FamilySymbol> LuminaryFamilySymbol = new FilteredElementCollector(this.doc).OfClass(typeof(FamilySymbol))
-                .Cast<FamilySymbol>().Where(x => x.FamilyName.Equals("Tag de Luminárias na Parede"));
-
-            return LuminaryFamilySymbol.Where(x => x.Name.Equals("Tag de Luminárias na Parede")).First();
+            return this.GetFamilySymbolByFamilyNameAndTypeName("Tag de Luminárias na Parede", "Tag de Luminárias na Parede");
         }
 
         public FamilySymbol symbolIdForConduits()
         {
-            IEnumerable<FamilySymbol> ConduitFamilySymbol = new FilteredElementCollector(this.doc).OfClass(typeof(FamilySymbol))
-                .Cast<FamilySymbol>().Where(x => x.FamilyName.Equals("Tag Diametro de Eletroduto"));
-
-            return ConduitFamilySymbol.Where(x => x.Name.Equals("Tag Diametro de Eletroduto")).First();
+            return this.GetFamilySymbolByFamilyNameAndTypeName("Tag Diametro de Eletroduto", "Tag Diametro de Eletroduto");
         }
 
         public bool isDispositive (Element e)
@@ -547,9 +529,29 @@ namespace AutoEletrica
                 .ToList();
         }
 
-        public void ChangeTagTypeByName (IndependentTag tag, string newTypeName)
+        public void ChangeTagByName (IndependentTag tag, string newFamilyName, string newTypeName)
         {
-            tag.ChangeTypeId(this.symbolId);
+            try
+            {
+                using (Transaction t = new Transaction(this.doc, "Change Tag"))
+                {
+                    t.Start();
+                    IndependentTag.Create(
+                        this.doc,
+                        this.GetFamilySymbolByFamilyNameAndTypeName(newFamilyName, newTypeName).Id,
+                        tag.OwnerViewId,
+                        tag.GetTaggedReferences().ToList().First(),
+                        tag.HasLeader,
+                        tag.TagOrientation,
+                        tag.TagHeadPosition
+                    );
+                    this.doc.Delete(tag.Id);
+                    t.Commit();
+                }
+
+            } catch (Autodesk.Revit.Exceptions.InvalidOperationException e) {
+                TaskDialog.Show("Error", $"Erro ao realizar troca de familia: \n{e.ToString()}");
+            }
         }
 
     }

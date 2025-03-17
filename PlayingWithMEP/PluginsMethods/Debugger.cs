@@ -34,7 +34,7 @@ namespace AutoEletrica.PluginsMethods
             sel = uiapp.ActiveUIDocument.Selection;
             var autos = new Automations.GeneralShortAutomations(doc);
 
-            autos.StartIdentifySelectedConduits(uiapp);
+            autos.changeDispositiveTagFor100Load(uiapp);
 
 
             return Result.Succeeded;
