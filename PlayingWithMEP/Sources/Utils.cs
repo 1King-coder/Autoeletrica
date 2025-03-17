@@ -256,6 +256,14 @@ namespace AutoEletrica
             return LuminaryFamilySymbol.Where(x => x.Name.Equals("Tag de Luminárias na Parede")).First();
         }
 
+        public FamilySymbol symbolIdForConduits()
+        {
+            IEnumerable<FamilySymbol> ConduitFamilySymbol = new FilteredElementCollector(this.doc).OfClass(typeof(FamilySymbol))
+                .Cast<FamilySymbol>().Where(x => x.FamilyName.Equals("Tag Diametro de Eletroduto"));
+
+            return ConduitFamilySymbol.Where(x => x.Name.Equals("Tag Diametro de Eletroduto")).First();
+        }
+
         public bool isDispositive (Element e)
         {
             return e.Category.Name == "Dispositivos elétricos";
@@ -514,5 +522,35 @@ namespace AutoEletrica
 
             return indpTag;
         }
+
+        private bool verifyConduitIsTaggable(Conduit conduit)
+        {
+            LocationCurve cLocCurve = conduit.Location as LocationCurve;
+            Line cLine = cLocCurve.Curve as Line;
+            int diameter = Convert.ToInt32(conduit.get_Parameter(BuiltInParameter.RBS_CONDUIT_DIAMETER_PARAM).AsValueString());
+            if (diameter == 25) return false;
+
+            return this.feetToMeters(cLine.Length) > 0.3 && Math.Round(cLine.Direction.Z) == 0;
+        }
+
+        public List<Conduit> FilterTaggableConduits (List<Conduit> conduits)
+        {
+            return conduits.Where(x => this.verifyConduitIsTaggable(x)).ToList();
+        }
+
+        public List<Conduit> GetAllTaggableConduits()
+        {
+            return new FilteredElementCollector(this.doc)
+                .OfClass(typeof(Conduit))
+                .Cast<Conduit>()
+                .Where(x => this.feetToMeters(x.get_Parameter(BuiltInParameter.CURVE_ELEM_LENGTH).AsDouble()) > 2)
+                .ToList();
+        }
+
+        public void ChangeTagTypeByName (IndependentTag tag, string newTypeName)
+        {
+            tag.ChangeTypeId(this.symbolId);
+        }
+
     }
 }

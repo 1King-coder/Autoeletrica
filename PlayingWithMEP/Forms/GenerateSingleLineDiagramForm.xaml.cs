@@ -136,19 +136,6 @@ namespace AutoEletrica
             };
         }
 
-        private bool VerifyFieldsAreFilled ()
-        {
-            
-
-            foreach (string field in GetAllFieldsContent())
-            {
-                if (string.IsNullOrEmpty(field)) { return false; }
-            }
-
-            return true;
-            
-        }
-
         private int CheckFieldsContent ()
         {
             if (ShowElecUchkbox.IsChecked.Value)
@@ -293,11 +280,6 @@ namespace AutoEletrica
 
         private async Task GenDiagramBtn_Click()
         {
-            if (!VerifyFieldsAreFilled())
-            {
-                TaskDialog.Show("Erro", "Preencha todos os campos!");
-                return;
-            }
 
             if (CheckFieldsContent() != -1)
             {

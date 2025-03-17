@@ -36,6 +36,7 @@ namespace AutoEletrica
             string shortAutosFullPath = Path.Combine(Path.GetDirectoryName(thisdirectorypath), "Icons", "shortAutosFullPath.png");
             string SetupNeutralAndGroundConPath = Path.Combine(Path.GetDirectoryName(thisdirectorypath), "Icons", "SetupNeutralAndGroundCon.png");
             string SendRoomsToSheetsPath = Path.Combine(Path.GetDirectoryName(thisdirectorypath), "Icons", "EnviaAmbientesImg.png");
+            string TagConduitsPath = Path.Combine(Path.GetDirectoryName(thisdirectorypath), "Icons", "TagConduites.png");
 
             application.CreateRibbonTab(tabName);
             RibbonPanel panelAnnotation = application.CreateRibbonPanel(tabName, panelAnnotationName);
@@ -102,7 +103,7 @@ namespace AutoEletrica
 
             SetupNeutralAndGroundConbtnData.SetLargeImage(new BitmapImage(new System.Uri(SetupNeutralAndGroundConPath)));
 
-            var sendRoomsToSheetsbtnData = new PushButtonData("Enviar Ambientes para Planilha", "Envia Ambientes", Assembly.GetExecutingAssembly().Location, "AutoEletrica.SendRoomsDataToSheets")
+            var sendRoomsToSheetsbtnData = new PushButtonData("Envia Ambientes", "Enviar Ambientes para Planilha", Assembly.GetExecutingAssembly().Location, "AutoEletrica.SendRoomsDataToSheets")
             {
                 ToolTipImage = new BitmapImage(new System.Uri(SendRoomsToSheetsPath))
                 ,
@@ -110,6 +111,15 @@ namespace AutoEletrica
             };
 
             sendRoomsToSheetsbtnData.SetLargeImage(new BitmapImage(new System.Uri(SendRoomsToSheetsPath)));
+
+            var tagConduitsBtnData = new PushButtonData( "Identifica diâmetro dos Conduites", "Identificar Conduites", Assembly.GetExecutingAssembly().Location, "AutoEletrica.TagConduits")
+            {
+                ToolTipImage = new BitmapImage(new System.Uri(TagConduitsPath))
+                ,
+                ToolTip = "Essa ferramenta é usada para enviar dados dos ambientes de um projeto para planilha de dimensionamento"
+            };
+
+            tagConduitsBtnData.SetLargeImage(new BitmapImage(new System.Uri(TagConduitsPath)));
 
             PushButton SendCircuitsToSheetsbtn = panelAnnotation.AddItem(SendCircuitsToSheetsbtnData) as PushButton;
             PushButton GenerateSingleLineDiagrambtn = panelAnnotation.AddItem(GenerateSingleLineDiagrambtnData) as PushButton;
@@ -121,6 +131,7 @@ namespace AutoEletrica
             ShortAutosPdBtn.AddPushButton(SetupNeutralAndGroundConbtnData);
             ShortAutosPdBtn.AddPushButton(AssociateSwitchesbtnData);
             ShortAutosPdBtn.AddPushButton(sendRoomsToSheetsbtnData);
+            ShortAutosPdBtn.AddPushButton(tagConduitsBtnData);
 
 
 

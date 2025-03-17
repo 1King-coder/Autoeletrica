@@ -20,6 +20,8 @@ using System.Reflection;
 using System.Windows.Ink;
 using System.Collections.ObjectModel;
 using Autodesk.Revit.DB.Architecture;
+using ricaun.Revit.UI.Tasks;
+using ricaun.Revit.Mvvm;
 
 
 namespace AutoEletrica
@@ -676,7 +678,77 @@ namespace AutoEletrica
 
                 }
             }
+ 
+            public void StartIdentifySelectedConduits(UIApplication uiapp)
+            {
+                Document doc = uiapp.ActiveUIDocument.Document;
+                Selection sel = uiapp.ActiveUIDocument.Selection;
+                Utils ut = new Utils(doc);
+                List<Element> conduitsRef = null;
+                try
+                {
+                    conduitsRef = sel.PickElementsByRectangle().ToList();
+                }
+                catch (Autodesk.Revit.Exceptions.OperationCanceledException e)
+                {
+                    return;
+                }
+
+                if (conduitsRef == null || conduitsRef.Count() == 0)
+                {
+                    return;
+                }
+
+                List<Conduit> conduits = conduitsRef
+                    .Where(e => e.Category.Name == "Conduites")
+                    .Select(e => e as Conduit)
+                    .ToList();
+                List<Conduit> taggableConduits = ut.FilterTaggableConduits(conduits);
+
+                FamilySymbol fsym = ut.symbolIdForConduits();
+                Transaction taggingT = new Transaction(doc, "Tagging conduits");
+                
+                List<ElementId> taggedRuns = new List<ElementId>();
+
+                taggingT.Start();
+                foreach (Conduit c in taggableConduits) {
+                    if (taggedRuns.Contains(c.RunId))
+                    {
+                        continue;
+                    }
+                    Reference cRef = new Reference(c);
+                    LocationCurve LocCur = c.Location as LocationCurve;
+                    XYZ midPt = (LocCur.Curve.GetEndPoint(0) + LocCur.Curve.GetEndPoint(1)) / 2;
+                    XYZ tagPt = midPt + (LocCur.Curve as Line).Direction.CrossProduct(XYZ.BasisZ) * ut.metersToFeet(0.15);
+
+                    IndependentTag tag = IndependentTag.Create(this.doc, fsym.Id, this.doc.ActiveView.Id, cRef, false, TagOrientation.Horizontal, tagPt);
+                    taggedRuns.Add(c.RunId);
+                };
+                taggingT.Commit();
+
+            }
+
+            public changeDispositiveTagFor100Load (UIApplication uiapp)
+            {
+                Document doc = uiapp.ActiveUIDocument.Document;
+                Selection sel = uiapp.ActiveUIDocument.Selection;
+                Utils ut = new Utils(doc);
+                List<IndependentTag> tags = ut.GetIndependentTagsByName("Tag de N Circ Legenda Pt Tomada");
+                
+
+                tags.ForEach((IndependentTag e) =>
+                {
+                    List<FamilyInstance> taggedDispositives = e.GetTaggedLocalElements().Cast<FamilyInstance>().ToList();
+                    if (taggedDispositives.Count != 0)
+                    {
+                        
+                    }
+                });
+
+            }
         }
+
+
     }
     
 
