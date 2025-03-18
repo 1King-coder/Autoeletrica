@@ -732,7 +732,6 @@ namespace AutoEletrica
             public void changeDispositiveTagFor100Load (UIApplication uiapp)
             {
                 Document doc = uiapp.ActiveUIDocument.Document;
-                Selection sel = uiapp.ActiveUIDocument.Selection;
                 Utils ut = new Utils(doc);
                 List<IndependentTag> tags = ut.GetIndependentTagsByName("Tag de N Circ Legenda Pt Tomada");
                 

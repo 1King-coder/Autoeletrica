@@ -520,6 +520,14 @@ namespace AutoEletrica
             return conduits.Where(x => this.verifyConduitIsTaggable(x)).ToList();
         }
 
+        public List<IndependentTag> GetTagsInActiveView ()
+        {
+            return new FilteredElementCollector(this.doc, this.doc.ActiveView.Id)
+                .OfClass(typeof(IndependentTag))
+                .Cast<IndependentTag>()
+                .ToList();
+        }
+
         public List<Conduit> GetAllTaggableConduits()
         {
             return new FilteredElementCollector(this.doc)

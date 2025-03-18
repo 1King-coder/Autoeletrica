@@ -37,6 +37,7 @@ namespace AutoEletrica
             string SetupNeutralAndGroundConPath = Path.Combine(Path.GetDirectoryName(thisdirectorypath), "Icons", "SetupNeutralAndGroundCon.png");
             string SendRoomsToSheetsPath = Path.Combine(Path.GetDirectoryName(thisdirectorypath), "Icons", "EnviaAmbientesImg.png");
             string TagConduitsPath = Path.Combine(Path.GetDirectoryName(thisdirectorypath), "Icons", "TagConduites.png");
+            string change100VATagsPath = Path.Combine(Path.GetDirectoryName(thisdirectorypath), "Icons", "change100vaTags.png");
 
             application.CreateRibbonTab(tabName);
             RibbonPanel panelAnnotation = application.CreateRibbonPanel(tabName, panelAnnotationName);
@@ -116,10 +117,20 @@ namespace AutoEletrica
             {
                 ToolTipImage = new BitmapImage(new System.Uri(TagConduitsPath))
                 ,
-                ToolTip = "Essa ferramenta é usada para enviar dados dos ambientes de um projeto para planilha de dimensionamento"
+                ToolTip = "Essa ferramenta é usada para adicionar tags de diâmetro aos conduites selecionados" +
+                ""
             };
 
             tagConduitsBtnData.SetLargeImage(new BitmapImage(new System.Uri(TagConduitsPath)));
+
+            var change100vaTagsBtnData = new PushButtonData("Muda tags de TUGs", "Mudar Tags 100VA", Assembly.GetExecutingAssembly().Location, "AutoEletrica.ChangeDispositivesTags")
+            {
+                ToolTipImage = new BitmapImage(new System.Uri(change100VATagsPath))
+                ,
+                ToolTip = "Essa ferramenta é usada para alterar as tags removendo a potência de tags de dispositivos de 100VA"
+            };
+
+            change100vaTagsBtnData.SetLargeImage(new BitmapImage(new System.Uri(change100VATagsPath)));
 
             PushButton SendCircuitsToSheetsbtn = panelAnnotation.AddItem(SendCircuitsToSheetsbtnData) as PushButton;
             PushButton GenerateSingleLineDiagrambtn = panelAnnotation.AddItem(GenerateSingleLineDiagrambtnData) as PushButton;
@@ -132,6 +143,7 @@ namespace AutoEletrica
             ShortAutosPdBtn.AddPushButton(AssociateSwitchesbtnData);
             ShortAutosPdBtn.AddPushButton(sendRoomsToSheetsbtnData);
             ShortAutosPdBtn.AddPushButton(tagConduitsBtnData);
+            ShortAutosPdBtn.AddPushButton(change100vaTagsBtnData);
 
 
 

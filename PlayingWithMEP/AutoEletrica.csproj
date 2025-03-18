@@ -114,6 +114,7 @@
     <Compile Include="Forms\UpdateInRevitCircuits.xaml.cs">
       <DependentUpon>UpdateInRevitCircuits.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PluginsMethods\ChangeDispositivesTags .cs" />
     <Compile Include="PluginsMethods\TagConduits.cs" />
     <Compile Include="PluginsMethods\Debugger.cs" />
     <Compile Include="PluginsMethods\SetupNeutralAndGroundCon.cs" />
