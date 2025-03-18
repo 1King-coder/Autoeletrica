@@ -16,7 +16,7 @@ namespace AutoEletrica
 {
     [Transaction(TransactionMode.Manual)]
     [Regeneration(RegenerationOption.Manual)]
-    internal class ChangeDispositiveTags : IExternalCommand
+    internal class ChangeDispositivesTags : IExternalCommand
     {
         private UIApplication uiapp;
         private Document doc;
