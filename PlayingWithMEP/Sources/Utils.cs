@@ -562,5 +562,36 @@ namespace AutoEletrica
             }
         }
 
+        public IList<T> Map<T> (List<T> list, Func<T, T> mapFunc)
+        {
+            IList<T> mappedList = new List<T>();
+
+            foreach(T el in list)
+            {
+                mappedList.Add(mapFunc(el));
+            }
+
+            return mappedList;
+        }
+
+        public IList<G> Map<T, G> (IList<T> list, Func<T, G> mapFunc)
+        {
+            IList<G> mappedList = new List<G>();
+
+            foreach (T el in list)
+            {
+                mappedList.Add(mapFunc(el));
+            }
+
+            return mappedList;
+        }
+
+        public List<ElectricalLoadClassification> GetAllElectricalLoadClassifications ()
+        {
+            return new FilteredElementCollector(this.doc)
+                .OfClass(typeof(ElectricalLoadClassification))
+                .Cast<ElectricalLoadClassification>()
+                .ToList();
+        }
     }
 }

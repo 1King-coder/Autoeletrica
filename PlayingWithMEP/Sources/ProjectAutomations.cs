@@ -5,23 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-using Autodesk.Revit.Attributes;
 using Autodesk.Revit.UI.Selection;
 using Autodesk.Revit.DB.Electrical;
 using ECs = AutoEletrica.ElectricalClasses;
 using AutoEletrica.Sources;
-using System.Runtime.CompilerServices;
-using System.Threading;
-using System.Security.Cryptography;
-using Autodesk.Revit.Exceptions;
-using System.Net;
-using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using System.Reflection;
-using System.Windows.Ink;
-using System.Collections.ObjectModel;
 using Autodesk.Revit.DB.Architecture;
-using ricaun.Revit.UI.Tasks;
-using ricaun.Revit.Mvvm;
+
 using static AutoEletrica.ElectricalClasses;
 
 
@@ -629,7 +619,27 @@ namespace AutoEletrica
 
 
             }
+        }
+        public class CreateCircuits : ProjectAutomations
+        {
+            public CreateCircuits(Document doc) : base(doc) { }
 
+            public void CreateCircuit(string name, IList<ElementId> dispositives)
+            {
+                using (Transaction t = new Transaction(this.doc))
+                {
+                    t.Start("Creating circuit " + name);
+                    ElectricalSystem circuit = ElectricalSystem.Create(this.doc, dispositives, ElectricalSystemType.PowerCircuit);
+                    circuit.LookupParameter("Nome da carga").Set(name);
+                    string classes = "";
+
+                    
+
+                    TaskDialog.Show("Circuit load class", classes);
+
+                    t.Commit();
+                }
+            }
         }
         public class GeneralShortAutomations : ProjectAutomations
         {
@@ -753,9 +763,6 @@ namespace AutoEletrica
                         }
                     }
                 });
-
-
-
             }
         }
 

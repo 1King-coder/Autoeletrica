@@ -32,9 +32,17 @@ namespace AutoEletrica.PluginsMethods
             uiapp = commandData.Application;
 
             sel = uiapp.ActiveUIDocument.Selection;
-            var autos = new Automations.GeneralShortAutomations(doc);
+            var autos = new Automations.CreateCircuits(doc);
+            
+            utils = new Utils(doc);
 
-            autos.changeDispositiveTagFor100Load(uiapp);
+            IList<Element> els = sel.PickElementsByRectangle(new SelectionFilterDispositives());
+
+            IList<ElementId> elsIds = utils.Map<Element, ElementId>(els, (Element el) => el.Id);
+
+            autos.CreateCircuit("circ Teste", elsIds);
+
+
 
 
             return Result.Succeeded;
