@@ -593,5 +593,14 @@ namespace AutoEletrica
                 .Cast<ElectricalLoadClassification>()
                 .ToList();
         }
+
+        public List<WireType> GetAllWireType()
+        {
+            return new FilteredElementCollector(this.doc)
+                .OfClass(typeof(WireType))
+                .Cast<WireType>()
+                .ToList();
+        }
+
     }
 }
