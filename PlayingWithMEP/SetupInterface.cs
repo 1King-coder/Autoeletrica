@@ -38,6 +38,7 @@ namespace AutoEletrica
             string SendRoomsToSheetsPath = Path.Combine(Path.GetDirectoryName(thisdirectorypath), "Icons", "EnviaAmbientesImg.png");
             string TagConduitsPath = Path.Combine(Path.GetDirectoryName(thisdirectorypath), "Icons", "TagConduites.png");
             string change100VATagsPath = Path.Combine(Path.GetDirectoryName(thisdirectorypath), "Icons", "change100vaTags.png");
+            string CreateCircuitPath = Path.Combine(Path.GetDirectoryName(thisdirectorypath), "Icons", "CriarCircuitoIcon.png");
 
             application.CreateRibbonTab(tabName);
             RibbonPanel panelAnnotation = application.CreateRibbonPanel(tabName, panelAnnotationName);
@@ -132,11 +133,21 @@ namespace AutoEletrica
 
             change100vaTagsBtnData.SetLargeImage(new BitmapImage(new System.Uri(change100VATagsPath)));
 
+            var createCircuitBtnData = new PushButtonData("Criar Circuito", "Criar Circuito", Assembly.GetExecutingAssembly().Location, "AutoEletrica.CreateCircuits")
+            {
+                ToolTipImage = new BitmapImage(new System.Uri(CreateCircuitPath))
+                ,
+                ToolTip = "Essa ferramenta é usada para criar um circuito de um painel de distribuição"
+            };
+
+            createCircuitBtnData.SetLargeImage(new BitmapImage(new System.Uri(CreateCircuitPath)));
+
             PushButton SendCircuitsToSheetsbtn = panelAnnotation.AddItem(SendCircuitsToSheetsbtnData) as PushButton;
             PushButton GenerateSingleLineDiagrambtn = panelAnnotation.AddItem(GenerateSingleLineDiagrambtnData) as PushButton;
             PushButton GenerateThreeLineDiagrambtn = panelAnnotation.AddItem(GenerateThreeLineDiagrambtnData) as PushButton;
             PushButton IdentifyElectricalElementsbtn = panelAnnotation.AddItem(IdentifyElectricalElementsbtnData) as PushButton;
             PushButton UpdateCircuitsInRevitbtn = panelAnnotation.AddItem(UpdateCircuitsInRevitbtnData) as PushButton;
+            PushButton CreateCircuitbtn = panelAnnotation.AddItem(createCircuitBtnData) as PushButton;
 
             PulldownButton ShortAutosPdBtn = panelAnnotation.AddItem(ShortAutosPd) as PulldownButton;
             ShortAutosPdBtn.AddPushButton(SetupNeutralAndGroundConbtnData);

@@ -111,13 +111,14 @@
     <Compile Include="Forms\SendRoomsToSheets.xaml.cs">
       <DependentUpon>SendRoomsToSheets.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Form base.xaml.cs">
-      <DependentUpon>Form base.xaml</DependentUpon>
+    <Compile Include="Forms\CriacaoCircuitosForm.xaml.cs">
+      <DependentUpon>CriacaoCircuitosForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\UpdateInRevitCircuits.xaml.cs">
       <DependentUpon>UpdateInRevitCircuits.xaml</DependentUpon>
     </Compile>
     <Compile Include="PluginsMethods\ChangeDispositivesTags .cs" />
+    <Compile Include="PluginsMethods\CreateCircuits.cs" />
     <Compile Include="PluginsMethods\LoadNeededFamilies.cs" />
     <Compile Include="PluginsMethods\TagConduits.cs" />
     <Compile Include="PluginsMethods\Debugger.cs" />
@@ -180,7 +181,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Forms\Form base.xaml">
+    <Page Include="Forms\CriacaoCircuitosForm.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

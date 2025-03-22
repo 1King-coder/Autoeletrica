@@ -20,6 +20,7 @@ using Google.Apis.Sheets.v4.Data;
 using System.Windows.Media.TextFormatting;
 using System.Linq.Expressions;
 using Autodesk.Revit.Exceptions;
+using System.Text.RegularExpressions;
 
 
 
@@ -30,14 +31,14 @@ namespace AutoEletrica
 
         private Document doc { get; set; }
 
-        public Utils (Document doc)
+        public Utils(Document doc)
         {
             this.doc = doc;
         }
 
-        public Utils () { }
+        public Utils() { }
 
-        public FamilyInstance pickElement (Selection sel)
+        public FamilyInstance pickElement(Selection sel)
         {
             Reference pickedRef = null;
 
@@ -45,9 +46,9 @@ namespace AutoEletrica
             try
             {
                 pickedRef = sel.PickObject(ObjectType.Element, "Select the Eletric panel");
-                
+
             }
-            catch 
+            catch
             {
                 return null;
             }
@@ -57,7 +58,7 @@ namespace AutoEletrica
             return selectedPanel as FamilyInstance;
         }
 
-        public double feetToMeters (double feetNum)
+        public double feetToMeters(double feetNum)
         {
             return feetNum / 3.281;
         }
@@ -107,7 +108,7 @@ namespace AutoEletrica
                 return null;
             }
             List<FamilyInstance> FIlist = new List<FamilyInstance>();
-            foreach (Reference pickedRef in pickedRefs) 
+            foreach (Reference pickedRef in pickedRefs)
             {
                 FIlist.Add(this.doc.GetElement(pickedRef) as FamilyInstance);
             }
@@ -158,15 +159,15 @@ namespace AutoEletrica
             return pickedRef;
         }
 
-        public List<Conduit> GetConduitsFromPath (List<ElementId> cPath)
+        public List<Conduit> GetConduitsFromPath(List<ElementId> cPath)
         {
             return cPath.ConvertAll(elId => this.doc.GetElement(elId) as Conduit);
         }
-        public ElementId GetDispositiveCircuitShemeSymbolId (ElectricalClasses.Dispositive dispositive)
+        public ElementId GetDispositiveCircuitShemeSymbolId(ElectricalClasses.Dispositive dispositive)
         {
             ECs.Circuit dispCirc = new ECs.Circuit(dispositive.EScircuit, doc);
 
-            switch (dispCirc.scheme) 
+            switch (dispCirc.scheme)
             {
                 case "F + N + T":
                     if (dispositive.dispType == "Lamp") return this.SymbolIdForIluminationDispositives("1 FN").Id;
@@ -198,12 +199,12 @@ namespace AutoEletrica
                 .Where(x => x.Name.Equals(typeName)).First();
         }
 
-        public FamilySymbol SymbolIdForPowerDispositives (string scheme) 
+        public FamilySymbol SymbolIdForPowerDispositives(string scheme)
         {
-            return this.GetFamilySymbolByFamilyNameAndTypeName("Fiação - Tags Eletrical Fixtures - Dispositivos", scheme); 
+            return this.GetFamilySymbolByFamilyNameAndTypeName("Fiação - Tags Eletrical Fixtures - Dispositivos", scheme);
         }
 
-        public FamilySymbol SymbolIdForPowerDispositives ()
+        public FamilySymbol SymbolIdForPowerDispositives()
         {
             return this.GetFamilySymbolByFamilyNameAndTypeName("Tag de N Circ Legenda Pt Tomada", "Tag de N Circ Legenda Pt Tomada");
         }
@@ -218,7 +219,7 @@ namespace AutoEletrica
             return this.GetFamilySymbolByFamilyNameAndTypeName("Fiação - Tags Lighting Fixture - Luminarias", scheme);
         }
 
-        public FamilySymbol SymbolIdForSwitchesScheme ()
+        public FamilySymbol SymbolIdForSwitchesScheme()
         {
             IEnumerable<FamilySymbol> LuminaryFamilySymbol = new FilteredElementCollector(this.doc).OfClass(typeof(FamilySymbol))
                 .Cast<FamilySymbol>().Where(x => x.Category.BuiltInCategory == BuiltInCategory.OST_LightingDeviceTags);
@@ -246,12 +247,12 @@ namespace AutoEletrica
             return this.GetFamilySymbolByFamilyNameAndTypeName("Tag Diametro de Eletroduto", "Tag Diametro de Eletroduto");
         }
 
-        public bool isDispositive (Element e)
+        public bool isDispositive(Element e)
         {
             return e.Category.Name == "Dispositivos elétricos";
         }
 
-        public bool isLuminary (Element e)
+        public bool isLuminary(Element e)
         {
             return e.Category.Name == "Luminárias";
         }
@@ -260,24 +261,24 @@ namespace AutoEletrica
         {
             return e.Category.Name == "Equipamento elétrico";
         }
-        public bool isElectricalComponent (Element e )
+        public bool isElectricalComponent(Element e)
         {
-            return isDispositive (e) || isLuminary(e) || isElectricEquipment(e);
+            return isDispositive(e) || isLuminary(e) || isElectricEquipment(e);
         }
 
-        public List<ElectricalSystem> ESSetToList (ISet<ElectricalSystem> iset)
+        public List<ElectricalSystem> ESSetToList(ISet<ElectricalSystem> iset)
         {
             List<ElectricalSystem> newList = new List<ElectricalSystem>();
 
             foreach (ElectricalSystem el in iset)
             {
-                newList.Add (el);
+                newList.Add(el);
             }
 
             return newList;
         }
 
-        public Dictionary<string, Parameter> ParamMapToDictonary (ParameterMap paramMap)
+        public Dictionary<string, Parameter> ParamMapToDictonary(ParameterMap paramMap)
         {
 
             Dictionary<string, Parameter> newDictionary = new Dictionary<string, Parameter>();
@@ -290,12 +291,12 @@ namespace AutoEletrica
             return newDictionary;
         }
 
-        public int loadStringToInt (string loadString)
+        public int loadStringToInt(string loadString)
         {
             return Convert.ToInt32(loadString.Remove(loadString.Length - 2));
         }
 
-        public int voltageStringToInt (string voltageString)
+        public int voltageStringToInt(string voltageString)
         {
             return Convert.ToInt32(voltageString.Remove(voltageString.Length - 3));
         }
@@ -303,24 +304,24 @@ namespace AutoEletrica
         public List<Connector> GetDispositiveUsedConnectors(ECs.Dispositive dispositive)
         {
             ConnectorSet allCons = dispositive.connectorManager.Connectors;
-            List<Connector > AllconnectorsList = new List<Connector>();
+            List<Connector> AllconnectorsList = new List<Connector>();
 
             foreach (Connector con in allCons)
             {
-                AllconnectorsList.Add (con);
+                AllconnectorsList.Add(con);
             }
 
             return AllconnectorsList.Where((x) => !x.AllRefs.IsEmpty).ToList();
 
         }
 
-        public List<Connector> GetConnectorListFromConnectorSet (ConnectorSet connectorSet)
+        public List<Connector> GetConnectorListFromConnectorSet(ConnectorSet connectorSet)
         {
             List<Connector> connectorList = new List<Connector>();
 
             foreach (Connector con in connectorSet)
             {
-                connectorList.Add (con);
+                connectorList.Add(con);
             }
 
             return connectorList;
@@ -355,12 +356,12 @@ namespace AutoEletrica
             return AllconnectorsList.Where((x) => !x.AllRefs.IsEmpty).ToList();
         }
 
-        public bool isElbowConnectedToMultipleConduits (Conduit elbow)
+        public bool isElbowConnectedToMultipleConduits(Conduit elbow)
         {
             return GetConduitElbowUsedConnectors(elbow).Count > 2;
         }
 
-        public View GetViewByName (string name)
+        public View GetViewByName(string name)
         {
             List<View> views = new FilteredElementCollector(this.doc)
                 .OfCategory(BuiltInCategory.OST_Views)
@@ -371,9 +372,9 @@ namespace AutoEletrica
             return views.Count == 0 ? null : views.Last();
         }
 
-        public string GetShemeToDiagrams (string sheme)
+        public string GetShemeToDiagrams(string sheme)
         {
-            switch (sheme) 
+            switch (sheme)
             {
                 case "F + N":
                     return "1 FN";
@@ -421,11 +422,11 @@ namespace AutoEletrica
               .OfClass(typeof(FilledRegionType)).Last() as FilledRegionType;
         }
 
-        public Category GetLineStyleId (string name)
+        public Category GetLineStyleId(string name)
         {
-            
+
             Category c = doc.Settings.Categories.get_Item(BuiltInCategory.OST_Lines);
-            
+
             return c.SubCategories.get_Item(name);
         }
 
@@ -452,20 +453,20 @@ namespace AutoEletrica
                 TaskDialog.Show("Error", message);
                 return null;
             }
-            
+
             // Cria a região preenchida
-            FilledRegion filledRegion = FilledRegion.Create(doc, filledRegionType.Id, view.Id , profileloops);
+            FilledRegion filledRegion = FilledRegion.Create(doc, filledRegionType.Id, view.Id, profileloops);
             DetailElementOrderUtils.BringToFront(this.doc, view, filledRegion.Id);
 
             return filledRegion;
         }
 
-        public void DrawRectangle (View view, XYZ topLeftCorner, XYZ bottomRightCorner)
+        public void DrawRectangle(View view, XYZ topLeftCorner, XYZ bottomRightCorner)
         {
             XYZ topRigtCorner = new XYZ(bottomRightCorner.X, topLeftCorner.Y, 0);
             XYZ bottomLeftCorner = new XYZ(topLeftCorner.X, bottomRightCorner.Y, 0);
 
-            List<Line> lines = new List<Line>() 
+            List<Line> lines = new List<Line>()
             {
                 Line.CreateBound(topLeftCorner, topRigtCorner),
                 Line.CreateBound(topRigtCorner, bottomRightCorner),
@@ -483,7 +484,7 @@ namespace AutoEletrica
 
         }
 
-        public List<FamilyInstance> GetFamilyInstancesByFamilyName (string familyName, bool includeRevitLinks = false)
+        public List<FamilyInstance> GetFamilyInstancesByFamilyName(string familyName, bool includeRevitLinks = false)
         {
             List<FamilyInstance> fminstances = new FilteredElementCollector(this.doc)
                 .OfClass(typeof(FamilyInstance))
@@ -494,7 +495,7 @@ namespace AutoEletrica
             return fminstances;
         }
 
-        public List<IndependentTag> GetIndependentTagsByName (string name)
+        public List<IndependentTag> GetIndependentTagsByName(string name)
         {
             List<IndependentTag> indpTag = new FilteredElementCollector(this.doc)
                 .OfClass(typeof(IndependentTag))
@@ -515,12 +516,12 @@ namespace AutoEletrica
             return this.feetToMeters(cLine.Length) > 0.3 && Math.Round(cLine.Direction.Z) == 0;
         }
 
-        public List<Conduit> FilterTaggableConduits (List<Conduit> conduits)
+        public List<Conduit> FilterTaggableConduits(List<Conduit> conduits)
         {
             return conduits.Where(x => this.verifyConduitIsTaggable(x)).ToList();
         }
 
-        public List<IndependentTag> GetTagsInActiveView ()
+        public List<IndependentTag> GetTagsInActiveView()
         {
             return new FilteredElementCollector(this.doc, this.doc.ActiveView.Id)
                 .OfClass(typeof(IndependentTag))
@@ -537,7 +538,7 @@ namespace AutoEletrica
                 .ToList();
         }
 
-        public void ChangeTagByName (IndependentTag tag, string newFamilyName, string newTypeName)
+        public void ChangeTagByName(IndependentTag tag, string newFamilyName, string newTypeName)
         {
             try
             {
@@ -557,16 +558,18 @@ namespace AutoEletrica
                     t.Commit();
                 }
 
-            } catch (Autodesk.Revit.Exceptions.InvalidOperationException e) {
+            }
+            catch (Autodesk.Revit.Exceptions.InvalidOperationException e)
+            {
                 TaskDialog.Show("Error", $"Erro ao realizar troca de familia: \n{e.ToString()}");
             }
         }
 
-        public IList<T> Map<T> (List<T> list, Func<T, T> mapFunc)
+        public IList<T> Map<T>(List<T> list, Func<T, T> mapFunc)
         {
             IList<T> mappedList = new List<T>();
 
-            foreach(T el in list)
+            foreach (T el in list)
             {
                 mappedList.Add(mapFunc(el));
             }
@@ -574,7 +577,7 @@ namespace AutoEletrica
             return mappedList;
         }
 
-        public IList<G> Map<T, G> (IList<T> list, Func<T, G> mapFunc)
+        public IList<G> Map<T, G>(IList<T> list, Func<T, G> mapFunc)
         {
             IList<G> mappedList = new List<G>();
 
@@ -586,7 +589,7 @@ namespace AutoEletrica
             return mappedList;
         }
 
-        public List<ElectricalLoadClassification> GetAllElectricalLoadClassifications ()
+        public List<ElectricalLoadClassification> GetAllElectricalLoadClassifications()
         {
             return new FilteredElementCollector(this.doc)
                 .OfClass(typeof(ElectricalLoadClassification))
@@ -602,5 +605,65 @@ namespace AutoEletrica
                 .ToList();
         }
 
+        public List<FamilyInstance> GetAllElectricalEquipments()
+        {
+            return new FilteredElementCollector(this.doc)
+                .OfClass(typeof(FamilyInstance))
+                .Where(x => x.Category.Name == "Equipamento elétrico")
+                .Cast<FamilyInstance>()
+                .ToList();
+        }
+
+        public static int GetDispositiveApparentLoad (FamilyInstance dispositive)
+        {
+            return Convert.ToInt32(dispositive.LookupParameter("Potência Aparente (VA)").AsValueString().Replace(" VA", ""));
+        }
+
+        public static ParameterValue GetGlobalParameterParamValue (Document doc, string parameterName)
+        {
+            ElementId paramId = GlobalParametersManager.FindByName(doc, parameterName);
+            GlobalParameter fatorCorrecaoGlobalParam = (doc.GetElement(paramId) as GlobalParameter);
+            return fatorCorrecaoGlobalParam.GetValue();
+        }
+
+        public static double GetGlobalParameterDoubleValue(Document doc, string parameterName)
+        {
+            return (GetGlobalParameterParamValue(doc, parameterName) as DoubleParameterValue).Value;
+        }
+
+        public static bool isValidDispositive(Element element)
+        {
+            if (element == null) { return false; }
+
+            if (!(element is FamilyInstance)) { return false; }
+
+            List<BuiltInCategory> categories = new List<BuiltInCategory>() {
+                BuiltInCategory.OST_ElectricalFixtures,
+                BuiltInCategory.OST_LightingFixtures,
+                BuiltInCategory.OST_LightingDevices,
+                BuiltInCategory.OST_ElectricalEquipment,
+
+            };
+
+            if (!categories.Contains(element.Category.BuiltInCategory)) { return false; }
+
+            Regex er1 = new Regex(@"^(?!1\s)^\d+\s+Tomadas\s+.+$", RegexOptions.None);
+            Regex er2 = new Regex(@"^(?!1\s)^\d+\s+Teclas\s+.+$", RegexOptions.None);
+            Regex er3 = new Regex(@"^\d+\s+.+?\s+(?:e|\+)\s+\d+\s+.+?(?:\s+.+)?$", RegexOptions.None);
+
+            if (er1.IsMatch(element.Name)) { return false; }
+            if (er2.IsMatch(element.Name)) { return false; }
+            if (er3.IsMatch(element.Name)) { return false; }
+
+            return true;
+        }
+
+        internal class Enums
+        {
+
+            
+
+
+        }
     }
 }

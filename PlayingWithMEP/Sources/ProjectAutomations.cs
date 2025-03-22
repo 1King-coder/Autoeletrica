@@ -620,27 +620,30 @@ namespace AutoEletrica
 
             }
         }
-        public class CreateCircuits : ProjectAutomations
+
+
+        public static void CreateCircuit (
+            Document doc,
+            string name,
+            WireType wireType,
+            int temDR,
+            int CorrenteDr,
+            IList<ElementId> dispositives)
         {
-            public CreateCircuits(Document doc) : base(doc) { }
-
-            public void CreateCircuit(string name, IList<ElementId> dispositives)
+            using (Transaction t = new Transaction(doc))
             {
-                using (Transaction t = new Transaction(this.doc))
-                {
-                    t.Start("Creating circuit " + name);
-                    ElectricalSystem circuit = ElectricalSystem.Create(this.doc, dispositives, ElectricalSystemType.PowerCircuit);
-                    circuit.LookupParameter("Nome da carga").Set(name);
-                    string classes = "";
+                t.Start("Creating circuit " + name);
+                ElectricalSystem circuit = ElectricalSystem.Create(doc, dispositives, ElectricalSystemType.PowerCircuit);
+                circuit.LookupParameter("Tipo de fiação").Set(wireType.Id);
+                circuit.LookupParameter("Nome da carga").Set(name);
+                circuit.LookupParameter("Tem DR").Set(temDR);
+                circuit.LookupParameter("Corrente Suportada DR").Set(CorrenteDr);
+                circuit.LookupParameter("Corrente de proteção DR").Set(30);
 
-                    
-
-                    TaskDialog.Show("Circuit load class", classes);
-
-                    t.Commit();
-                }
+                t.Commit();
             }
         }
+            
         public class GeneralShortAutomations : ProjectAutomations
         {
             public GeneralShortAutomations(Document doc) : base(doc) { }

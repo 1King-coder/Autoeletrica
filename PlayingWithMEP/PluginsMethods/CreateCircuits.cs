@@ -12,11 +12,11 @@ using Autodesk.Revit.DB.Electrical;
 using ECs = AutoEletrica.ElectricalClasses;
 using Automations = AutoEletrica.ProjectAutomations;
 
-namespace AutoEletrica.PluginsMethods
+namespace AutoEletrica
 {
     [Transaction(TransactionMode.Manual)]
     [Regeneration(RegenerationOption.Manual)]
-    internal class Debugger : IExternalCommand
+    internal class CreateCircuits : IExternalCommand
     {
         private UIApplication uiapp;
         private Document doc;
@@ -50,10 +50,6 @@ namespace AutoEletrica.PluginsMethods
             CriacaoCircuitosForm createCircsForm = new CriacaoCircuitosForm(App.RevitTask, doc, wireTypes, panels, selectedEls);
 
             createCircsForm.Show();
-
-
-
-
 
             return Result.Succeeded;
         }
