@@ -37,6 +37,7 @@ namespace AutoEletrica
         public IAsyncRelayCommand SelecionaQD { get; private set; }
         public IAsyncRelayCommand AddDisp { get; private set; }
         public IAsyncRelayCommand RmDisp { get; private set; }
+        public IAsyncRelayCommand CreateCirc { get; private set; }
 
         private List<WireType> tiposFiacao { get; set; }
         private List<FamilyInstance> QDs { get; set; }
@@ -67,6 +68,7 @@ namespace AutoEletrica
             SelecionaQD = new AsyncRelayCommand(SelecionaQDNoProjeto);
             AddDisp = new AsyncRelayCommand(AddDispositivo);
             RmDisp = new AsyncRelayCommand(RmDispositivo);
+            CreateCirc = new AsyncRelayCommand(CreateCircuit);
             this.revitTask = revitTask;
             this.tiposFiacao = tiposFiacao;
             this.QDs = QDs;
@@ -242,7 +244,7 @@ namespace AutoEletrica
             RmDisp.Execute(null);
         }
 
-        private void CriarCircBtn_Click(object sender, RoutedEventArgs e)
+        private async Task CreateCircuit ()
         {
             FamilyInstance qd = this.selectedQD;
             WireType tipoFiação = this.WireTypesByName[TipoFiaçãoComboBox.SelectedItem.ToString()];
@@ -268,7 +270,12 @@ namespace AutoEletrica
                     TaskDialog.Show("Erro", "Nenhum dispositivo selecionado");
                     return;
                 }
-                ProjectAutomations.CreateCircuit(document, nomeCircuito, tipoFiação, TemDR, correnteDR, this.SelectedElements);
+
+                await revitTask.Run((UIApplication uiapp) =>
+                {
+                    Document doc = uiapp.ActiveUIDocument.Document;
+                    ProjectAutomations.CreateCircuit(doc, nomeCircuito, tipoFiação, this.selectedQD, TemDR, correnteDR, this.SelectedElements);
+                });
             }
             catch (Exception ex)
             {
@@ -278,6 +285,11 @@ namespace AutoEletrica
 
             TaskDialog.Show("Sucesso", $"Circuito {nomeCircuito} criado com sucesso");
             this.clearFormAfterCreation();
+        }
+
+        private void CriarCircBtn_Click (object sender, RoutedEventArgs e)
+        {
+            CreateCirc.Execute(null);
         }
 
         private void SelecionarQDBtn_Click(object sender, RoutedEventArgs e)

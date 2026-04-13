@@ -12,33 +12,14 @@ namespace AutoEletrica.Sources
 {
     public class SchemasManager
     {
-        public static Schema CreateSchema (Document doc, string name, Dictionary<string, Dictionary<string, Type>> fields, Guid uid)
+        public static Schema CreateSchema (Document doc, string name, Guid uid)
         {
             Transaction tcreateSchema = new Transaction(doc, "tCreating Schema");
             tcreateSchema.Start();
             SchemaBuilder schemaBuilder = new SchemaBuilder(uid);
             schemaBuilder.SetReadAccessLevel(AccessLevel.Public);
             schemaBuilder.SetSchemaName(name);
-
-            foreach (string key in fields.Keys.ToList())
-            {
-
-                string fieldType = fields[key].Keys.Last();
-
-                if (fieldType == "simple")
-                {
-                    schemaBuilder.AddSimpleField(key, fields[key][fieldType]);
-                    continue;
-                }
-                if (fieldType == "array")
-                {
-                    schemaBuilder.AddArrayField(key, fields[key][fieldType]);
-                    continue;
-                }
-
-
-            }
-            
+          
             Schema schema = schemaBuilder.Finish();
             tcreateSchema.Commit();
             return schema;

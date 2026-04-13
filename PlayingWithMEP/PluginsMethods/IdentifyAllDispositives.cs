@@ -40,9 +40,6 @@ namespace AutoEletrica
 
             this.utils = new Utils(doc);
             this.identify = new Automations.IdentifyCircuitsClass(doc);
-        
-
-
 
             List<FamilyInstance> els = utils.pickElements(sel1, new SelectionFilterDispositives());
             XYZ leaderEndPt = null;
@@ -88,6 +85,10 @@ namespace AutoEletrica
                         if (c.EScircuit.CircuitNumber.Split(',').ToList().Count() > 1) 
                         {
                             return Convert.ToInt32(c.EScircuit.CircuitNumber.Split(',')[0]); 
+                        }
+                        else if (c.EScircuit.CircuitNumber.Split('-').ToList().Count() > 1)
+                        {
+                            return Convert.ToInt32(c.EScircuit.CircuitNumber.Split('-')[1]);
                         }
                         else
                         {

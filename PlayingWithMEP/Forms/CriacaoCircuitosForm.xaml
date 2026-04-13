@@ -4,30 +4,29 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AutoEletrica"
-             mc:Ignorable="d"  Width="620" Height="500" MinHeight="500" MinWidth="620" MaxWidth="620" MaxHeight="500" HorizontalContentAlignment="Center">
+             mc:Ignorable="d"  Width="725" Height="500" MaxWidth="1000" MaxHeight="1000" HorizontalContentAlignment="Center">
     <Grid Margin="0,10,0,4" Background="LightGray">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
             <ColumnDefinition Width="0*"/>
         </Grid.ColumnDefinitions>
-        <Grid Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="0,0,0,10">
-            <Label x:Name="Titulo" Content="Criação de circuito" VerticalAlignment="Top"  FontFamily="Cascadia Mono" FontSize="18" FontWeight="Bold" Background="LightYellow" HorizontalAlignment="Right" Width="578" Grid.Row="0" HorizontalContentAlignment="Center"/>
-            <Label Content="Nome/Descrição:" Background="White" Margin="0,36,458,0" HorizontalContentAlignment="Center" FontFamily="Cascadia Mono" FontWeight="Bold" VerticalContentAlignment="Center" Height="25" VerticalAlignment="Top" HorizontalAlignment="Right" Width="122"/>
-            <TextBox x:Name="NomeCircuitoTxtbox" Margin="0,36,289,0" TextWrapping="Wrap" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="169" Height="25" VerticalAlignment="Top"/>
-            <Label Content="Tipo de Ligação:" Background="White" Margin="0,66,458,0" HorizontalContentAlignment="Center" FontFamily="Cascadia Mono" FontWeight="Bold" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="120" Height="25" VerticalAlignment="Top"/>
-            <ComboBox x:Name="TipoDeLigacaoComboBox" Margin="0,67,290,0" HorizontalAlignment="Right" Width="168" Height="24" VerticalAlignment="Top" />
-            <Label Content="Tensão:" Background="White" Margin="0,66,165,0" HorizontalContentAlignment="Center" FontFamily="Cascadia Mono" FontWeight="Bold" VerticalContentAlignment="Center" Height="25" VerticalAlignment="Top" HorizontalAlignment="Right" Width="121"/>
-            <ComboBox x:Name="TensaoComboBox" Margin="0,67,3,0" Height="24" VerticalAlignment="Top" HorizontalAlignment="Right" Width="161" SelectionChanged="TensaoComboBox_SelectionChanged"/>
-            <Label Content="Quadro de Distribuição:" Background="White" Margin="0,105,405,0" HorizontalContentAlignment="Center" FontFamily="Cascadia Mono" FontWeight="Bold" VerticalContentAlignment="Center" Height="25" VerticalAlignment="Top" HorizontalAlignment="Right" Width="173"/>
-            <ComboBox x:Name="QDComboBox" Margin="0,105,237,0" Height="24" VerticalAlignment="Top" HorizontalAlignment="Right" Width="168" SelectionChanged="QDComboBox_SelectionChanged"/>
-            <Button x:Name="SelecionarQDBtn" Content="Selecionar no projeto" Margin="0,105,26,0" FontFamily="Cascadia Mono" Height="24" VerticalAlignment="Top" HorizontalAlignment="Right" Width="176" Click="SelecionarQDBtn_Click"/>
-            <Label Content="Ou" HorizontalAlignment="Right" Margin="0,104,207,0" VerticalAlignment="Top"/>
-            <Button x:Name="AdicionarDispBtn" Background="LightGreen" Content="Adicionar" Margin="0,233,305,0" HorizontalAlignment="Right" Width="72" Height="33" VerticalAlignment="Top" FontFamily="Cascadia Code" FontWeight="Bold" Click="AdicionarDispBtn_Click"/>
-            <Button x:Name="RemoverDispBtn" Background="Red" Content="Remover" Margin="0,233,168,0" RenderTransformOrigin="-0.58,-0.933" HorizontalAlignment="Right" Width="72" Height="33" VerticalAlignment="Top" FontFamily="Cascadia Code" FontWeight="Bold" Click="RemoverDispBtn_Click"/>
-            <Label Content="Modificar elementos do circuito:" Background="White" Margin="186,203,0,0" HorizontalContentAlignment="Center" FontFamily="Cascadia Mono" FontWeight="Bold" VerticalContentAlignment="Center" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="240"/>
+        <Grid Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="0,0,0,10" Width="725">
+            <Label x:Name="Titulo" Content="Criação de circuito" VerticalAlignment="Top"  FontFamily="Cascadia Mono" FontSize="18" FontWeight="Bold" Background="LightYellow" HorizontalAlignment="Center" Width="725" Grid.Row="0" HorizontalContentAlignment="Center"/>
+            <Label Content="Nome/Descrição:" Background="White" Margin="55,36,0,0" HorizontalContentAlignment="Center" FontFamily="Cascadia Mono" FontWeight="Bold" VerticalContentAlignment="Center" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120"/>
+            <TextBox x:Name="NomeCircuitoTxtbox" Margin="0,37,379,0" TextWrapping="Wrap" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="171" Height="25" VerticalAlignment="Top"/>
+            <Label Content="Tipo de Ligação:" Background="White" Margin="0,67,550,0" HorizontalContentAlignment="Center" FontFamily="Cascadia Mono" FontWeight="Bold" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="120" Height="25" VerticalAlignment="Top"/>
+            <ComboBox x:Name="TipoDeLigacaoComboBox" Margin="0,68,379,0" HorizontalAlignment="Right" Width="171" Height="24" VerticalAlignment="Top" />
+            <Label Content="Tensão:" Background="White" Margin="0,67,253,0" HorizontalContentAlignment="Center" FontFamily="Cascadia Mono" FontWeight="Bold" VerticalContentAlignment="Center" Height="25" VerticalAlignment="Top" HorizontalAlignment="Right" Width="121"/>
+            <ComboBox x:Name="TensaoComboBox" Margin="0,68,44,0" Height="24" VerticalAlignment="Top" HorizontalAlignment="Right" Width="209" SelectionChanged="TensaoComboBox_SelectionChanged"/>
+            <ComboBox x:Name="QDComboBox" Margin="0,105,288,0" Height="24" VerticalAlignment="Top" HorizontalAlignment="Right" Width="168" SelectionChanged="QDComboBox_SelectionChanged"/>
+            <Button x:Name="SelecionarQDBtn" Content="Selecionar no projeto" Margin="0,105,77,0" FontFamily="Cascadia Mono" Height="24" VerticalAlignment="Top" HorizontalAlignment="Right" Width="176" Click="SelecionarQDBtn_Click"/>
+            <Label Content="Ou" HorizontalAlignment="Right" Margin="0,104,258,0" VerticalAlignment="Top"/>
+            <Button x:Name="AdicionarDispBtn" Background="LightGreen" Content="Adicionar" Margin="0,216,411,0" HorizontalAlignment="Right" Width="72" Height="33" VerticalAlignment="Top" FontFamily="Cascadia Code" FontWeight="Bold" Click="AdicionarDispBtn_Click"/>
+            <Button x:Name="RemoverDispBtn" Background="Red" Content="Remover" Margin="0,216,241,0" RenderTransformOrigin="-0.58,-0.933" HorizontalAlignment="Right" Width="72" Height="33" VerticalAlignment="Top" FontFamily="Cascadia Code" FontWeight="Bold" Click="RemoverDispBtn_Click"/>
+            <Label Content="Modificar elementos do circuito:" Background="White" Margin="0,183,0,0" HorizontalContentAlignment="Center" FontFamily="Cascadia Mono" FontWeight="Bold" VerticalContentAlignment="Center" Height="25" VerticalAlignment="Top" HorizontalAlignment="Center" Width="240"/>
             <Button x:Name="CriarCircBtn" Content="Criar circuito" HorizontalAlignment="Center" Margin="0,382,0,0" Width="560" Height="45" VerticalAlignment="Top" FontFamily="Cascadia Code" Click="CriarCircBtn_Click"/>
-            <WrapPanel HorizontalAlignment="Left" Height="106" Margin="147,271,0,0" VerticalAlignment="Top" Width="319">
+            <WrapPanel HorizontalAlignment="Center" Height="106" Margin="0,267,0,0" VerticalAlignment="Top" Width="319">
                 <Label Content="Potência Aparente (VA):" Height="26" Width="184"/>
                 <TextBox x:Name="PotAparenteTxtBox" Height="26" TextWrapping="Wrap" Width="134" IsEnabled="False"/>
                 <Label HorizontalAlignment="Center" Height="27" VerticalAlignment="Center" Width="184" Content="Qtde de elementos:"/>
@@ -40,15 +39,15 @@
                 <TextBox x:Name="CorrenteCorrigidaTxtBox" Height="26" TextWrapping="Wrap" Width="134" IsEnabled="False"/>
                 <Label Content="Total de dispositivos:" HorizontalAlignment="Center" Height="23" VerticalAlignment="Center" Width="130"/>
             </WrapPanel>
-            <Label Content="Quadro de Distribuição:" Background="White" Margin="0,105,405,0" HorizontalContentAlignment="Center" FontFamily="Cascadia Mono" FontWeight="Bold" VerticalContentAlignment="Center" Height="25" VerticalAlignment="Top" HorizontalAlignment="Right" Width="173"/>
-            <WrapPanel HorizontalAlignment="Left" Height="26" Margin="142,164,0,0" VerticalAlignment="Top" Width="316">
+            <Label Content="Quadro de Distribuição:" Background="White" Margin="0,105,456,0" HorizontalContentAlignment="Center" FontFamily="Cascadia Mono" FontWeight="Bold" VerticalContentAlignment="Center" Height="25" VerticalAlignment="Top" HorizontalAlignment="Right" Width="173"/>
+            <WrapPanel HorizontalAlignment="Left" Height="26" Margin="200,152,0,0" VerticalAlignment="Top" Width="316">
                 <CheckBox x:Name="TemDRChkBox" Content="Tem DR?" HorizontalAlignment="Center" VerticalAlignment="Center" Width="89" Height="23" VerticalContentAlignment="Center"/>
                 <Label Content="Corrente suportada:" Background="White" HorizontalContentAlignment="Center" FontFamily="Cascadia Mono" FontWeight="Bold" VerticalContentAlignment="Center" Height="23" VerticalAlignment="Center" HorizontalAlignment="Center" Width="147"/>
                 <TextBox x:Name="CorrenteDRTxtBox" TextWrapping="Wrap" VerticalContentAlignment="Center" HorizontalAlignment="Center" Width="80" Height="25" VerticalAlignment="Center"/>
             </WrapPanel>
-            <WrapPanel HorizontalAlignment="Left" Height="24" Margin="294,38,0,0" VerticalAlignment="Top" Width="286">
+            <WrapPanel Height="24" Margin="351,37,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="330">
                 <Label Content="Tipo de fiação:" Background="White" HorizontalContentAlignment="Center" FontFamily="Cascadia Mono" FontWeight="Bold" VerticalContentAlignment="Center" Height="24" VerticalAlignment="Center" HorizontalAlignment="Center" Width="123"/>
-                <ComboBox x:Name="TipoFiaçãoComboBox" Height="24" VerticalAlignment="Center" HorizontalAlignment="Center" Width="161"/>
+                <ComboBox x:Name="TipoFiaçãoComboBox" Height="24" VerticalAlignment="Center" HorizontalAlignment="Center" Width="205"/>
             </WrapPanel>
         </Grid>
 

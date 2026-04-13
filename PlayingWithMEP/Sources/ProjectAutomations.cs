@@ -206,8 +206,6 @@ namespace AutoEletrica
                     tag.SetLeaderElbow(dispRef, leaderElbowPt);
                     tag.TagHeadPosition = tagPt;
                 }
-                
-
 
                 transaction.Commit();
             }
@@ -626,6 +624,7 @@ namespace AutoEletrica
             Document doc,
             string name,
             WireType wireType,
+            FamilyInstance panel,
             int temDR,
             int CorrenteDr,
             IList<ElementId> dispositives)
@@ -639,6 +638,7 @@ namespace AutoEletrica
                 circuit.LookupParameter("Tem DR").Set(temDR);
                 circuit.LookupParameter("Corrente Suportada DR").Set(CorrenteDr);
                 circuit.LookupParameter("Corrente de proteção DR").Set(30);
+                circuit.SelectPanel(panel);
 
                 t.Commit();
             }

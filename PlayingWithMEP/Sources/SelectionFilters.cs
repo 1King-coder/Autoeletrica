@@ -6,10 +6,21 @@ using System.Text.RegularExpressions;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Autodesk.Revit.DB.Electrical;
 
 namespace AutoEletrica.Sources
 {
-    
+    internal class SelectionFilterElectricalSystems : ISelectionFilter
+    {
+        public bool AllowElement(Element element)
+        {
+            return element.Category.BuiltInCategory is BuiltInCategory.OST_ElectricalCircuit;
+        }
+        public bool AllowReference(Reference reference, XYZ position)
+        {
+            return false;
+        }
+    }
     internal class SelectionFilterNoSelectedDispositives : ISelectionFilter
     {
         private List<ElementId> selectedOnes;
@@ -21,9 +32,6 @@ namespace AutoEletrica.Sources
         {
             if (!Utils.isValidDispositive(element)) { return false; }
 
-            var circuito = (element as FamilyInstance).MEPModel.GetElectricalSystems();
-
-            if (circuito != null || circuito.Count != 0) { return false; }
             if (selectedOnes.Contains(element.Id)) { return false; }
 
             return true;
@@ -39,10 +47,6 @@ namespace AutoEletrica.Sources
         public bool AllowElement(Element element)
         {
             if (!Utils.isValidDispositive(element)) { return false; }
-
-            var circuito = (element as FamilyInstance).MEPModel.GetElectricalSystems();
-
-            if (circuito != null || circuito.Count != 0) { return false; }
 
             return true;
         }
@@ -64,9 +68,6 @@ namespace AutoEletrica.Sources
             if (!Utils.isValidDispositive(element)) { return false; }
 
 
-            var circuito = (element as FamilyInstance).MEPModel.GetElectricalSystems();
-
-            if (circuito != null || circuito.Count != 0) { return false; }
             if (!selectedOnes.Contains(element.Id)) { return false; }
 
             return true;

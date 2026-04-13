@@ -11,6 +11,7 @@ using Autodesk.Revit.UI.Selection;
 using Autodesk.Revit.DB.Electrical;
 using ECs = AutoEletrica.ElectricalClasses;
 using Automations = AutoEletrica.ProjectAutomations;
+using System.Windows;
 
 namespace AutoEletrica.PluginsMethods
 {
@@ -34,26 +35,11 @@ namespace AutoEletrica.PluginsMethods
             sel = uiapp.ActiveUIDocument.Selection;
             Utils utils = new Utils(doc);
 
-            List<FamilyInstance> panels  = utils.GetAllElectricalEquipments();
+            FamilyInstance disp = utils.pickElement(sel, new SelectionFilterDispositives());
 
-            List<WireType> wireTypes = utils.GetAllWireType();
+            List<List<Conduit>> conduitRunsConnected = Utils.GetAllConduitRunsConnectedToFamilyInstance(disp, doc);
 
-            IList<Reference> preSelectedEls = sel.PickObjects(ObjectType.Element, new SelectionFilterDispositives());
-
-            if (preSelectedEls.Count == 0)
-            {
-                return Result.Failed;
-            }
-
-            List<ElementId> selectedEls = utils.Map<Reference, ElementId>(preSelectedEls, (Reference x) => x.ElementId).ToList();
-
-            CriacaoCircuitosForm createCircsForm = new CriacaoCircuitosForm(App.RevitTask, doc, wireTypes, panels, selectedEls);
-
-            createCircsForm.Show();
-
-
-
-
+            MessageBox.Show("Conduit Runs Connected: " + conduitRunsConnected.Count);
 
             return Result.Succeeded;
         }

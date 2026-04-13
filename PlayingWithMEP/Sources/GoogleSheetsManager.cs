@@ -34,12 +34,8 @@ namespace AutoEletrica
         {
             GoogleCredential credential;
 
-            
-            
-            
             credential = GoogleCredential.FromJson(Properties.Resources.creds).CreateScoped(scopes);
             
-
             SheetsService service = new SheetsService(new BaseClientService.Initializer() {
                 HttpClientInitializer = credential,
                 ApplicationName = this.AppName

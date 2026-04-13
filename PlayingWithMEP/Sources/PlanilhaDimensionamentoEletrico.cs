@@ -20,10 +20,8 @@ namespace AutoEletrica
         public void SendCircuitsDataToSheets(ElectricalClasses.Panel panel)
         {
 
-            string sheet1 = "Quadro de Carga";
-            string sheet2 = "Dimensionamento das Seções";
-
-            
+            string sheet1 = "Quadro de carga";
+            string sheet2 = "Correção de corrente";
 
             List<IList<object>> circuitData_1 = this.FormatCircuitsDataToSend(panel.AssignedCircuits);
 
@@ -31,15 +29,12 @@ namespace AutoEletrica
 
             panel.AssignedCircuits.ForEach ((ElectricalClasses.Circuit c) => circsLengths.Add(new List<object>() { c.length}));
 
-            string range1 = $"B8:Z{panel.AssignedCircuits.Count() + 8}";
-            string range2 = $"O9:O{panel.AssignedCircuits.Count() + 9}";
+            string range1 = $"A2:K{panel.AssignedCircuits.Count() + 1}";
+            string range2 = $"H3:H{panel.AssignedCircuits.Count() + 3}";
             try
             {
-
                 this.editData(sheet1, range1, circuitData_1);
                 this.editData(sheet2, range2, circsLengths);
-                
-                
             } catch (Exception e)
             {
                 TaskDialog.Show("Error", e.ToString());
@@ -58,16 +53,8 @@ namespace AutoEletrica
                 {
                     c.circuitNumber,
                     c.Name,
-                    null,
-                    c.voltage,
                     c.Name.Contains("Iluminação") ? "F + N" : c.scheme,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
+                    c.voltage,
                     c.numOfDispositivesByLoad["Lamps"]["60"],
                     c.numOfDispositivesByLoad["Lamps"]["100"],
                     c.numOfDispositivesByLoad["TUGs-TUEs"]["100"],
@@ -101,9 +88,9 @@ namespace AutoEletrica
                 return $"A{row1}:D{row2}";
             }
 
-            string sheet = "Informações do projeto";
+            string sheet = "Quantidades MÍNIMAS";
 
-            int row = 7;
+            int row = 3;
 
             Utils ut = new Utils();
 

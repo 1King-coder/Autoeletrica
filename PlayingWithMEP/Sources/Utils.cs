@@ -58,6 +58,21 @@ namespace AutoEletrica
             return selectedPanel as FamilyInstance;
         }
 
+        public static double StaticfeetToMeters(double feetNum)
+        {
+            return feetNum / 3.281;
+        }
+
+        public static double StaticfeetToMeters2(double feetNum)
+        {
+            return feetNum / Math.Pow(3.281, 2);
+        }
+
+        public static double StaticmetersToFeet(double metersNum)
+        {
+            return metersNum / 0.3048;
+        }
+
         public double feetToMeters(double feetNum)
         {
             return feetNum / 3.281;
@@ -315,7 +330,77 @@ namespace AutoEletrica
 
         }
 
-        public List<Connector> GetConnectorListFromConnectorSet(ConnectorSet connectorSet)
+        public static List<Connector> GetElementUsedConnectors(FamilyInstance dispositive)
+        {
+            ConnectorSet allCons = dispositive.MEPModel.ConnectorManager.Connectors;
+            List<Connector> AllconnectorsList = new List<Connector>();
+
+            foreach (Connector con in allCons)
+            {
+                AllconnectorsList.Add(con);
+            }
+
+            return AllconnectorsList.Where((x) => !x.AllRefs.IsEmpty).ToList();
+
+        }
+
+        public static Element GetConnectedElement (ConnectorSet allRefs)
+        {
+            
+            return Utils.GetConnectorListFromConnectorSet(allRefs).First().Owner;
+        }
+
+        public static List<Connector> GetConnectorsWithConduits(List<Connector> connectors)
+        {
+            List<Connector> cCons = connectors
+                .Where((x) => Utils.GetConnectedElement(x.AllRefs).Category.BuiltInCategory == BuiltInCategory.OST_Conduit).ToList();
+
+            return cCons;
+        }
+
+        public List<Element> GetConduitsFromRunId (ElementId runId)
+        {
+            List<Element> conduits = new FilteredElementCollector(this.doc)
+                .OfCategory(BuiltInCategory.OST_Conduit)
+                .ToList();
+
+            List<Element> conduitsFromRun = new List<Element>();
+
+            foreach (Element cEl in conduits)
+            {
+                Conduit c = cEl as Conduit;
+                if (c == null) { continue; }
+                if (c.RunId == runId)
+                {
+                    conduitsFromRun.Add(cEl);
+                }
+            }
+
+            return conduitsFromRun;
+        }
+
+        public static List<List<Conduit>> GetAllConduitRunsConnectedToFamilyInstance (FamilyInstance fi, Document doc)
+        {
+            List<Connector> usedCons = Utils.GetElementUsedConnectors(fi);
+            List<Connector> cCons = Utils.GetConnectorsWithConduits(usedCons);
+            List<List<Conduit>> ConduitRuns = new List<List<Conduit>>();
+
+            foreach (Connector cCon in cCons)
+            {
+                Conduit connectedConduit = Utils.GetConnectedElement(cCon.AllRefs) as Conduit;
+                List<Element> conduits = new Utils(doc).GetConduitsFromRunId(connectedConduit.RunId);
+                List<Conduit> conduitsList = new List<Conduit>();
+                foreach (Element cEl in conduits)
+                {
+                    conduitsList.Add(cEl as Conduit);
+                }
+
+                ConduitRuns.Add(conduitsList);
+            }
+            return ConduitRuns;
+        }
+
+        public static List<Connector> GetConnectorListFromConnectorSet(ConnectorSet connectorSet)
         {
             List<Connector> connectorList = new List<Connector>();
 
@@ -506,6 +591,13 @@ namespace AutoEletrica
             return indpTag;
         }
 
+        public XYZ GetConduitMiddlePoint(Conduit conduit)
+        {
+            LocationCurve cLocCurve = conduit.Location as LocationCurve;
+            Line cLine = cLocCurve.Curve as Line;
+            return cLine.GetEndPoint(0).Add(cLine.GetEndPoint(1)).Divide(2);
+        }
+
         private bool verifyConduitIsTaggable(Conduit conduit)
         {
             LocationCurve cLocCurve = conduit.Location as LocationCurve;
@@ -657,6 +749,7 @@ namespace AutoEletrica
 
             return true;
         }
+
 
         internal class Enums
         {

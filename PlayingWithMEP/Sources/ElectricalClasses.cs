@@ -137,13 +137,16 @@ namespace AutoEletrica
 
                 this.apparentload = u.loadStringToInt(apparentLoadString);
 
-                this.length = GetLongerPath(ES, doc);
+
 
                 this.typeId = ES.GetTypeId();
 
                 this.levelId = ES.LevelId;
 
                 this.dispositives = getDispositives(ES.Elements, doc);
+                XYZ loadCenterOfMass = GetLoadCenterOfMass(this.dispositives);
+
+                this.length = GetDistanceFromPointToPanel(loadCenterOfMass, doc);
 
                 this.voltage = u.voltageStringToInt(ES.get_Parameter(BuiltInParameter.RBS_ELEC_VOLTAGE).AsValueString());
 
@@ -171,23 +174,41 @@ namespace AutoEletrica
 
             }
 
-            public static double GetLongerPath(ElectricalSystem ES, Document doc)
+            public static XYZ GetLoadCenterOfMass (List<Dispositive> dispositives)
             {
-                Transaction changeTrans1 = new Transaction(doc);
-                Transaction changeTrans2 = new Transaction(doc);
+                double totalLoad = 0;
+                double totalX = 0;
+                double totalY = 0;
+                double totalZ = 0;
+                foreach (Dispositive d in dispositives)
+                {
+                    LocationPoint loc = d.location;
+                    totalLoad += d.apparentLoad;
+                    totalX += loc.Point.X * d.apparentLoad;
+                    totalY += loc.Point.Y * d.apparentLoad;
+                    totalZ += loc.Point.Z * d.apparentLoad;
+                }
+                double x = totalX / totalLoad;
+                double y = totalY / totalLoad;
+                double z = totalZ / totalLoad;
 
-                changeTrans1.Start("Changing Circuit " + ES.CircuitNumber + " path mode to AllDevices");
-                ES.CircuitPathMode = ElectricalCircuitPathMode.AllDevices;
-                double length1 = Math.Round(ES.Length / 3.281, 0);
-                changeTrans1.Commit();
+                return new XYZ(x, y, z);
+            }
 
-                changeTrans2.Start("Changing Circuit " + ES.CircuitNumber + " path mode to FarthestDevice");
-                ES.CircuitPathMode = ElectricalCircuitPathMode.FarthestDevice;
-                double lenght2 = Math.Round(ES.Length / 3.281, 0);
-                changeTrans2.Commit();
+            public double GetDistanceFromPointToPanel (XYZ pt, Document doc)
+            {
+                FamilyInstance panel = new FilteredElementCollector(doc)
+                    .OfCategory(BuiltInCategory.OST_ElectricalEquipment)
+                    .OfClass(typeof(FamilyInstance))
+                    .Cast<FamilyInstance>()
+                    .Where(x => x.Name == this.CircuitObj.PanelName)
+                    .First();
 
+                LocationPoint panelLoc = panel.Location as LocationPoint;
 
-                return Math.Max(length1, lenght2);
+                XYZ distVector = pt - panelLoc.Point;
+
+                return Math.Ceiling(Utils.StaticfeetToMeters(Math.Abs(distVector.X) + Math.Abs(distVector.Y) + Math.Abs(distVector.Z)));
             }
 
             public List<Dispositive> getDispositives (ElementSet dispositivesSet, Document doc)

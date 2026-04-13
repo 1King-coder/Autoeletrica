@@ -95,7 +95,7 @@ namespace AutoEletrica
 
                 SpreadsheetTitleLbl.Content = gSheets.GetSpreadsheetTitle();
             }
-            catch (Exception ex) { TaskDialog.Show("Sheets ID é inválido", "ID da planilha é inválido!"); }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
